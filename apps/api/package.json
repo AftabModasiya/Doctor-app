@@ -1,10 +1,12 @@
 {
-  "name": "api",
-  "version": "1.0.0",
-  "private": true,
-  "main": "index.js",
-  "scripts": {
-    "dev": "node index.js",
-    "build": "echo 'No build step yet'"
-  }
+	"name": "api",
+	"version": "1.0.0",
+	"private": true,
+	"main": "index.js",
+	"scripts": {
+		"dev": "node index.js",
+		"build": "echo 'No build step yet'",
+		"format": "biome check --write",
+		"lint": "biome check"
+	}
 }

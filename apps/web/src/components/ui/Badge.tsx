@@ -1,42 +1,63 @@
-import React from 'react';
 import clsx from 'clsx';
+import React from 'react';
 
-type BadgeVariant = 'success' | 'warning' | 'danger' | 'info' | 'neutral' | 'purple';
+type BadgeVariant =
+	| 'success'
+	| 'warning'
+	| 'danger'
+	| 'info'
+	| 'neutral'
+	| 'purple';
 
 interface BadgeProps {
-  children: React.ReactNode;
-  variant?: BadgeVariant;
-  dot?: boolean;
-  className?: string;
+	children: React.ReactNode;
+	variant?: BadgeVariant;
+	dot?: boolean;
+	className?: string;
 }
 
 const variantClasses: Record<BadgeVariant, string> = {
-  success: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-  warning: 'bg-amber-50 text-amber-700 border-amber-200',
-  danger: 'bg-rose-50 text-rose-700 border-rose-200',
-  info: 'bg-sky-50 text-sky-700 border-sky-200',
-  neutral: 'bg-gray-100 text-gray-600 border-gray-200',
-  purple: 'bg-purple-50 text-purple-700 border-purple-200',
+	success: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+	warning: 'bg-amber-50 text-amber-700 border-amber-200',
+	danger: 'bg-rose-50 text-rose-700 border-rose-200',
+	info: 'bg-sky-50 text-sky-700 border-sky-200',
+	neutral: 'bg-gray-100 text-gray-600 border-gray-200',
+	purple: 'bg-purple-50 text-purple-700 border-purple-200',
 };
 
 const dotClasses: Record<BadgeVariant, string> = {
-  success: 'bg-emerald-500',
-  warning: 'bg-amber-500',
-  danger: 'bg-rose-500',
-  info: 'bg-sky-500',
-  neutral: 'bg-gray-400',
-  purple: 'bg-purple-500',
+	success: 'bg-emerald-500',
+	warning: 'bg-amber-500',
+	danger: 'bg-rose-500',
+	info: 'bg-sky-500',
+	neutral: 'bg-gray-400',
+	purple: 'bg-purple-500',
 };
 
-export default function Badge({ children, variant = 'neutral', dot = false, className }: BadgeProps) {
-  return (
-    <span className={clsx(
-      'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border',
-      variantClasses[variant],
-      className
-    )}>
-      {dot && <span className={clsx('h-1.5 w-1.5 rounded-full', dotClasses[variant], 'animate-pulse-dot')} />}
-      {children}
-    </span>
-  );
+export default function Badge({
+	children,
+	variant = 'neutral',
+	dot = false,
+	className,
+}: BadgeProps) {
+	return (
+		<span
+			className={clsx(
+				'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border',
+				variantClasses[variant],
+				className,
+			)}
+		>
+			{dot && (
+				<span
+					className={clsx(
+						'h-1.5 w-1.5 rounded-full',
+						dotClasses[variant],
+						'animate-pulse-dot',
+					)}
+				/>
+			)}
+			{children}
+		</span>
+	);
 }

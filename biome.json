@@ -7,9 +7,8 @@
     },
     "files": {
         "includes": [
-            "src/**/*",
-            "test/**/*",
-            "!src/generated/**/*"
+            "apps/**/*",
+            "packages/**/*"
         ]
     },
     "formatter": {
