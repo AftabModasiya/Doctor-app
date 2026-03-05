@@ -17,7 +17,7 @@ export default function LandingFooter() {
           <div className="lg:col-span-2">
             <Link to="/" className="flex items-center gap-2.5 mb-4">
               <div className="h-9 w-9 bg-primary-600 rounded-xl flex items-center justify-center">
-                <FaHospital className="h-4.5 w-4.5 text-white" />
+                <FaHospital className="h-4 w-4 text-white" />
               </div>
               <span className="text-lg font-bold text-white">
                 Medi<span className="text-primary-400">Admin</span>
@@ -27,18 +27,16 @@ export default function LandingFooter() {
               The all-in-one hospital management platform trusted by clinics and hospitals worldwide to modernize patient care.
             </p>
             <div className="space-y-2">
-              <div className="flex items-center gap-3 text-sm text-gray-400">
-                <FaPhone className="h-3.5 w-3.5 text-primary-500 flex-shrink-0" />
-                <span>+1 (800) 555-MEDI</span>
-              </div>
-              <div className="flex items-center gap-3 text-sm text-gray-400">
-                <FaEnvelope className="h-3.5 w-3.5 text-primary-500 flex-shrink-0" />
-                <span>hello@mediadmin.io</span>
-              </div>
-              <div className="flex items-center gap-3 text-sm text-gray-400">
-                <FaMapMarkerAlt className="h-3.5 w-3.5 text-primary-500 flex-shrink-0" />
-                <span>123 Health St, San Francisco, CA</span>
-              </div>
+              {[
+                { icon: FaPhone, text: '+1 (800) 555-MEDI' },
+                { icon: FaEnvelope, text: 'hello@mediadmin.io' },
+                { icon: FaMapMarkerAlt, text: '123 Health St, San Francisco, CA' },
+              ].map(({ icon: Icon, text }) => (
+                <div key={text} className="flex items-center gap-3 text-sm text-gray-400">
+                  <Icon className="h-3.5 w-3.5 text-primary-500 flex-shrink-0" />
+                  <span>{text}</span>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -49,9 +47,7 @@ export default function LandingFooter() {
               <ul className="space-y-2.5">
                 {links.map(link => (
                   <li key={link}>
-                    <a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">
-                      {link}
-                    </a>
+                    <a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">{link}</a>
                   </li>
                 ))}
               </ul>
@@ -61,9 +57,7 @@ export default function LandingFooter() {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-gray-500">
-            © 2025 MediAdmin Inc. All rights reserved.
-          </p>
+          <p className="text-sm text-gray-500">© 2025 MediAdmin Inc. All rights reserved.</p>
           <div className="flex items-center gap-3">
             {[
               { icon: FaFacebookF, label: 'Facebook' },
@@ -71,12 +65,8 @@ export default function LandingFooter() {
               { icon: FaLinkedinIn, label: 'LinkedIn' },
               { icon: FaInstagram, label: 'Instagram' },
             ].map(({ icon: Icon, label }) => (
-              <a
-                key={label}
-                href="#"
-                aria-label={label}
-                className="h-9 w-9 flex items-center justify-center rounded-xl bg-gray-800 text-gray-400 hover:bg-primary-600 hover:text-white transition-all"
-              >
+              <a key={label} href="#" aria-label={label}
+                className="h-9 w-9 flex items-center justify-center rounded-xl bg-gray-800 text-gray-400 hover:bg-primary-600 hover:text-white transition-all">
                 <Icon className="h-4 w-4" />
               </a>
             ))}

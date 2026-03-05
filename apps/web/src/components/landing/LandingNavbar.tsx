@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaHospital, FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
+import { FaHospital, FaBars, FaTimes, FaSun, FaMoon } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import clsx from 'clsx';
 
 const navLinks = [
@@ -16,7 +17,7 @@ export default function LandingNavbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user } = useAuth();
-  const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -30,20 +31,32 @@ export default function LandingNavbar() {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // In dark mode the navbar can always show inverted, in light mode it flips on scroll
+  const isDark = theme === 'dark';
+
   return (
     <nav className={clsx(
       'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-      scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100' : 'bg-transparent'
+      isDark
+        ? scrolled
+          ? 'bg-gray-950/95 backdrop-blur-md shadow-sm border-b border-gray-800'
+          : 'bg-transparent'
+        : scrolled
+        ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100'
+        : 'bg-transparent'
     )}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5">
             <div className="h-9 w-9 bg-primary-600 rounded-xl flex items-center justify-center shadow-sm">
-              <FaHospital className="h-4.5 w-4.5 text-white" />
+              <FaHospital className="h-4 w-4 text-white" />
             </div>
-            <span className={clsx('text-lg font-bold transition-colors', scrolled ? 'text-gray-900' : 'text-white')}>
-              Medi<span className="text-primary-400">Admin</span>
+            <span className={clsx(
+              'text-lg font-bold transition-colors',
+              isDark ? 'text-white' : scrolled ? 'text-gray-900' : 'text-gray-900'
+            )}>
+              Medi<span className="text-primary-500">Admin</span>
             </span>
           </Link>
 
@@ -55,7 +68,11 @@ export default function LandingNavbar() {
                 onClick={() => handleScroll(link.href)}
                 className={clsx(
                   'px-4 py-2 text-sm font-medium rounded-lg transition-colors',
-                  scrolled ? 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' : 'text-white/80 hover:text-white hover:bg-white/10'
+                  isDark
+                    ? 'text-gray-300 hover:text-white hover:bg-white/10'
+                    : scrolled
+                    ? 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                 )}
               >
                 {link.label}
@@ -63,13 +80,33 @@ export default function LandingNavbar() {
             ))}
           </div>
 
-          {/* Desktop CTA Buttons */}
-          <div className="hidden md:flex items-center gap-3">
+          {/* Desktop: theme toggle + auth buttons */}
+          <div className="hidden md:flex items-center gap-2">
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              className={clsx(
+                'h-9 w-9 flex items-center justify-center rounded-xl transition-all',
+                isDark
+                  ? 'text-amber-400 hover:bg-white/10 hover:text-amber-300'
+                  : scrolled
+                  ? 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+                  : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+              )}
+            >
+              {theme === 'dark' ? <FaSun className="h-4 w-4" /> : <FaMoon className="h-4 w-4" />}
+            </button>
+
             <Link
               to={user ? '/dashboard' : '/login'}
               className={clsx(
                 'px-4 py-2 text-sm font-medium rounded-xl transition-all',
-                scrolled ? 'text-gray-700 hover:text-gray-900 hover:bg-gray-100' : 'text-white/90 hover:text-white hover:bg-white/10'
+                isDark
+                  ? 'text-gray-300 hover:text-white hover:bg-white/10'
+                  : scrolled
+                  ? 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
+                  : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
               )}
             >
               {user ? 'Dashboard' : 'Login'}
@@ -82,22 +119,35 @@ export default function LandingNavbar() {
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className={clsx(
-              'md:hidden p-2 rounded-lg transition-colors',
-              scrolled ? 'text-gray-600 hover:bg-gray-100' : 'text-white hover:bg-white/10'
-            )}
-          >
-            {mobileOpen ? <FaTimes className="h-5 w-5" /> : <FaBars className="h-5 w-5" />}
-          </button>
+          {/* Mobile: theme toggle + hamburger */}
+          <div className="md:hidden flex items-center gap-1">
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              className={clsx(
+                'h-9 w-9 flex items-center justify-center rounded-lg transition-colors',
+                isDark ? 'text-amber-400 hover:bg-white/10' : 'text-gray-500 hover:bg-gray-100'
+              )}
+            >
+              {theme === 'dark' ? <FaSun className="h-4 w-4" /> : <FaMoon className="h-4 w-4" />}
+            </button>
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className={clsx(
+                'p-2 rounded-lg transition-colors',
+                isDark ? 'text-gray-300 hover:bg-white/10' : 'text-gray-600 hover:bg-gray-100'
+              )}
+            >
+              {mobileOpen ? <FaTimes className="h-5 w-5" /> : <FaBars className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Mobile Menu */}
       <div className={clsx(
-        'md:hidden bg-white border-t border-gray-100 shadow-lg transition-all duration-300 overflow-hidden',
+        'md:hidden border-t shadow-lg transition-all duration-300 overflow-hidden',
+        isDark ? 'bg-gray-950 border-gray-800' : 'bg-white border-gray-100',
         mobileOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
       )}>
         <div className="px-4 py-4 space-y-1">
@@ -105,14 +155,20 @@ export default function LandingNavbar() {
             <button
               key={link.label}
               onClick={() => handleScroll(link.href)}
-              className="w-full text-left px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-colors"
+              className={clsx(
+                'w-full text-left px-4 py-2.5 text-sm font-medium rounded-xl transition-colors',
+                isDark ? 'text-gray-300 hover:text-white hover:bg-white/10' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+              )}
             >
               {link.label}
             </button>
           ))}
-          <div className="pt-3 border-t border-gray-100 flex flex-col gap-2">
+          <div className={clsx('pt-3 border-t flex flex-col gap-2', isDark ? 'border-gray-800' : 'border-gray-100')}>
             <Link to={user ? '/dashboard' : '/login'} onClick={() => setMobileOpen(false)}
-              className="w-full text-center px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-colors border border-gray-200">
+              className={clsx(
+                'w-full text-center px-4 py-2.5 text-sm font-medium rounded-xl transition-colors border',
+                isDark ? 'text-gray-300 border-gray-700 hover:bg-white/10' : 'text-gray-700 border-gray-200 hover:bg-gray-50'
+              )}>
               {user ? 'Dashboard' : 'Login'}
             </Link>
             <Link to="/signup" onClick={() => setMobileOpen(false)}
