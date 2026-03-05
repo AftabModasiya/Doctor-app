@@ -15,5 +15,8 @@
     "@biomejs/biome": "2.4.5",
     "turbo": "^2.8.13"
   },
-  "packageManager": "npm@10.9.3"
+  "packageManager": "npm@10.9.3",
+  "dependencies": {
+    "@swc/cli": "^0.8.0"
+  }
 }
