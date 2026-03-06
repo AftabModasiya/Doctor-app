@@ -12,9 +12,34 @@ import { SpecializationModule } from "./specialization/specialization.module";
 import { TokenModule } from "./token/token.module";
 import { UserModule } from "./user/user.module";
 import { UserDeviceModule } from "./user-device/user-device.module";
+import { ConfigModule } from "@nestjs/config";
+import { DatabaseModule } from "./database/database.module";
+import { GracefulShutdownModule } from "nestjs-graceful-shutdown";
+import { HeaderResolver, I18nModule } from "nestjs-i18n";
+import path from "node:path";
 
 @Module({
 	imports: [
+		//* Configuration Modules
+		ConfigModule.forRoot({
+			isGlobal: true,
+		}),
+		DatabaseModule,
+		GracefulShutdownModule.forRoot(),
+		I18nModule.forRoot({
+			fallbackLanguage: "en",
+			loaderOptions: {
+				path: path.join(__dirname, "..", "/locales/"),
+				watch: true,
+			},
+			resolvers: [new HeaderResolver(["x-lang"])],
+			typesOutputPath: path.join(
+				process.cwd(),
+				"generated/i18n.generated.ts",
+			),
+		}),
+
+		//* API Modules
 		UserModule,
 		UserDeviceModule,
 		TokenModule,
