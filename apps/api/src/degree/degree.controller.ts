@@ -7,13 +7,13 @@ import {
 	Patch,
 	Post,
 } from "@nestjs/common";
-import type { DegreeService } from "./degree.service";
+import { DegreeService } from "./degree.service";
 import type { CreateDegreeDto } from "./dto/create-degree.dto";
 import type { UpdateDegreeDto } from "./dto/update-degree.dto";
 
 @Controller("degree")
 export class DegreeController {
-	constructor(private readonly degreeService: DegreeService) {}
+	constructor(private readonly degreeService: DegreeService) { }
 
 	@Post()
 	create(@Body() createDegreeDto: CreateDegreeDto) {
