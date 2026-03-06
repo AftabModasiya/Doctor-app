@@ -30,6 +30,7 @@ lerna-debug.log*
 *.sublime-workspace
 .turbo
 .qodo
+.vite
 
 # IDE - VSCode
 .vscode/*
