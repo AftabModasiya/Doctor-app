@@ -9,11 +9,11 @@ import {
 } from "@nestjs/common";
 import type { CreateTokenDto } from "./dto/create-token.dto";
 import type { UpdateTokenDto } from "./dto/update-token.dto";
-import type { TokenService } from "./token.service";
+import { TokenService } from "./token.service";
 
 @Controller("token")
 export class TokenController {
-	constructor(private readonly tokenService: TokenService) {}
+	constructor(private readonly tokenService: TokenService) { }
 
 	@Post()
 	create(@Body() createTokenDto: CreateTokenDto) {

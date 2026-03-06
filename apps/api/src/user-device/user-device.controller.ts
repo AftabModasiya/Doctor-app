@@ -9,11 +9,11 @@ import {
 } from "@nestjs/common";
 import type { CreateUserDeviceDto } from "./dto/create-user-device.dto";
 import type { UpdateUserDeviceDto } from "./dto/update-user-device.dto";
-import type { UserDeviceService } from "./user-device.service";
+import { UserDeviceService } from "./user-device.service";
 
 @Controller("user-device")
 export class UserDeviceController {
-	constructor(private readonly userDeviceService: UserDeviceService) {}
+	constructor(private readonly userDeviceService: UserDeviceService) { }
 
 	@Post()
 	create(@Body() createUserDeviceDto: CreateUserDeviceDto) {
