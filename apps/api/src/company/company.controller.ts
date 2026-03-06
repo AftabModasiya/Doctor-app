@@ -7,13 +7,13 @@ import {
 	Patch,
 	Post,
 } from "@nestjs/common";
-import type { CompanyService } from "./company.service";
+import { CompanyService } from "./company.service";
 import type { CreateCompanyDto } from "./dto/create-company.dto";
 import type { UpdateCompanyDto } from "./dto/update-company.dto";
 
 @Controller("company")
 export class CompanyController {
-	constructor(private readonly companyService: CompanyService) {}
+	constructor(private readonly companyService: CompanyService) { }
 
 	@Post()
 	create(@Body() createCompanyDto: CreateCompanyDto) {

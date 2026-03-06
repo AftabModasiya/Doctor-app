@@ -9,11 +9,11 @@ import {
 } from "@nestjs/common";
 import type { CreateSpecializationDto } from "./dto/create-specialization.dto";
 import type { UpdateSpecializationDto } from "./dto/update-specialization.dto";
-import type { SpecializationService } from "./specialization.service";
+import { SpecializationService } from "./specialization.service";
 
 @Controller("specialization")
 export class SpecializationController {
-	constructor(private readonly specializationService: SpecializationService) {}
+	constructor(private readonly specializationService: SpecializationService) { }
 
 	@Post()
 	create(@Body() createSpecializationDto: CreateSpecializationDto) {
