@@ -2,9 +2,11 @@ import type React from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { FaCheckCircle, FaHospital, FaLock } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function ResetPasswordPage() {
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const [password, setPassword] = useState("");
 	const [confirm, setConfirm] = useState("");
@@ -14,17 +16,17 @@ export default function ResetPasswordPage() {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (password !== confirm) {
-			toast.error("Passwords do not match");
+			toast.error(t("settings.password.toast.noMatch"));
 			return;
 		}
 		if (password.length < 6) {
-			toast.error("Password must be at least 6 characters");
+			toast.error(t("settings.password.toast.minLength"));
 			return;
 		}
 		setLoading(true);
 		await new Promise((r) => setTimeout(r, 800));
 		setDone(true);
-		toast.success("Password reset successfully!");
+		toast.success(t("auth.toast.resetSuccess"));
 		setLoading(false);
 		setTimeout(() => navigate("/login"), 2000);
 	};
@@ -36,7 +38,7 @@ export default function ResetPasswordPage() {
 					<div className="h-11 w-11 bg-primary-600 rounded-2xl flex items-center justify-center shadow-sm">
 						<FaHospital className="h-5 w-5 text-white" />
 					</div>
-					<h1 className="text-xl font-bold text-gray-900">MediAdmin</h1>
+					<h1 className="text-xl font-bold text-gray-900">{t("common.appName")}</h1>
 				</div>
 				<div className="bg-white rounded-2xl shadow-card border border-gray-100 p-8">
 					{done ? (
@@ -47,24 +49,24 @@ export default function ResetPasswordPage() {
 								</div>
 							</div>
 							<h2 className="text-xl font-bold text-gray-900 mb-2">
-								Password Reset!
+								{t("auth.resetPassword.doneTitle")}
 							</h2>
-							<p className="text-sm text-gray-500">Redirecting to sign in…</p>
+							<p className="text-sm text-gray-500">{t("auth.resetPassword.redirecting")}</p>
 						</div>
 					) : (
 						<>
 							<div className="mb-6">
 								<h2 className="text-2xl font-bold text-gray-900 mb-1">
-									Set new password
+									{t("auth.resetPassword.title")}
 								</h2>
 								<p className="text-sm text-gray-500">
-									Create a strong, unique password for your account
+									{t("auth.resetPassword.subtitle")}
 								</p>
 							</div>
 							<form onSubmit={handleSubmit} className="space-y-4">
 								<div>
 									<label className="block text-sm font-medium text-gray-700 mb-1.5">
-										New Password
+										{t("auth.resetPassword.newPassword")}
 									</label>
 									<div className="relative">
 										<FaLock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -73,14 +75,14 @@ export default function ResetPasswordPage() {
 											value={password}
 											onChange={(e) => setPassword(e.target.value)}
 											required
-											placeholder="Min 6 characters"
+											placeholder={t("auth.resetPassword.passwordPlaceholder")}
 											className="w-full pl-10 pr-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all hover:border-gray-300"
 										/>
 									</div>
 								</div>
 								<div>
 									<label className="block text-sm font-medium text-gray-700 mb-1.5">
-										Confirm Password
+										{t("auth.resetPassword.confirmPassword")}
 									</label>
 									<div className="relative">
 										<FaLock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -89,7 +91,7 @@ export default function ResetPasswordPage() {
 											value={confirm}
 											onChange={(e) => setConfirm(e.target.value)}
 											required
-											placeholder="Repeat password"
+											placeholder={t("auth.confirmPasswordPlaceholder")}
 											className="w-full pl-10 pr-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all hover:border-gray-300"
 										/>
 									</div>
@@ -102,7 +104,7 @@ export default function ResetPasswordPage() {
 									{loading ? (
 										<span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
 									) : (
-										"Reset Password"
+										t("auth.resetPassword.submitBtn")
 									)}
 								</button>
 							</form>
@@ -111,7 +113,7 @@ export default function ResetPasswordPage() {
 									to="/login"
 									className="text-sm text-gray-500 hover:text-gray-700"
 								>
-									Back to sign in
+									{t("auth.backToSignIn")}
 								</Link>
 							</div>
 						</>

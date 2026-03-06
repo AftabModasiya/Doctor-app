@@ -10,17 +10,11 @@ import {
 	FaSave,
 	FaUser,
 } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import Button from "../../components/ui/Button";
 import { useAuth } from "../../context/AuthContext";
 
 type Tab = "profile" | "password" | "notifications" | "system";
-
-const tabs: { id: Tab; label: string; icon: React.ElementType }[] = [
-	{ id: "profile", label: "Profile", icon: FaUser },
-	{ id: "password", label: "Change Password", icon: FaLock },
-	{ id: "notifications", label: "Notifications", icon: FaBell },
-	{ id: "system", label: "System", icon: FaCog },
-];
 
 function ToggleSwitch({
 	checked,
@@ -42,6 +36,7 @@ function ToggleSwitch({
 }
 
 export default function SettingsPage() {
+	const { t } = useTranslation();
 	const { user, updateUser } = useAuth();
 	const [activeTab, setActiveTab] = useState<Tab>("profile");
 	const [profile, setProfile] = useState({
@@ -73,29 +68,36 @@ export default function SettingsPage() {
 	});
 	const [profileLoading, setProfileLoading] = useState(false);
 
+	const tabs: { id: Tab; label: string; icon: React.ElementType }[] = [
+		{ id: "profile", label: t("settings.tabs.profile"), icon: FaUser },
+		{ id: "password", label: t("settings.tabs.changePassword"), icon: FaLock },
+		{ id: "notifications", label: t("settings.tabs.notifications"), icon: FaBell },
+		{ id: "system", label: t("settings.tabs.system"), icon: FaCog },
+	];
+
 	const saveProfile = async () => {
 		setProfileLoading(true);
 		await new Promise((r) => setTimeout(r, 800));
 		updateUser({ ...user!, name: profile.name, email: profile.email });
-		toast.success("Profile updated successfully");
+		toast.success(t("settings.profile.toast.saved"));
 		setProfileLoading(false);
 	};
 
 	const changePassword = async () => {
 		if (!passwords.current) {
-			toast.error("Enter current password");
+			toast.error(t("settings.password.toast.enterCurrent"));
 			return;
 		}
 		if (passwords.newPass.length < 6) {
-			toast.error("New password must be 6+ characters");
+			toast.error(t("settings.password.toast.minLength"));
 			return;
 		}
 		if (passwords.newPass !== passwords.confirm) {
-			toast.error("Passwords do not match");
+			toast.error(t("settings.password.toast.noMatch"));
 			return;
 		}
 		await new Promise((r) => setTimeout(r, 600));
-		toast.success("Password changed successfully");
+		toast.success(t("settings.password.toast.changed"));
 		setPasswords({ current: "", newPass: "", confirm: "" });
 	};
 
@@ -104,21 +106,29 @@ export default function SettingsPage() {
 		value,
 		type = "text",
 		onChange,
+		readOnly = false,
 	}: {
 		label: string;
 		value: string;
 		type?: string;
-		onChange: (v: string) => void;
+		onChange?: (v: string) => void;
+		readOnly?: boolean;
 	}) => (
-		<div>
+		<div className={clsx(readOnly && "sm:col-span-2")}>
 			<label className="block text-sm font-medium text-gray-700 mb-1.5">
 				{label}
 			</label>
 			<input
 				type={type}
 				value={value}
-				onChange={(e) => onChange(e.target.value)}
-				className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all hover:border-gray-300"
+				readOnly={readOnly}
+				onChange={(e) => onChange?.(e.target.value)}
+				className={clsx(
+					"w-full px-4 py-2.5 text-sm border rounded-xl focus:outline-none transition-all",
+					readOnly
+						? "border-gray-100 bg-gray-50 text-gray-500 cursor-not-allowed"
+						: "border-gray-200 focus:ring-2 focus:ring-primary-500 hover:border-gray-300"
+				)}
 			/>
 		</div>
 	);
@@ -146,9 +156,9 @@ export default function SettingsPage() {
 	return (
 		<div className="space-y-5">
 			<div>
-				<h1 className="text-2xl font-bold text-gray-900">Settings</h1>
+				<h1 className="text-2xl font-bold text-gray-900">{t("settings.title")}</h1>
 				<p className="text-sm text-gray-500 mt-0.5">
-					Manage your account and system preferences
+					{t("settings.subtitle")}
 				</p>
 			</div>
 
@@ -180,10 +190,10 @@ export default function SettingsPage() {
 						<div className="p-6 space-y-5">
 							<div>
 								<h2 className="text-base font-semibold text-gray-900">
-									Admin Profile
+									{t("settings.profile.title")}
 								</h2>
 								<p className="text-sm text-gray-500">
-									Manage your personal information
+									{t("settings.profile.subtitle")}
 								</p>
 							</div>
 							{/* Avatar */}
@@ -209,36 +219,31 @@ export default function SettingsPage() {
 							</div>
 							<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 								<Field
-									label="Full Name"
+									label={t("settings.profile.fullName")}
 									value={profile.name}
 									onChange={(v) => setProfile((p) => ({ ...p, name: v }))}
 								/>
 								<Field
-									label="Email Address"
+									label={t("settings.profile.emailAddress")}
 									value={profile.email}
 									type="email"
 									onChange={(v) => setProfile((p) => ({ ...p, email: v }))}
 								/>
 								<Field
-									label="Phone"
+									label={t("settings.profile.phone")}
 									value={profile.phone}
 									onChange={(v) => setProfile((p) => ({ ...p, phone: v }))}
 								/>
 								<Field
-									label="Department"
+									label={t("settings.profile.department")}
 									value={profile.department}
 									onChange={(v) => setProfile((p) => ({ ...p, department: v }))}
 								/>
-								<div className="sm:col-span-2">
-									<label className="block text-sm font-medium text-gray-700 mb-1.5">
-										Role
-									</label>
-									<input
-										value={profile.role}
-										readOnly
-										className="w-full px-4 py-2.5 text-sm border border-gray-100 bg-gray-50 rounded-xl text-gray-500 cursor-not-allowed"
-									/>
-								</div>
+								<Field
+									label={t("settings.profile.role")}
+									value={profile.role}
+									readOnly
+								/>
 							</div>
 							<div className="pt-2">
 								<Button
@@ -246,7 +251,7 @@ export default function SettingsPage() {
 									onClick={saveProfile}
 									leftIcon={<FaSave className="h-3.5 w-3.5" />}
 								>
-									Save Profile
+									{t("settings.profile.saveProfile")}
 								</Button>
 							</div>
 						</div>
@@ -256,55 +261,41 @@ export default function SettingsPage() {
 						<div className="p-6 space-y-5">
 							<div>
 								<h2 className="text-base font-semibold text-gray-900">
-									Change Password
+									{t("settings.password.title")}
 								</h2>
 								<p className="text-sm text-gray-500">
-									Keep your account secure with a strong password
+									{t("settings.password.subtitle")}
 								</p>
 							</div>
 							<div className="max-w-md space-y-4">
-								{[
-									{
-										label: "Current Password",
-										key: "current",
-										val: passwords.current,
-									},
-									{
-										label: "New Password",
-										key: "newPass",
-										val: passwords.newPass,
-									},
-									{
-										label: "Confirm New Password",
-										key: "confirm",
-										val: passwords.confirm,
-									},
-								].map(({ label, key, val }) => (
-									<div key={key}>
-										<label className="block text-sm font-medium text-gray-700 mb-1.5">
-											{label}
-										</label>
-										<input
-											type="password"
-											value={val}
-											onChange={(e) =>
-												setPasswords((p) => ({ ...p, [key]: e.target.value }))
-											}
-											placeholder="••••••••"
-											className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
-										/>
-									</div>
-								))}
+								<Field
+									label={t("settings.password.current")}
+									value={passwords.current}
+									type="password"
+									onChange={(v) => setPasswords((p) => ({ ...p, current: v }))}
+								/>
+								<Field
+									label={t("settings.password.new")}
+									value={passwords.newPass}
+									type="password"
+									onChange={(v) => setPasswords((p) => ({ ...p, newPass: v }))}
+								/>
+								<Field
+									label={t("settings.password.confirm")}
+									value={passwords.confirm}
+									type="password"
+									onChange={(v) => setPasswords((p) => ({ ...p, confirm: v }))}
+								/>
 								<div className="p-3 bg-sky-50 border border-sky-200 rounded-xl">
 									<p className="text-xs text-sky-700">
-										Password must be at least 6 characters long
+										{t("settings.password.hint")}
 									</p>
 								</div>
 								<Button
 									onClick={changePassword}
 									leftIcon={<FaLock className="h-3.5 w-3.5" />}
 								>
-									Update Password
+									{t("settings.password.updateBtn")}
 								</Button>
 							</div>
 						</div>
@@ -314,44 +305,44 @@ export default function SettingsPage() {
 						<div className="p-6 space-y-5">
 							<div>
 								<h2 className="text-base font-semibold text-gray-900">
-									Notification Preferences
+									{t("settings.notifications.title")}
 								</h2>
 								<p className="text-sm text-gray-500">
-									Choose what you want to be notified about
+									{t("settings.notifications.subtitle")}
 								</p>
 							</div>
 							<div>
 								<p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-									In-App Notifications
+									{t("settings.notifications.inApp")}
 								</p>
 								<div className="bg-surface-secondary rounded-xl px-4">
 									<NotificationRow
-										label="New Appointments"
-										desc="When a new appointment is booked"
+										label={t("settings.notifications.newAppointments")}
+										desc={t("settings.notifications.newAppointmentsDesc")}
 										checked={notifications.appointments}
 										onChange={(v) =>
 											setNotifications((n) => ({ ...n, appointments: v }))
 										}
 									/>
 									<NotificationRow
-										label="Prescriptions"
-										desc="When a new prescription is created"
+										label={t("settings.notifications.prescriptions")}
+										desc={t("settings.notifications.prescriptionsDesc")}
 										checked={notifications.prescriptions}
 										onChange={(v) =>
 											setNotifications((n) => ({ ...n, prescriptions: v }))
 										}
 									/>
 									<NotificationRow
-										label="Medicine Alerts"
-										desc="Low stock and expiry warnings"
+										label={t("settings.notifications.medicineAlerts")}
+										desc={t("settings.notifications.medicineAlertsDesc")}
 										checked={notifications.medicines}
 										onChange={(v) =>
 											setNotifications((n) => ({ ...n, medicines: v }))
 										}
 									/>
 									<NotificationRow
-										label="Weekly Reports"
-										desc="Automated weekly summary report"
+										label={t("settings.notifications.weeklyReports")}
+										desc={t("settings.notifications.weeklyReportsDesc")}
 										checked={notifications.reports}
 										onChange={(v) =>
 											setNotifications((n) => ({ ...n, reports: v }))
@@ -361,20 +352,20 @@ export default function SettingsPage() {
 							</div>
 							<div>
 								<p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-									Delivery Methods
+									{t("settings.notifications.delivery")}
 								</p>
 								<div className="bg-surface-secondary rounded-xl px-4">
 									<NotificationRow
-										label="Email Notifications"
-										desc="Receive alerts via email"
+										label={t("settings.notifications.emailNotifications")}
+										desc={t("settings.notifications.emailNotificationsDesc")}
 										checked={notifications.email}
 										onChange={(v) =>
 											setNotifications((n) => ({ ...n, email: v }))
 										}
 									/>
 									<NotificationRow
-										label="SMS Notifications"
-										desc="Receive alerts via text message"
+										label={t("settings.notifications.smsNotifications")}
+										desc={t("settings.notifications.smsNotificationsDesc")}
 										checked={notifications.sms}
 										onChange={(v) =>
 											setNotifications((n) => ({ ...n, sms: v }))
@@ -383,10 +374,10 @@ export default function SettingsPage() {
 								</div>
 							</div>
 							<Button
-								onClick={() => toast.success("Notification preferences saved")}
+								onClick={() => toast.success(t("settings.notifications.toast.saved"))}
 								leftIcon={<FaSave className="h-3.5 w-3.5" />}
 							>
-								Save Preferences
+								{t("settings.notifications.savePreferences")}
 							</Button>
 						</div>
 					)}
@@ -395,56 +386,41 @@ export default function SettingsPage() {
 						<div className="p-6 space-y-5">
 							<div>
 								<h2 className="text-base font-semibold text-gray-900">
-									System Configuration
+									{t("settings.system.title")}
 								</h2>
 								<p className="text-sm text-gray-500">
-									Configure global system settings
+									{t("settings.system.subtitle")}
 								</p>
 							</div>
 							<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg">
-								{[
-									{
-										label: "Timezone",
-										value: system.timezone,
-										key: "timezone",
-									},
-									{
-										label: "Language",
-										value: system.language,
-										key: "language",
-									},
-									{
-										label: "Date Format",
-										value: system.dateFormat,
-										key: "dateFormat",
-									},
-									{
-										label: "Currency",
-										value: system.currency,
-										key: "currency",
-									},
-								].map(({ label, value, key }) => (
-									<div key={key}>
-										<label className="block text-sm font-medium text-gray-700 mb-1.5">
-											{label}
-										</label>
-										<input
-											value={value}
-											onChange={(e) =>
-												setSystem((s) => ({ ...s, [key]: e.target.value }))
-											}
-											className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
-										/>
-									</div>
-								))}
+								<Field
+									label={t("settings.system.timezone")}
+									value={system.timezone}
+									onChange={(v) => setSystem((s) => ({ ...s, timezone: v }))}
+								/>
+								<Field
+									label={t("settings.system.language")}
+									value={system.language}
+									onChange={(v) => setSystem((s) => ({ ...s, language: v }))}
+								/>
+								<Field
+									label={t("settings.system.dateFormat")}
+									value={system.dateFormat}
+									onChange={(v) => setSystem((s) => ({ ...s, dateFormat: v }))}
+								/>
+								<Field
+									label={t("settings.system.currency")}
+									value={system.currency}
+									onChange={(v) => setSystem((s) => ({ ...s, currency: v }))}
+								/>
 							</div>
 							<div className="flex items-center justify-between p-4 bg-amber-50 border border-amber-200 rounded-xl max-w-lg">
 								<div>
 									<p className="text-sm font-semibold text-amber-900">
-										Maintenance Mode
+										{t("settings.system.maintenanceMode")}
 									</p>
 									<p className="text-xs text-amber-700">
-										Temporarily disable access for non-admin users
+										{t("settings.system.maintenanceModeDesc")}
 									</p>
 								</div>
 								<ToggleSwitch
@@ -453,17 +429,17 @@ export default function SettingsPage() {
 										setSystem((s) => ({ ...s, maintenanceMode: v }));
 										toast(
 											v
-												? "⚠️ Maintenance mode enabled"
-												: "Maintenance mode disabled",
+												? t("settings.system.toast.maintenanceEnabled")
+												: t("settings.system.toast.maintenanceDisabled"),
 										);
 									}}
 								/>
 							</div>
 							<Button
-								onClick={() => toast.success("System settings saved")}
+								onClick={() => toast.success(t("settings.system.toast.saved"))}
 								leftIcon={<FaSave className="h-3.5 w-3.5" />}
 							>
-								Save Settings
+								{t("settings.system.saveSettings")}
 							</Button>
 						</div>
 					)}

@@ -9,16 +9,56 @@ import {
 	FaUserInjured,
 	FaUserMd,
 } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-const stats = [
-	{ value: "500+", label: "Hospitals Trust Us" },
-	{ value: "50K+", label: "Patients Managed" },
-	{ value: "99.9%", label: "Uptime SLA" },
-	{ value: "24/7", label: "Expert Support" },
-];
-
 export default function HeroSection() {
+	const { t } = useTranslation();
+
+	const stats = [
+		{ value: "500+", label: t("landing.hero.stats.hospitals") },
+		{ value: "50K+", label: t("landing.hero.stats.patients") },
+		{ value: "99.9%", label: t("landing.hero.stats.uptime") },
+		{ value: "24/7", label: t("landing.hero.stats.support") },
+	];
+
+	const trustIndicators = [
+		{ icon: FaCheckCircle, text: t("landing.hero.trust.hipaa") },
+		{ icon: FaCheckCircle, text: t("landing.hero.trust.noCard") },
+		{ icon: FaCheckCircle, text: t("landing.hero.trust.trial") },
+	];
+
+	const dashboardStats = [
+		{
+			icon: FaUserInjured,
+			label: t("landing.hero.dashboard.patients"),
+			value: "267",
+			light: "bg-sky-50 text-sky-600",
+			dark: "text-sky-300",
+		},
+		{
+			icon: FaUserMd,
+			label: t("landing.hero.dashboard.doctors"),
+			value: "6",
+			light: "bg-violet-50 text-violet-600",
+			dark: "text-violet-300",
+		},
+		{
+			icon: FaPills,
+			label: t("landing.hero.dashboard.medicines"),
+			value: "48",
+			light: "bg-emerald-50 text-emerald-600",
+			dark: "text-emerald-300",
+		},
+		{
+			icon: FaCalendarCheck,
+			label: t("landing.hero.dashboard.appointments"),
+			value: "12",
+			light: "bg-amber-50 text-amber-600",
+			dark: "text-amber-300",
+		},
+	];
+
 	return (
 		<section
 			id="home"
@@ -39,20 +79,18 @@ export default function HeroSection() {
 						{/* AI Badge */}
 						<div className="inline-flex items-center gap-2 bg-primary-50 border border-primary-200 text-primary-700 dark:bg-primary-600/20 dark:border-primary-500/30 dark:text-primary-300 text-xs font-semibold px-4 py-2 rounded-full mb-6">
 							<span className="h-1.5 w-1.5 rounded-full bg-primary-500 dark:bg-primary-400 animate-pulse" />
-							Now with AI-powered diagnostics
+							{t("landing.hero.badge")}
 						</div>
 
 						<h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-gray-900 dark:text-white">
-							Smart Doctor{" "}
+							{t("landing.hero.title1")}{" "}
 							<span className="bg-gradient-to-r from-primary-600 to-sky-500 dark:from-primary-400 dark:to-sky-400 bg-clip-text text-transparent">
-								Management System
+								{t("landing.hero.title2")}
 							</span>{" "}
-							for Modern Hospitals
+							{t("landing.hero.title3")}
 						</h1>
 						<p className="text-lg mb-8 leading-relaxed max-w-lg text-gray-600 dark:text-gray-300">
-							Streamline your entire hospital workflow — from patient
-							registrations and doctor scheduling to prescriptions, medicines,
-							and analytics. All in one powerful, secure platform.
+							{t("landing.hero.subtitle")}
 						</p>
 
 						<div className="flex flex-col sm:flex-row gap-4 mb-12">
@@ -60,7 +98,7 @@ export default function HeroSection() {
 								to="/signup"
 								className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-primary-600 hover:bg-primary-700 dark:hover:bg-primary-500 text-white font-semibold rounded-2xl shadow-lg shadow-primary-600/20 dark:shadow-primary-600/30 transition-all hover:-translate-y-0.5"
 							>
-								Start Free Trial
+								{t("landing.hero.startTrial")}
 								<FaArrowRight className="h-4 w-4" />
 							</Link>
 							<Link
@@ -70,17 +108,13 @@ export default function HeroSection() {
                   dark:bg-white/10 dark:border-white/20 dark:text-white dark:hover:bg-white/20 dark:backdrop-blur-sm"
 							>
 								<FaPlay className="h-3.5 w-3.5 text-primary-500 dark:text-primary-400" />
-								Login to Dashboard
+								{t("landing.hero.loginDashboard")}
 							</Link>
 						</div>
 
 						{/* Trust indicators */}
 						<div className="flex flex-wrap items-center gap-5 text-sm text-gray-500 dark:text-gray-400">
-							{[
-								{ icon: FaCheckCircle, text: "HIPAA Compliant" },
-								{ icon: FaCheckCircle, text: "No credit card required" },
-								{ icon: FaCheckCircle, text: "14-day free trial" },
-							].map(({ icon: Icon, text }) => (
+							{trustIndicators.map(({ icon: Icon, text }) => (
 								<div key={text} className="flex items-center gap-1.5">
 									<Icon className="h-3.5 w-3.5 text-primary-600 dark:text-primary-400" />
 									<span>{text}</span>
@@ -95,10 +129,10 @@ export default function HeroSection() {
 							<div className="flex items-center justify-between mb-5">
 								<div>
 									<p className="text-sm text-gray-400 dark:text-gray-300">
-										Today's Overview
+										{t("landing.hero.dashboard.overview")}
 									</p>
 									<p className="text-xl font-bold text-gray-900 dark:text-white">
-										Hospital Dashboard
+										{t("landing.hero.dashboard.title")}
 									</p>
 								</div>
 								<div className="h-10 w-10 bg-primary-600 rounded-xl flex items-center justify-center">
@@ -107,36 +141,7 @@ export default function HeroSection() {
 							</div>
 
 							<div className="grid grid-cols-2 gap-3 mb-4">
-								{[
-									{
-										icon: FaUserInjured,
-										label: "Patients",
-										value: "267",
-										light: "bg-sky-50 text-sky-600",
-										dark: "text-sky-300",
-									},
-									{
-										icon: FaUserMd,
-										label: "Doctors",
-										value: "6",
-										light: "bg-violet-50 text-violet-600",
-										dark: "text-violet-300",
-									},
-									{
-										icon: FaPills,
-										label: "Medicines",
-										value: "48",
-										light: "bg-emerald-50 text-emerald-600",
-										dark: "text-emerald-300",
-									},
-									{
-										icon: FaCalendarCheck,
-										label: "Appointments",
-										value: "12",
-										light: "bg-amber-50 text-amber-600",
-										dark: "text-amber-300",
-									},
-								].map(({ icon: Icon, label, value, light, dark }) => (
+								{dashboardStats.map(({ icon: Icon, label, value, light, dark }) => (
 									<div
 										key={label}
 										className="bg-gray-50 dark:bg-white/5 rounded-2xl p-4 flex items-center gap-3"
@@ -161,7 +166,7 @@ export default function HeroSection() {
 							{/* Mini chart bars */}
 							<div className="bg-gray-50 dark:bg-white/5 rounded-2xl p-4">
 								<p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
-									Weekly Appointments
+									{t("landing.hero.dashboard.weekly")}
 								</p>
 								<div className="flex items-end gap-2 h-14">
 									{[40, 65, 50, 80, 70, 90, 75].map((h, i) => (
@@ -184,7 +189,7 @@ export default function HeroSection() {
 						<div className="absolute -top-6 -right-6 bg-emerald-600 rounded-2xl px-4 py-2.5 shadow-lg flex items-center gap-2">
 							<FaShieldAlt className="h-4 w-4 text-white" />
 							<span className="text-xs font-semibold text-white">
-								HIPAA Secured
+								{t("landing.hero.dashboard.hipaaSecured")}
 							</span>
 						</div>
 
@@ -204,7 +209,7 @@ export default function HeroSection() {
 								))}
 							</div>
 							<span className="text-xs font-semibold text-gray-800 dark:text-gray-100">
-								500+ hospitals
+								{t("landing.hero.dashboard.hospitalCount")}
 							</span>
 						</div>
 					</div>

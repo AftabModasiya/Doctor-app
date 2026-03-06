@@ -4,21 +4,10 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FaEnvelope, FaHospital, FaLock, FaUser } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import { useAuth } from "../../context/AuthContext";
 
-const schema = yup.object({
-	name: yup.string().min(2, "Min 2 characters").required("Name required"),
-	email: yup.string().email("Invalid email").required("Email required"),
-	password: yup
-		.string()
-		.min(6, "Min 6 characters")
-		.required("Password required"),
-	confirmPassword: yup
-		.string()
-		.oneOf([yup.ref("password")], "Passwords must match")
-		.required("Confirm your password"),
-});
 type FormData = {
 	name: string;
 	email: string;
@@ -27,9 +16,24 @@ type FormData = {
 };
 
 export default function SignupPage() {
+	const { t } = useTranslation();
 	const { login } = useAuth();
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
+
+	const schema = yup.object({
+		name: yup.string().min(2, t("validation.nameMin")).required(t("validation.nameRequired")),
+		email: yup.string().email(t("validation.emailInvalid")).required(t("validation.emailRequired")),
+		password: yup
+			.string()
+			.min(6, t("validation.passwordMin"))
+			.required(t("validation.passwordRequired")),
+		confirmPassword: yup
+			.string()
+			.oneOf([yup.ref("password")], t("validation.passwordsMustMatch"))
+			.required(t("validation.confirmPasswordRequired")),
+	});
+
 	const {
 		register,
 		handleSubmit,
@@ -41,10 +45,10 @@ export default function SignupPage() {
 		try {
 			await new Promise((r) => setTimeout(r, 800));
 			await login(data.email, data.password);
-			toast.success("Account created successfully!");
+			toast.success(t("auth.toast.accountCreated"));
 			navigate("/dashboard");
 		} catch {
-			toast.error("Signup failed. Please try again.");
+			toast.error(t("auth.toast.signupFailed"));
 		} finally {
 			setLoading(false);
 		}
@@ -58,30 +62,30 @@ export default function SignupPage() {
 						<FaHospital className="h-5 w-5 text-white" />
 					</div>
 					<div>
-						<h1 className="text-xl font-bold text-gray-900">MediAdmin</h1>
-						<p className="text-xs text-gray-500">Hospital Management System</p>
+						<h1 className="text-xl font-bold text-gray-900">{t("common.appName")}</h1>
+						<p className="text-xs text-gray-500">{t("common.tagline")}</p>
 					</div>
 				</div>
 				<div className="bg-white rounded-2xl shadow-card border border-gray-100 p-8">
 					<div className="mb-6">
 						<h2 className="text-2xl font-bold text-gray-900 mb-1">
-							Create an account
+							{t("auth.createAccountTitle")}
 						</h2>
 						<p className="text-sm text-gray-500">
-							Join MediAdmin to manage your hospital
+							{t("auth.createAccountSubtitle")}
 						</p>
 					</div>
 					<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 						<div>
 							<label className="block text-sm font-medium text-gray-700 mb-1.5">
-								Full Name
+								{t("auth.fullName")}
 							</label>
 							<div className="relative">
 								<FaUser className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
 								<input
 									{...register("name")}
 									type="text"
-									placeholder="Dr. John Smith"
+									placeholder={t("auth.fullNamePlaceholder")}
 									className="w-full pl-10 pr-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all hover:border-gray-300"
 								/>
 							</div>
@@ -93,14 +97,14 @@ export default function SignupPage() {
 						</div>
 						<div>
 							<label className="block text-sm font-medium text-gray-700 mb-1.5">
-								Email Address
+								{t("auth.emailAddress")}
 							</label>
 							<div className="relative">
 								<FaEnvelope className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
 								<input
 									{...register("email")}
 									type="email"
-									placeholder="admin@hospital.com"
+									placeholder={t("auth.emailPlaceholder")}
 									className="w-full pl-10 pr-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all hover:border-gray-300"
 								/>
 							</div>
@@ -112,14 +116,14 @@ export default function SignupPage() {
 						</div>
 						<div>
 							<label className="block text-sm font-medium text-gray-700 mb-1.5">
-								Password
+								{t("auth.password")}
 							</label>
 							<div className="relative">
 								<FaLock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
 								<input
 									{...register("password")}
 									type="password"
-									placeholder="Min 6 characters"
+									placeholder={t("auth.passwordPlaceholder")}
 									className="w-full pl-10 pr-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all hover:border-gray-300"
 								/>
 							</div>
@@ -131,14 +135,14 @@ export default function SignupPage() {
 						</div>
 						<div>
 							<label className="block text-sm font-medium text-gray-700 mb-1.5">
-								Confirm Password
+								{t("auth.confirmPassword")}
 							</label>
 							<div className="relative">
 								<FaLock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
 								<input
 									{...register("confirmPassword")}
 									type="password"
-									placeholder="Repeat your password"
+									placeholder={t("auth.confirmPasswordPlaceholder")}
 									className="w-full pl-10 pr-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all hover:border-gray-300"
 								/>
 							</div>
@@ -156,17 +160,17 @@ export default function SignupPage() {
 							{loading ? (
 								<span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
 							) : (
-								"Create Account"
+								t("auth.createAccountBtn")
 							)}
 						</button>
 					</form>
 					<p className="mt-6 text-center text-sm text-gray-500">
-						Already have an account?{" "}
+						{t("auth.alreadyHaveAccount")}{" "}
 						<Link
 							to="/login"
 							className="text-primary-600 hover:text-primary-700 font-semibold"
 						>
-							Sign in
+							{t("auth.signIn")}
 						</Link>
 					</p>
 				</div>

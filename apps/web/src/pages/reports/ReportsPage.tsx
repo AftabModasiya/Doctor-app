@@ -7,6 +7,7 @@ import {
 	FaNotesMedical,
 	FaUserInjured,
 } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import {
 	CartesianGrid,
 	Legend,
@@ -35,38 +36,70 @@ const monthlyData = [
 	{ month: "Mar", patients: 267, prescriptions: 178, appointments: 242 },
 ];
 
-function downloadCSV(data: Record<string, unknown>[], filename: string) {
-	const headers = Object.keys(data[0]).join(",");
-	const rows = data.map((r) =>
-		Object.values(r)
-			.map((v) => `"${v}"`)
-			.join(","),
-	);
-	const csv = [headers, ...rows].join("\n");
-	const blob = new Blob([csv], { type: "text/csv" });
-	const url = URL.createObjectURL(blob);
-	const a = document.createElement("a");
-	a.href = url;
-	a.download = filename + ".csv";
-	a.click();
-	URL.revokeObjectURL(url);
-	toast.success(`${filename} downloaded!`);
-}
-
 export default function ReportsPage() {
+	const { t } = useTranslation();
 	const [activeTab, setActiveTab] = useState<"patients" | "prescriptions">(
 		"patients",
 	);
+
+	function downloadCSV(data: Record<string, unknown>[], filename: string) {
+		const headers = Object.keys(data[0]).join(",");
+		const rows = data.map((r) =>
+			Object.values(r)
+				.map((v) => `"${v}"`)
+				.join(","),
+		);
+		const csv = [headers, ...rows].join("\n");
+		const blob = new Blob([csv], { type: "text/csv" });
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement("a");
+		a.href = url;
+		a.download = filename + ".csv";
+		a.click();
+		URL.revokeObjectURL(url);
+		toast.success(`${filename} ${t("reports.toast.downloaded")}`);
+	}
+
+	const stats = [
+		{
+			label: t("reports.stats.totalPatients"),
+			value: mockPatients.length,
+			sub: `${mockPatients.filter((p) => p.status === "Active").length} ${t("reports.stats.active")}`,
+			color: "bg-sky-50 text-sky-700 border-sky-200",
+			icon: FaUserInjured,
+		},
+		{
+			label: t("reports.stats.totalPrescriptions"),
+			value: mockPrescriptions.length,
+			sub: `${mockPrescriptions.filter((p) => p.status === "Active").length} ${t("reports.stats.active")}`,
+			color: "bg-violet-50 text-violet-700 border-violet-200",
+			icon: FaNotesMedical,
+		},
+		{
+			label: t("reports.stats.totalAppointments"),
+			value: mockAppointments.length,
+			sub: `${mockAppointments.filter((a) => a.status === "Completed").length} ${t("reports.stats.completed")}`,
+			color: "bg-emerald-50 text-emerald-700 border-emerald-200",
+			icon: FaChartBar,
+		},
+		{
+			label: t("reports.stats.completionRate"),
+			value: `${Math.round((mockAppointments.filter((a) => a.status === "Completed").length / mockAppointments.length) * 100)}%`,
+			sub: t("reports.stats.successRate"),
+			color: "bg-amber-50 text-amber-700 border-amber-200",
+			icon: FaChartBar,
+		},
+	];
 
 	return (
 		<div className="space-y-5">
 			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
 				<div>
 					<h1 className="text-2xl font-bold text-gray-900">
-						Reports & Analytics
+						{t("reports.title")}
 					</h1>
 					<p className="text-sm text-gray-500 mt-0.5">
-						Insights and downloadable reports
+						{t("reports.subtitle")}
 					</p>
 				</div>
 				<div className="flex gap-2">
@@ -80,7 +113,7 @@ export default function ReportsPage() {
 						}
 						leftIcon={<FaFileCsv className="h-3.5 w-3.5" />}
 					>
-						Export Patients
+						{t("reports.exportPatients")}
 					</Button>
 					<Button
 						variant="outline"
@@ -92,43 +125,14 @@ export default function ReportsPage() {
 						}
 						leftIcon={<FaDownload className="h-3.5 w-3.5" />}
 					>
-						Export Prescriptions
+						{t("reports.exportPrescriptions")}
 					</Button>
 				</div>
 			</div>
 
 			{/* Summary Stats */}
 			<div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-				{[
-					{
-						label: "Total Patients",
-						value: mockPatients.length,
-						sub: `${mockPatients.filter((p) => p.status === "Active").length} active`,
-						color: "bg-sky-50 text-sky-700 border-sky-200",
-						icon: FaUserInjured,
-					},
-					{
-						label: "Total Prescriptions",
-						value: mockPrescriptions.length,
-						sub: `${mockPrescriptions.filter((p) => p.status === "Active").length} active`,
-						color: "bg-violet-50 text-violet-700 border-violet-200",
-						icon: FaNotesMedical,
-					},
-					{
-						label: "Total Appointments",
-						value: mockAppointments.length,
-						sub: `${mockAppointments.filter((a) => a.status === "Completed").length} completed`,
-						color: "bg-emerald-50 text-emerald-700 border-emerald-200",
-						icon: FaChartBar,
-					},
-					{
-						label: "Completion Rate",
-						value: `${Math.round((mockAppointments.filter((a) => a.status === "Completed").length / mockAppointments.length) * 100)}%`,
-						sub: "Appointment success rate",
-						color: "bg-amber-50 text-amber-700 border-amber-200",
-						icon: FaChartBar,
-					},
-				].map(({ label, value, sub, color, icon: Icon }) => (
+				{stats.map(({ label, value, sub, color, icon: Icon }) => (
 					<div key={label} className={`${color} border rounded-2xl p-5`}>
 						<Icon className="h-5 w-5 mb-3" />
 						<p className="text-3xl font-bold">{value}</p>
@@ -143,10 +147,10 @@ export default function ReportsPage() {
 				<div className="flex items-center justify-between mb-5">
 					<div>
 						<h2 className="text-base font-semibold text-gray-900">
-							Monthly Trend (7 Months)
+							{t("reports.chart.title")}
 						</h2>
 						<p className="text-xs text-gray-500">
-							Patients, Prescriptions & Appointments
+							{t("reports.chart.subtitle")}
 						</p>
 					</div>
 				</div>
@@ -182,7 +186,7 @@ export default function ReportsPage() {
 							strokeWidth={2.5}
 							dot={{ r: 4 }}
 							activeDot={{ r: 6 }}
-							name="Patients"
+							name={t("reports.chart.patients")}
 						/>
 						<Line
 							type="monotone"
@@ -191,7 +195,7 @@ export default function ReportsPage() {
 							strokeWidth={2.5}
 							dot={{ r: 4 }}
 							activeDot={{ r: 6 }}
-							name="Prescriptions"
+							name={t("reports.chart.prescriptions")}
 						/>
 						<Line
 							type="monotone"
@@ -200,7 +204,7 @@ export default function ReportsPage() {
 							strokeWidth={2.5}
 							dot={{ r: 4 }}
 							activeDot={{ r: 6 }}
-							name="Appointments"
+							name={t("reports.chart.appointments")}
 						/>
 					</LineChart>
 				</ResponsiveContainer>
@@ -211,8 +215,8 @@ export default function ReportsPage() {
 				<div className="flex border-b border-gray-100">
 					{(
 						[
-							["patients", "Patient Report", FaUserInjured],
-							["prescriptions", "Prescription Report", FaNotesMedical],
+							["patients", t("reports.tabs.patientReport"), FaUserInjured],
+							["prescriptions", t("reports.tabs.prescriptionReport"), FaNotesMedical],
 						] as const
 					).map(([id, label, Icon]) => (
 						<button
@@ -232,13 +236,13 @@ export default function ReportsPage() {
 								<tr className="border-b border-gray-100">
 									{[
 										"ID",
-										"Name",
-										"Age",
-										"Gender",
-										"Blood Group",
-										"Status",
-										"Registered",
-										"Last Visit",
+										t("patients.columns.patient"),
+										t("patients.modal.age"),
+										t("patients.modal.gender"),
+										t("patients.modal.bloodGroup"),
+										t("patients.columns.status"),
+										t("patients.view.registered"),
+										t("patients.view.lastVisit"),
 									].map((h) => (
 										<th
 											key={h}
@@ -292,13 +296,13 @@ export default function ReportsPage() {
 							<thead>
 								<tr className="border-b border-gray-100">
 									{[
-										"Rx ID",
-										"Patient",
-										"Doctor",
-										"Date",
-										"Diagnosis",
-										"Medicines",
-										"Status",
+										t("prescriptions.columns.rxId"),
+										t("prescriptions.columns.patient"),
+										t("prescriptions.columns.doctor"),
+										t("prescriptions.columns.date"),
+										t("prescriptions.columns.diagnosis"),
+										t("prescriptions.columns.medicines"),
+										t("prescriptions.columns.status"),
 									].map((h) => (
 										<th
 											key={h}

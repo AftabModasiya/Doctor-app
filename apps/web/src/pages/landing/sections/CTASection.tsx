@@ -1,14 +1,17 @@
 import { FaArrowRight, FaCheckCircle, FaHospital } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-const perks = [
-	"No credit card required",
-	"HIPAA compliant from day one",
-	"14-day free trial",
-	"Cancel anytime",
-];
-
 export default function CTASection() {
+	const { t } = useTranslation();
+
+	const perks = [
+		t("landing.cta.perks.noCard"),
+		t("landing.cta.perks.hipaa"),
+		t("landing.cta.perks.trial"),
+		t("landing.cta.perks.cancel"),
+	];
+
 	return (
 		<section className="py-24 relative overflow-hidden bg-gradient-to-br from-primary-700 via-primary-600 to-sky-600 dark:from-gray-950 dark:via-primary-950 dark:to-primary-900">
 			<div className="absolute inset-0 pointer-events-none">
@@ -22,15 +25,13 @@ export default function CTASection() {
 				</div>
 
 				<h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
-					Start managing your hospital{" "}
+					{t("landing.cta.title")}{" "}
 					<span className="text-sky-200 dark:bg-gradient-to-r dark:from-primary-400 dark:to-sky-400 dark:bg-clip-text dark:text-transparent">
-						smarter today
+						{t("landing.cta.titleHighlight")}
 					</span>
 				</h2>
 				<p className="text-lg text-blue-100 dark:text-gray-300 mb-10 max-w-xl mx-auto leading-relaxed">
-					Join over 500 hospitals and clinics already using MediAdmin to
-					streamline operations, improve patient outcomes, and grow their
-					practice.
+					{t("landing.cta.subtitle")}
 				</p>
 
 				<div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
@@ -38,14 +39,14 @@ export default function CTASection() {
 						to="/signup"
 						className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white hover:bg-blue-50 text-primary-700 text-base font-bold rounded-2xl shadow-lg transition-all hover:-translate-y-0.5"
 					>
-						Start Your Free Trial
+						{t("landing.cta.startTrial")}
 						<FaArrowRight className="h-4 w-4" />
 					</Link>
 					<Link
 						to="/login"
 						className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 border border-white/30 hover:bg-white/20 text-white text-base font-semibold rounded-2xl backdrop-blur-sm transition-all"
 					>
-						Sign In to Dashboard
+						{t("landing.cta.signInDashboard")}
 					</Link>
 				</div>
 

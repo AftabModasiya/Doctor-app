@@ -1,6 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { FaEye, FaNotesMedical, FaPlus, FaSearch } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import Badge from "../../components/ui/Badge";
 import Button from "../../components/ui/Button";
 import Modal from "../../components/ui/Modal";
@@ -20,6 +21,7 @@ const statusVariant: Record<string, "success" | "info" | "danger"> = {
 };
 
 export default function PrescriptionsPage() {
+	const { t } = useTranslation();
 	const [prescriptions, setPrescriptions] =
 		useState<Prescription[]>(mockPrescriptions);
 	const [search, setSearch] = useState("");
@@ -70,7 +72,7 @@ export default function PrescriptionsPage() {
 
 	const handleCreate = () => {
 		if (!form.patientId || !form.doctorId || !form.diagnosis) {
-			toast.error("Please fill required fields");
+			toast.error(t("prescriptions.toast.fillRequired"));
 			return;
 		}
 		const patient = mockPatients.find((p) => p.id === form.patientId);
@@ -88,7 +90,7 @@ export default function PrescriptionsPage() {
 			status: "Active",
 		};
 		setPrescriptions((ps) => [newRx, ...ps]);
-		toast.success("Prescription created");
+		toast.success(t("prescriptions.toast.created"));
 		setCreateOpen(false);
 		setForm({ patientId: "", doctorId: "", diagnosis: "", notes: "" });
 		setSelectedMeds([]);
@@ -97,7 +99,7 @@ export default function PrescriptionsPage() {
 	const columns = [
 		{
 			key: "id",
-			header: "Rx ID",
+			header: t("prescriptions.columns.rxId"),
 			render: (p: Prescription) => (
 				<span className="font-mono text-xs font-semibold text-primary-600">
 					{p.id}
@@ -106,7 +108,7 @@ export default function PrescriptionsPage() {
 		},
 		{
 			key: "patientName",
-			header: "Patient",
+			header: t("prescriptions.columns.patient"),
 			render: (p: Prescription) => (
 				<div>
 					<p className="text-sm font-semibold text-gray-900">{p.patientName}</p>
@@ -116,37 +118,37 @@ export default function PrescriptionsPage() {
 		},
 		{
 			key: "doctorName",
-			header: "Doctor",
+			header: t("prescriptions.columns.doctor"),
 			render: (p: Prescription) => (
 				<span className="text-sm text-gray-700">{p.doctorName}</span>
 			),
 		},
 		{
 			key: "diagnosis",
-			header: "Diagnosis",
+			header: t("prescriptions.columns.diagnosis"),
 			render: (p: Prescription) => (
 				<span className="text-sm text-gray-700">{p.diagnosis}</span>
 			),
 		},
 		{
 			key: "date",
-			header: "Date",
+			header: t("prescriptions.columns.date"),
 			render: (p: Prescription) => (
 				<span className="text-sm text-gray-600">{p.date}</span>
 			),
 		},
 		{
 			key: "medicines",
-			header: "Medicines",
+			header: t("prescriptions.columns.medicines"),
 			render: (p: Prescription) => (
 				<span className="text-sm text-gray-600">
-					{p.medicines.length} item{p.medicines.length !== 1 ? "s" : ""}
+					{p.medicines.length} {p.medicines.length === 1 ? t("prescriptions.item") : t("prescriptions.items")}
 				</span>
 			),
 		},
 		{
 			key: "status",
-			header: "Status",
+			header: t("prescriptions.columns.status"),
 			render: (p: Prescription) => (
 				<Badge variant={statusVariant[p.status]} dot>
 					{p.status}
@@ -171,16 +173,16 @@ export default function PrescriptionsPage() {
 		<div className="space-y-5">
 			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
 				<div>
-					<h1 className="text-2xl font-bold text-gray-900">Prescriptions</h1>
+					<h1 className="text-2xl font-bold text-gray-900">{t("prescriptions.title")}</h1>
 					<p className="text-sm text-gray-500 mt-0.5">
-						{prescriptions.length} total prescriptions
+						{prescriptions.length} {t("prescriptions.totalPrescriptions")}
 					</p>
 				</div>
 				<Button
 					onClick={() => setCreateOpen(true)}
 					leftIcon={<FaPlus className="h-3.5 w-3.5" />}
 				>
-					New Prescription
+					{t("prescriptions.newPrescription")}
 				</Button>
 			</div>
 
@@ -191,7 +193,7 @@ export default function PrescriptionsPage() {
 						<input
 							value={search}
 							onChange={(e) => setSearch(e.target.value)}
-							placeholder="Search prescriptions…"
+							placeholder={t("prescriptions.searchPlaceholder")}
 							className="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
 						/>
 					</div>
@@ -199,7 +201,7 @@ export default function PrescriptionsPage() {
 				<Table
 					columns={columns}
 					data={filtered}
-					emptyMessage="No prescriptions found"
+					emptyMessage={t("prescriptions.noPrescriptions")}
 					emptyIcon={<FaNotesMedical />}
 				/>
 			</div>
@@ -209,21 +211,21 @@ export default function PrescriptionsPage() {
 				<Modal
 					isOpen={!!viewRx}
 					onClose={() => setViewRx(null)}
-					title={`Prescription ${viewRx.id}`}
+					title={`${t("prescriptions.modal.viewTitle")} ${viewRx.id}`}
 					size="lg"
 					footer={
 						<Button variant="secondary" onClick={() => setViewRx(null)}>
-							Close
+							{t("common.close")}
 						</Button>
 					}
 				>
 					<div className="space-y-4">
 						<div className="grid grid-cols-2 gap-3">
 							{[
-								["Patient", viewRx.patientName],
-								["Doctor", viewRx.doctorName],
-								["Date", viewRx.date],
-								["Diagnosis", viewRx.diagnosis],
+								[t("prescriptions.modal.patient"), viewRx.patientName],
+								[t("prescriptions.modal.doctor"), viewRx.doctorName],
+								[t("prescriptions.modal.date"), viewRx.date],
+								[t("prescriptions.modal.diagnosis"), viewRx.diagnosis],
 							].map(([k, v]) => (
 								<div key={k} className="bg-surface-secondary rounded-xl p-3">
 									<p className="text-xs text-gray-500">{k}</p>
@@ -235,7 +237,7 @@ export default function PrescriptionsPage() {
 						</div>
 						<div>
 							<p className="text-sm font-semibold text-gray-700 mb-2">
-								Prescribed Medicines
+								{t("prescriptions.modal.prescribedMedicines")}
 							</p>
 							<div className="space-y-2">
 								{viewRx.medicines.map((m, i) => (
@@ -261,7 +263,7 @@ export default function PrescriptionsPage() {
 						{viewRx.notes && (
 							<div className="p-3 bg-amber-50 border border-amber-200 rounded-xl">
 								<p className="text-xs font-semibold text-amber-800 mb-1">
-									Doctor's Notes
+									{t("prescriptions.modal.doctorNotes")}
 								</p>
 								<p className="text-sm text-amber-700">{viewRx.notes}</p>
 							</div>
@@ -274,14 +276,14 @@ export default function PrescriptionsPage() {
 			<Modal
 				isOpen={createOpen}
 				onClose={() => setCreateOpen(false)}
-				title="New Prescription"
+				title={t("prescriptions.modal.addTitle")}
 				size="lg"
 				footer={
 					<>
 						<Button variant="secondary" onClick={() => setCreateOpen(false)}>
-							Cancel
+							{t("common.cancel")}
 						</Button>
-						<Button onClick={handleCreate}>Create Prescription</Button>
+						<Button onClick={handleCreate}>{t("prescriptions.modal.addBtn")}</Button>
 					</>
 				}
 			>
@@ -289,7 +291,7 @@ export default function PrescriptionsPage() {
 					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 						<div>
 							<label className="block text-sm font-medium text-gray-700 mb-1.5">
-								Patient <span className="text-rose-500">*</span>
+								{t("prescriptions.modal.patient")} <span className="text-rose-500">*</span>
 							</label>
 							<select
 								value={form.patientId}
@@ -298,7 +300,7 @@ export default function PrescriptionsPage() {
 								}
 								className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
 							>
-								<option value="">Select patient…</option>
+								<option value="">{t("prescriptions.modal.selectPatient")}</option>
 								{mockPatients.map((p) => (
 									<option key={p.id} value={p.id}>
 										{p.name}
@@ -308,7 +310,7 @@ export default function PrescriptionsPage() {
 						</div>
 						<div>
 							<label className="block text-sm font-medium text-gray-700 mb-1.5">
-								Doctor <span className="text-rose-500">*</span>
+								{t("prescriptions.modal.doctor")} <span className="text-rose-500">*</span>
 							</label>
 							<select
 								value={form.doctorId}
@@ -317,7 +319,7 @@ export default function PrescriptionsPage() {
 								}
 								className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
 							>
-								<option value="">Select doctor…</option>
+								<option value="">{t("prescriptions.modal.selectDoctor")}</option>
 								{mockDoctors.map((d) => (
 									<option key={d.id} value={d.id}>
 										{d.name}
@@ -327,14 +329,14 @@ export default function PrescriptionsPage() {
 						</div>
 						<div className="sm:col-span-2">
 							<label className="block text-sm font-medium text-gray-700 mb-1.5">
-								Diagnosis <span className="text-rose-500">*</span>
+								{t("prescriptions.modal.diagnosis")} <span className="text-rose-500">*</span>
 							</label>
 							<input
 								value={form.diagnosis}
 								onChange={(e) =>
 									setForm((f) => ({ ...f, diagnosis: e.target.value }))
 								}
-								placeholder="e.g. Viral Fever"
+								placeholder={t("prescriptions.modal.diagnosisPlaceholder")}
 								className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
 							/>
 						</div>
@@ -342,14 +344,14 @@ export default function PrescriptionsPage() {
 
 					<div>
 						<div className="flex items-center justify-between mb-2">
-							<p className="text-sm font-semibold text-gray-700">Medicines</p>
+							<p className="text-sm font-semibold text-gray-700">{t("prescriptions.modal.medicines")}</p>
 							<Button
 								size="sm"
 								variant="outline"
 								onClick={addMed}
 								leftIcon={<FaPlus className="h-3 w-3" />}
 							>
-								Add Medicine
+								{t("prescriptions.modal.addMed")}
 							</Button>
 						</div>
 						{selectedMeds.map((m, i) => (
@@ -363,7 +365,7 @@ export default function PrescriptionsPage() {
 										onChange={(e) => updateMed(i, "medicineId", e.target.value)}
 										className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
 									>
-										<option value="">Select medicine…</option>
+										<option value="">{t("prescriptions.modal.selectMed")}</option>
 										{mockMedicines.map((med) => (
 											<option key={med.id} value={med.id}>
 												{med.name}
@@ -374,19 +376,19 @@ export default function PrescriptionsPage() {
 								<input
 									value={m.dosage}
 									onChange={(e) => updateMed(i, "dosage", e.target.value)}
-									placeholder="Dosage"
+									placeholder={t("prescriptions.modal.dosagePlaceholder")}
 									className="px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
 								/>
 								<input
 									value={m.frequency}
 									onChange={(e) => updateMed(i, "frequency", e.target.value)}
-									placeholder="Frequency"
+									placeholder={t("prescriptions.modal.frequencyPlaceholder")}
 									className="px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
 								/>
 								<input
 									value={m.duration}
 									onChange={(e) => updateMed(i, "duration", e.target.value)}
-									placeholder="Duration (e.g. 7 days)"
+									placeholder={t("prescriptions.modal.durationPlaceholder")}
 									className="col-span-2 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
 								/>
 							</div>
@@ -395,7 +397,7 @@ export default function PrescriptionsPage() {
 
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1.5">
-							Notes
+							{t("prescriptions.modal.notes")}
 						</label>
 						<textarea
 							value={form.notes}
@@ -403,7 +405,7 @@ export default function PrescriptionsPage() {
 								setForm((f) => ({ ...f, notes: e.target.value }))
 							}
 							rows={3}
-							placeholder="Additional instructions…"
+							placeholder={t("prescriptions.modal.notesPlaceholder")}
 							className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
 						/>
 					</div>

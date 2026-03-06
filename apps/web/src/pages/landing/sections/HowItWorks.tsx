@@ -5,72 +5,69 @@ import {
 	FaUserMd,
 	FaUserPlus,
 } from "react-icons/fa";
-
-const steps = [
-	{
-		number: "01",
-		icon: FaUserPlus,
-		title: "Create Your Account",
-		description:
-			"Sign up in under 2 minutes. No credit card needed for the free trial.",
-		color:
-			"bg-sky-50 dark:bg-sky-900/30 text-sky-600 dark:text-sky-400 border-sky-200 dark:border-sky-800",
-	},
-	{
-		number: "02",
-		icon: FaClinicMedical,
-		title: "Setup Your Clinic",
-		description:
-			"Configure your hospital name, departments, billing settings, and preferences.",
-		color:
-			"bg-violet-50 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 border-violet-200 dark:border-violet-800",
-	},
-	{
-		number: "03",
-		icon: FaUserMd,
-		title: "Add Doctors & Patients",
-		description:
-			"Onboard your medical staff and start registering patient profiles into the system.",
-		color:
-			"bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800",
-	},
-	{
-		number: "04",
-		icon: FaCalendarCheck,
-		title: "Manage Appointments",
-		description:
-			"Start booking and tracking appointments with automated confirmations and reminders.",
-		color:
-			"bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800",
-	},
-	{
-		number: "05",
-		icon: FaNotesMedical,
-		title: "Track & Prescribe",
-		description:
-			"Issue digital prescriptions, manage inventory, and generate detailed reports.",
-		color:
-			"bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-800",
-	},
-];
+import { useTranslation } from "react-i18next";
 
 export default function HowItWorks() {
+	const { t } = useTranslation();
+
+	const steps = [
+		{
+			number: "01",
+			icon: FaUserPlus,
+			title: t("landing.howItWorks.steps.one.title"),
+			description: t("landing.howItWorks.steps.one.desc"),
+			color:
+				"bg-sky-50 dark:bg-sky-900/30 text-sky-600 dark:text-sky-400 border-sky-200 dark:border-sky-800",
+		},
+		{
+			number: "02",
+			icon: FaClinicMedical,
+			title: t("landing.howItWorks.steps.two.title"),
+			description: t("landing.howItWorks.steps.two.desc"),
+			color:
+				"bg-violet-50 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 border-violet-200 dark:border-violet-800",
+		},
+		{
+			number: "03",
+			icon: FaUserMd,
+			title: t("landing.howItWorks.steps.three.title"),
+			description: t("landing.howItWorks.steps.three.desc"),
+			color:
+				"bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800",
+		},
+		{
+			number: "04",
+			icon: FaCalendarCheck,
+			title: t("landing.howItWorks.steps.four.title"),
+			description: t("landing.howItWorks.steps.four.desc"),
+			color:
+				"bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800",
+		},
+		{
+			number: "05",
+			icon: FaNotesMedical,
+			title: t("landing.howItWorks.steps.five.title"),
+			description: t("landing.howItWorks.steps.five.desc"),
+			color:
+				"bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-800",
+		},
+	];
+
 	return (
 		<section className="py-24 bg-white dark:bg-gray-950">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				<div className="text-center max-w-2xl mx-auto mb-16">
 					<span className="inline-block text-xs font-bold text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-900/30 px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">
-						How It Works
+						{t("landing.howItWorks.badge")}
 					</span>
 					<h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-						Up and running in{" "}
+						{t("landing.howItWorks.title1")}{" "}
 						<span className="bg-gradient-to-r from-violet-600 to-indigo-500 bg-clip-text text-transparent">
-							minutes, not months
+							{t("landing.howItWorks.titleHighlight")}
 						</span>
 					</h2>
 					<p className="text-lg text-gray-500 dark:text-gray-400">
-						Our guided onboarding gets your hospital digitized quickly — with
-						zero technical expertise needed.
+						{t("landing.howItWorks.subtitle")}
 					</p>
 				</div>
 
