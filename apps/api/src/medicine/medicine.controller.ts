@@ -13,7 +13,7 @@ import { MedicineService } from "./medicine.service";
 
 @Controller("medicine")
 export class MedicineController {
-	constructor(private readonly medicineService: MedicineService) { }
+	constructor(private readonly medicineService: MedicineService) {}
 
 	@Post()
 	create(@Body() createMedicineDto: CreateMedicineDto) {

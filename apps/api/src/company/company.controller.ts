@@ -13,7 +13,7 @@ import type { UpdateCompanyDto } from "./dto/update-company.dto";
 
 @Controller("company")
 export class CompanyController {
-	constructor(private readonly companyService: CompanyService) { }
+	constructor(private readonly companyService: CompanyService) {}
 
 	@Post()
 	create(@Body() createCompanyDto: CreateCompanyDto) {

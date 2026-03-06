@@ -15,7 +15,7 @@ import { MedicinePrescriptionService } from "./medicine-prescription.service";
 export class MedicinePrescriptionController {
 	constructor(
 		private readonly medicinePrescriptionService: MedicinePrescriptionService,
-	) { }
+	) {}
 
 	@Post()
 	create(@Body() createMedicinePrescriptionDto: CreateMedicinePrescriptionDto) {

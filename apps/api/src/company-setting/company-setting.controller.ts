@@ -11,7 +11,7 @@ import { CompanySettingService } from "./company-setting.service";
 
 @Controller("company-setting")
 export class CompanySettingController {
-	constructor(private readonly companySettingService: CompanySettingService) { }
+	constructor(private readonly companySettingService: CompanySettingService) {}
 
 	@Post()
 	create() {
@@ -29,9 +29,7 @@ export class CompanySettingController {
 	}
 
 	@Patch(":id")
-	update(
-		@Param("id") id: string,
-	) {
+	update(@Param("id") id: string) {
 		return this.companySettingService.update(+id);
 	}
 

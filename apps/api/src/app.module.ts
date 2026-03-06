@@ -1,7 +1,12 @@
+import path from "node:path";
 import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import { GracefulShutdownModule } from "nestjs-graceful-shutdown";
+import { HeaderResolver, I18nModule } from "nestjs-i18n";
 import { AppController } from "./app.controller";
 import { CompanyModule } from "./company/company.module";
 import { CompanySettingModule } from "./company-setting/company-setting.module";
+import { DatabaseModule } from "./database/database.module";
 import { DegreeModule } from "./degree/degree.module";
 import { DoctorModule } from "./doctor/doctor.module";
 import { MedicineModule } from "./medicine/medicine.module";
@@ -12,11 +17,6 @@ import { SpecializationModule } from "./specialization/specialization.module";
 import { TokenModule } from "./token/token.module";
 import { UserModule } from "./user/user.module";
 import { UserDeviceModule } from "./user-device/user-device.module";
-import { ConfigModule } from "@nestjs/config";
-import { DatabaseModule } from "./database/database.module";
-import { GracefulShutdownModule } from "nestjs-graceful-shutdown";
-import { HeaderResolver, I18nModule } from "nestjs-i18n";
-import path from "node:path";
 
 @Module({
 	imports: [
@@ -33,10 +33,7 @@ import path from "node:path";
 				watch: true,
 			},
 			resolvers: [new HeaderResolver(["x-lang"])],
-			typesOutputPath: path.join(
-				process.cwd(),
-				"generated/i18n.generated.ts",
-			),
+			typesOutputPath: path.join(process.cwd(), "generated/i18n.generated.ts"),
 		}),
 
 		//* API Modules
