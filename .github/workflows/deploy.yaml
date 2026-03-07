@@ -1,4 +1,4 @@
-name: Deploy Fullstack App
+name: Deploy Doctor App
 
 on:
   workflow_dispatch:
@@ -17,19 +17,13 @@ jobs:
         with:
           node-version: 24.14.0
 
-      # ---------- INSTALL ROOT DEPS ----------
-      - name: Install root dependencies
+      # ---------- INSTALL DEPS ----------
+      - name: Install dependencies
         run: npm install
 
-      # ---------- BUILD FRONTEND ----------
-      - name: Build React
-        working-directory: apps/web
-        run: npm run build
-
-      # ---------- BUILD BACKEND ----------
-      - name: Build NestJS
-        working-directory: apps/api
-        run: npm run build
+      # ---------- BUILD VIA TURBO ----------
+      - name: Build monorepo
+        run: npx turbo run build
 
       # ---------- DEPLOY ----------
       - name: Deploy to Oracle Server
@@ -48,6 +42,6 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd /var/www/doctorapp/apps/api
+            cd /var/www/doctorapp/apps/server
             npm install --production
-            pm2 restart doctor-api || pm2 start dist/main.js --name doctor-api
+            pm2 restart doctor-api || pm2 start dist/api/main.js --name doctor-api

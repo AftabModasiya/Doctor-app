@@ -9,7 +9,7 @@
 		"build": "npx turbo run build",
 		"test": "npx turbo run test",
 		"check": "biome check . --write",
-		"start": "node apps/api/dist/main"
+		"start": "node apps/server/dist/api/main"
 	},
 	"workspaces": [
 		"apps/*"

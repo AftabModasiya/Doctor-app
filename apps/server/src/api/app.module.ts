@@ -6,7 +6,6 @@ import { HeaderResolver, I18nModule } from "nestjs-i18n";
 import { AppController } from "./app.controller";
 import { CompanyModule } from "./company/company.module";
 import { CompanySettingModule } from "./company-setting/company-setting.module";
-import { DatabaseModule } from "./database/database.module";
 import { DegreeModule } from "./degree/degree.module";
 import { DoctorModule } from "./doctor/doctor.module";
 import { MedicineModule } from "./medicine/medicine.module";
@@ -18,6 +17,7 @@ import { TokenModule } from "./token/token.module";
 import { UserModule } from "./user/user.module";
 import { UserDeviceModule } from "./user-device/user-device.module";
 import { ServeStaticModule } from "@nestjs/serve-static";
+import { DatabaseModule } from "src/database/database.module";
 
 @Module({
 	imports: [
@@ -30,14 +30,14 @@ import { ServeStaticModule } from "@nestjs/serve-static";
 		I18nModule.forRoot({
 			fallbackLanguage: "en",
 			loaderOptions: {
-				path: path.join(__dirname, "..", "/locales/"),
+				path: path.join(__dirname, "..", "..", "/locales/"),
 				watch: true,
 			},
 			resolvers: [new HeaderResolver(["x-lang"])],
 			typesOutputPath: path.join(process.cwd(), "generated/i18n.generated.ts"),
 		}),
 		ServeStaticModule.forRoot({
-			rootPath: path.join(process.cwd(), "..", "..", "web", "dist"),
+			rootPath: path.join(process.cwd(), "..", "..", "..", "web", "dist"),
 		}),
 
 		//* API Modules
