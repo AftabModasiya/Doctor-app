@@ -4,7 +4,7 @@ import { FaBars, FaHospital, FaMoon, FaSun, FaTimes } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { useTheme } from "../../context/ThemeContext";
+import { useTheme } from "../../context/useTheme";
 
 export default function LandingNavbar() {
 	const { t } = useTranslation();
