@@ -14,18 +14,8 @@ import {
 	FaUserMd,
 } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../../context/AuthContext";
-
-const navItems = [
-	{ label: "Dashboard", path: "/dashboard", icon: FaTachometerAlt },
-	{ label: "Patients", path: "/patients", icon: FaUserInjured },
-	{ label: "Doctors", path: "/doctors", icon: FaUserMd },
-	{ label: "Medicines", path: "/medicines", icon: FaPills },
-	{ label: "Prescriptions", path: "/prescriptions", icon: FaNotesMedical },
-	{ label: "Appointments", path: "/appointments", icon: FaCalendarCheck },
-	{ label: "Reports", path: "/reports", icon: FaChartBar },
-	{ label: "Settings", path: "/settings", icon: FaCog },
-];
 
 interface SidebarProps {
 	collapsed: boolean;
@@ -40,8 +30,20 @@ export default function Sidebar({
 	mobileOpen,
 	onMobileClose,
 }: SidebarProps) {
+	const { t } = useTranslation();
 	const { logout, user } = useAuth();
 	const navigate = useNavigate();
+
+	const navItems = [
+		{ label: t("nav.dashboard"), path: "/dashboard", icon: FaTachometerAlt },
+		{ label: t("nav.patients"), path: "/patients", icon: FaUserInjured },
+		{ label: t("nav.doctors"), path: "/doctors", icon: FaUserMd },
+		{ label: t("nav.medicines"), path: "/medicines", icon: FaPills },
+		{ label: t("nav.prescriptions"), path: "/prescriptions", icon: FaNotesMedical },
+		{ label: t("nav.appointments"), path: "/appointments", icon: FaCalendarCheck },
+		{ label: t("nav.reports"), path: "/reports", icon: FaChartBar },
+		{ label: t("nav.settings"), path: "/settings", icon: FaCog },
+	];
 
 	const handleLogout = () => {
 		logout();
@@ -63,9 +65,9 @@ export default function Sidebar({
 				{!collapsed && (
 					<div className="overflow-hidden">
 						<p className="text-sm font-bold text-gray-900 leading-tight">
-							MediAdmin
+							{t("common.appName")}
 						</p>
-						<p className="text-xs text-gray-500">Hospital Management</p>
+						<p className="text-xs text-gray-500">{t("sidebar.hospitalManagement")}</p>
 					</div>
 				)}
 				<button
@@ -120,7 +122,7 @@ export default function Sidebar({
 					)}
 				>
 					<FaSignOutAlt className="h-4 w-4 flex-shrink-0" />
-					{!collapsed && "Logout"}
+					{!collapsed && t("common.logout")}
 				</button>
 			</div>
 		</div>

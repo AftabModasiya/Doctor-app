@@ -10,6 +10,7 @@ import {
 	FaTrash,
 	FaUserInjured,
 } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import Badge from "../../components/ui/Badge";
 import Button from "../../components/ui/Button";
 import Modal from "../../components/ui/Modal";
@@ -23,6 +24,7 @@ const ITEMS_PER_PAGE = 8;
 type FilterStatus = "All" | "Active" | "Inactive";
 
 export default function PatientsPage() {
+	const { t } = useTranslation();
 	const [patients, setPatients] = useState<Patient[]>(mockPatients);
 	const [search, setSearch] = useState("");
 	const [filterStatus, setFilterStatus] = useState<FilterStatus>("All");
@@ -77,7 +79,7 @@ export default function PatientsPage() {
 			setPatients((ps) =>
 				ps.map((p) => (p.id === editPatient.id ? { ...p, ...data } : p)),
 			);
-			toast.success("Patient updated successfully");
+			toast.success(t("patients.toast.updated"));
 		} else {
 			const newPatient: Patient = {
 				...data,
@@ -86,28 +88,28 @@ export default function PatientsPage() {
 				lastVisit: "",
 			} as Patient;
 			setPatients((ps) => [newPatient, ...ps]);
-			toast.success("Patient added successfully");
+			toast.success(t("patients.toast.added"));
 		}
 		setModalOpen(false);
 	};
 
 	const handleDelete = (p: Patient) => {
 		setPatients((ps) => ps.filter((x) => x.id !== p.id));
-		toast.success("Patient removed");
+		toast.success(t("patients.toast.removed"));
 		setDeleteConfirm(null);
 	};
 
 	const columns = [
 		{
 			key: "id",
-			header: "Patient ID",
+			header: t("patients.columns.patientId"),
 			render: (p: Patient) => (
 				<span className="font-mono text-xs text-gray-500">{p.id}</span>
 			),
 		},
 		{
 			key: "name",
-			header: "Patient",
+			header: t("patients.columns.patient"),
 			render: (p: Patient) => (
 				<div className="flex items-center gap-2.5">
 					<div className="h-8 w-8 rounded-xl bg-primary-100 flex items-center justify-center text-primary-700 text-xs font-bold">
@@ -126,7 +128,7 @@ export default function PatientsPage() {
 		},
 		{
 			key: "age",
-			header: "Age / Gender",
+			header: t("patients.columns.ageGender"),
 			render: (p: Patient) => (
 				<span className="text-sm">
 					{p.age}y · {p.gender}
@@ -135,7 +137,7 @@ export default function PatientsPage() {
 		},
 		{
 			key: "bloodGroup",
-			header: "Blood",
+			header: t("patients.columns.blood"),
 			render: (p: Patient) => (
 				<span className="font-mono text-xs font-semibold text-rose-600 bg-rose-50 px-2 py-1 rounded-lg">
 					{p.bloodGroup}
@@ -144,14 +146,14 @@ export default function PatientsPage() {
 		},
 		{
 			key: "phone",
-			header: "Phone",
+			header: t("patients.columns.phone"),
 			render: (p: Patient) => (
 				<span className="text-sm text-gray-600">{p.phone}</span>
 			),
 		},
 		{
 			key: "status",
-			header: "Status",
+			header: t("patients.columns.status"),
 			render: (p: Patient) => (
 				<Badge variant={p.status === "Active" ? "success" : "neutral"} dot>
 					{p.status}
@@ -160,7 +162,7 @@ export default function PatientsPage() {
 		},
 		{
 			key: "actions",
-			header: "Actions",
+			header: t("patients.columns.actions"),
 			render: (p: Patient) => (
 				<div className="flex items-center gap-1">
 					<button
@@ -190,13 +192,13 @@ export default function PatientsPage() {
 		<div className="space-y-5">
 			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
 				<div>
-					<h1 className="text-2xl font-bold text-gray-900">Patients</h1>
+					<h1 className="text-2xl font-bold text-gray-900">{t("patients.title")}</h1>
 					<p className="text-sm text-gray-500 mt-0.5">
-						{patients.length} total patients registered
+						{patients.length} {t("patients.totalRegistered")}
 					</p>
 				</div>
 				<Button onClick={openAdd} leftIcon={<FaPlus className="h-3.5 w-3.5" />}>
-					Add Patient
+					{t("patients.addPatient")}
 				</Button>
 			</div>
 
@@ -211,22 +213,26 @@ export default function PatientsPage() {
 								setSearch(e.target.value);
 								setCurrentPage(1);
 							}}
-							placeholder="Search by name, email or ID…"
+							placeholder={t("patients.searchPlaceholder")}
 							className="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
 						/>
 					</div>
 					<div className="flex items-center gap-2">
 						<FaFilter className="h-3.5 w-3.5 text-gray-400" />
-						{(["All", "Active", "Inactive"] as FilterStatus[]).map((s) => (
+						{[
+							{ label: t("appointments.all"), value: "All" },
+							{ label: t("patients.modal.active"), value: "Active" },
+							{ label: t("patients.modal.inactive"), value: "Inactive" },
+						].map((s) => (
 							<button
-								key={s}
+								key={s.value}
 								onClick={() => {
-									setFilterStatus(s);
+									setFilterStatus(s.value as FilterStatus);
 									setCurrentPage(1);
 								}}
-								className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${filterStatus === s ? "bg-primary-600 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
+								className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${filterStatus === s.value ? "bg-primary-600 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
 							>
-								{s}
+								{s.label}
 							</button>
 						))}
 					</div>
@@ -234,7 +240,7 @@ export default function PatientsPage() {
 				<Table
 					columns={columns}
 					data={paged}
-					emptyMessage="No patients found"
+					emptyMessage={t("patients.noPatients")}
 					emptyIcon={<FaUserInjured />}
 				/>
 				<div className="px-4 border-t border-gray-50">
@@ -252,15 +258,15 @@ export default function PatientsPage() {
 			<Modal
 				isOpen={modalOpen}
 				onClose={() => setModalOpen(false)}
-				title={editPatient ? "Edit Patient" : "Add New Patient"}
+				title={editPatient ? t("patients.modal.editTitle") : t("patients.modal.addTitle")}
 				size="lg"
 				footer={
 					<>
 						<Button variant="secondary" onClick={() => setModalOpen(false)}>
-							Cancel
+							{t("common.cancel")}
 						</Button>
 						<Button onClick={handleSubmit(onSubmit)}>
-							{editPatient ? "Save Changes" : "Add Patient"}
+							{editPatient ? t("patients.modal.saveBtn") : t("patients.modal.addBtn")}
 						</Button>
 					</>
 				}
@@ -269,24 +275,24 @@ export default function PatientsPage() {
 					{[
 						{
 							name: "name" as const,
-							label: "Full Name",
-							placeholder: "James Harrington",
+							label: t("patients.modal.fullName"),
+							placeholder: t("patients.modal.fullNamePlaceholder"),
 						},
 						{
 							name: "email" as const,
-							label: "Email",
+							label: t("patients.modal.email"),
 							type: "email",
-							placeholder: "patient@email.com",
+							placeholder: t("patients.modal.emailPlaceholder"),
 						},
 						{
 							name: "phone" as const,
-							label: "Phone",
-							placeholder: "+1 555-0100",
+							label: t("patients.modal.phone"),
+							placeholder: t("patients.modal.phonePlaceholder"),
 						},
 						{
 							name: "address" as const,
-							label: "Address",
-							placeholder: "123 Oak St",
+							label: t("patients.modal.address"),
+							placeholder: t("patients.modal.addressPlaceholder"),
 						},
 					].map((f) => (
 						<div key={f.name}>
@@ -303,7 +309,7 @@ export default function PatientsPage() {
 					))}
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1.5">
-							Age
+							{t("patients.modal.age")}
 						</label>
 						<input
 							{...register("age")}
@@ -314,20 +320,20 @@ export default function PatientsPage() {
 					</div>
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1.5">
-							Gender
+							{t("patients.modal.gender")}
 						</label>
 						<select
 							{...register("gender")}
 							className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
 						>
-							<option value="Male">Male</option>
-							<option value="Female">Female</option>
-							<option value="Other">Other</option>
+							<option value="Male">{t("patients.modal.male")}</option>
+							<option value="Female">{t("patients.modal.female")}</option>
+							<option value="Other">{t("patients.modal.other")}</option>
 						</select>
 					</div>
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1.5">
-							Blood Group
+							{t("patients.modal.bloodGroup")}
 						</label>
 						<select
 							{...register("bloodGroup")}
@@ -342,14 +348,14 @@ export default function PatientsPage() {
 					</div>
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1.5">
-							Status
+							{t("patients.modal.status")}
 						</label>
 						<select
 							{...register("status")}
 							className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
 						>
-							<option value="Active">Active</option>
-							<option value="Inactive">Inactive</option>
+							<option value="Active">{t("patients.modal.active")}</option>
+							<option value="Inactive">{t("patients.modal.inactive")}</option>
 						</select>
 					</div>
 				</div>
@@ -360,11 +366,11 @@ export default function PatientsPage() {
 				<Modal
 					isOpen={!!viewPatient}
 					onClose={() => setViewPatient(null)}
-					title="Patient Profile"
+					title={t("patients.modal.viewTitle")}
 					size="md"
 					footer={
 						<Button variant="secondary" onClick={() => setViewPatient(null)}>
-							Close
+							{t("common.close")}
 						</Button>
 					}
 				>
@@ -393,14 +399,14 @@ export default function PatientsPage() {
 						</div>
 						<div className="grid grid-cols-2 gap-3">
 							{[
-								["Age", `${viewPatient.age} years`],
-								["Gender", viewPatient.gender],
-								["Blood Group", viewPatient.bloodGroup],
-								["Phone", viewPatient.phone],
-								["Email", viewPatient.email],
-								["Registered", viewPatient.registeredDate],
-								["Last Visit", viewPatient.lastVisit || "N/A"],
-								["Address", viewPatient.address],
+								[t("patients.view.age"), `${viewPatient.age} years`],
+								[t("patients.view.gender"), viewPatient.gender],
+								[t("patients.view.bloodGroup"), viewPatient.bloodGroup],
+								[t("patients.view.phone"), viewPatient.phone],
+								[t("patients.view.email"), viewPatient.email],
+								[t("patients.view.registered"), viewPatient.registeredDate],
+								[t("patients.view.lastVisit"), viewPatient.lastVisit || "N/A"],
+								[t("patients.view.address"), viewPatient.address],
 							].map(([k, v]) => (
 								<div key={k} className="bg-surface-secondary rounded-xl p-3">
 									<p className="text-xs text-gray-500">{k}</p>
@@ -419,7 +425,7 @@ export default function PatientsPage() {
 				<Modal
 					isOpen={!!deleteConfirm}
 					onClose={() => setDeleteConfirm(null)}
-					title="Confirm Delete"
+					title={t("patients.modal.deleteTitle")}
 					size="sm"
 					footer={
 						<>
@@ -427,20 +433,20 @@ export default function PatientsPage() {
 								variant="secondary"
 								onClick={() => setDeleteConfirm(null)}
 							>
-								Cancel
+								{t("common.cancel")}
 							</Button>
 							<Button
 								variant="danger"
 								onClick={() => handleDelete(deleteConfirm)}
 							>
-								Delete
+								{t("patients.modal.deleteBtn")}
 							</Button>
 						</>
 					}
 				>
 					<p className="text-sm text-gray-600">
-						Are you sure you want to remove{" "}
-						<strong>{deleteConfirm.name}</strong>? This action cannot be undone.
+						{t("patients.modal.deleteConfirm")}{" "}
+						<strong>{deleteConfirm.name}</strong>{t("patients.modal.deleteUndone")}
 					</p>
 				</Modal>
 			)}

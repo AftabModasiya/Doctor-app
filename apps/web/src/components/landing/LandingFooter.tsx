@@ -8,21 +8,42 @@ import {
 	FaPhone,
 	FaTwitter,
 } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-const footerLinks = {
-	Product: ["Features", "Modules", "Pricing", "Changelog", "Roadmap"],
-	Company: ["About Us", "Blog", "Careers", "Press", "Partners"],
-	Support: ["Documentation", "Help Center", "Community", "Status", "Contact"],
-	Legal: [
-		"Privacy Policy",
-		"Terms of Service",
-		"Cookie Policy",
-		"HIPAA Compliance",
-	],
-};
-
 export default function LandingFooter() {
+	const { t } = useTranslation();
+
+	const footerLinks = {
+		[t("landing.footer.product")]: [
+			t("landing.nav.features"),
+			t("landing.nav.modules"),
+			t("landing.nav.pricing"),
+			t("landing.footer.changelog"),
+			t("landing.footer.roadmap")
+		],
+		[t("landing.footer.company")]: [
+			t("landing.footer.aboutUs"),
+			t("landing.footer.blog"),
+			t("landing.footer.careers"),
+			t("landing.footer.press"),
+			t("landing.footer.partners")
+		],
+		[t("landing.footer.support")]: [
+			t("landing.footer.documentation"),
+			t("landing.footer.helpCenter"),
+			t("landing.footer.community"),
+			t("landing.footer.status"),
+			t("landing.nav.contact")
+		],
+		[t("landing.footer.legal")]: [
+			t("landing.footer.privacyPolicy"),
+			t("landing.footer.termsOfService"),
+			t("landing.footer.cookiePolicy"),
+			t("landing.footer.hipaa")
+		],
+	};
+
 	return (
 		<footer className="bg-gray-950 text-gray-300" id="contact">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
@@ -38,8 +59,7 @@ export default function LandingFooter() {
 							</span>
 						</Link>
 						<p className="text-sm text-gray-400 leading-relaxed mb-6 max-w-xs">
-							The all-in-one hospital management platform trusted by clinics and
-							hospitals worldwide to modernize patient care.
+							{t("landing.footer.tagline")}
 						</p>
 						<div className="space-y-2">
 							{[
@@ -86,7 +106,7 @@ export default function LandingFooter() {
 				{/* Bottom Bar */}
 				<div className="border-t border-gray-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
 					<p className="text-sm text-gray-500">
-						© 2025 MediAdmin Inc. All rights reserved.
+						© 2025 MediAdmin Inc. {t("landing.footer.rights")}
 					</p>
 					<div className="flex items-center gap-3">
 						{[

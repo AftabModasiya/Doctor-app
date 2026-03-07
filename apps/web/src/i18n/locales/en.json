@@ -1,0 +1,664 @@
+{
+    "common": {
+        "appName": "MediAdmin",
+        "tagline": "Hospital Management System",
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "remove": "Remove",
+        "edit": "Edit",
+        "close": "Close",
+        "search": "Search",
+        "logout": "Logout",
+        "signOut": "Sign Out",
+        "profile": "Profile",
+        "settings": "Settings",
+        "add": "Add",
+        "saveChanges": "Save Changes",
+        "loading": "Loading...",
+        "dashboard": "Dashboard"
+    },
+    "validation": {
+        "nameMin": "Min 2 characters",
+        "nameRequired": "Name required",
+        "emailInvalid": "Invalid email",
+        "emailRequired": "Email required",
+        "passwordMin": "Min 6 characters",
+        "passwordRequired": "Password required",
+        "passwordsMustMatch": "Passwords must match",
+        "confirmPasswordRequired": "Confirm your password"
+    },
+    "auth": {
+        "welcomeBack": "Welcome back",
+        "signInSubtitle": "Sign in to your admin account to continue",
+        "demoHint": "Demo: Use any email & password (min 6 chars) to login",
+        "demo": "Demo:",
+        "emailAddress": "Email Address",
+        "emailPlaceholder": "admin@hospital.com",
+        "password": "Password",
+        "forgotPassword": "Forgot password?",
+        "signIn": "Sign In",
+        "noAccount": "Don't have an account?",
+        "createAccount": "Create account",
+        "createAccountBtn": "Create Account",
+        "createAccountTitle": "Create an account",
+        "createAccountSubtitle": "Join MediAdmin to manage your hospital",
+        "fullName": "Full Name",
+        "fullNamePlaceholder": "Dr. John Smith",
+        "passwordPlaceholder": "Min 6 characters",
+        "confirmPassword": "Confirm Password",
+        "confirmPasswordPlaceholder": "Repeat your password",
+        "alreadyHaveAccount": "Already have an account?",
+        "resetPassword": {
+            "title": "Reset Password",
+            "subtitle": "Enter your new password below",
+            "newPassword": "New Password",
+            "confirmPassword": "Confirm New Password",
+            "passwordPlaceholder": "Min 6 characters",
+            "submitBtn": "Reset Password",
+            "doneTitle": "Password Reset Successful",
+            "redirecting": "Your password has been reset. Redirecting to login...",
+            "emailSubtitle": "Enter your email to receive a password reset link",
+            "sendLink": "Send Reset Link"
+        },
+        "backToSignIn": "Back to sign in",
+        "checkEmail": "Check your email",
+        "checkEmailDesc": "We sent a password reset link to",
+        "modernHealthcare": "Modern Healthcare",
+        "administration": "Administration",
+        "managementSuiteDesc": "Streamline your hospital operations with our comprehensive management suite built for healthcare professionals.",
+        "manageDoctors": "Manage Doctors & Staff",
+        "patientRecords": "Patient Records & History",
+        "prescriptionTracking": "Prescription & Medicine Tracking",
+        "copyright": "© 2025 MediAdmin. Secure & HIPAA Compliant.",
+        "toast": {
+            "welcomeBack": "Welcome back!",
+            "invalidCredentials": "Invalid credentials. Please try again.",
+            "accountCreated": "Account created successfully!",
+            "signupFailed": "Signup failed. Please try again.",
+            "resetLinkSent": "Reset link sent!",
+            "resetSuccess": "Password reset successfully!"
+        }
+    },
+    "nav": {
+        "dashboard": "Dashboard",
+        "patients": "Patients",
+        "doctors": "Doctors",
+        "medicines": "Medicines",
+        "prescriptions": "Prescriptions",
+        "appointments": "Appointments",
+        "reports": "Reports",
+        "settings": "Settings"
+    },
+    "sidebar": {
+        "hospitalManagement": "Hospital Management"
+    },
+    "navbar": {
+        "searchPlaceholder": "Search patients, doctors...",
+        "admin": "Admin"
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "subtitle": "Welcome back, Admin",
+        "totalPatients": "Total Patients",
+        "totalDoctors": "Total Doctors",
+        "prescriptions": "Prescriptions",
+        "appointmentsToday": "Appointments Today",
+        "patientGrowth": "Patient Growth",
+        "last7Months": "Last 7 months",
+        "vsLastPeriod": "+18% vs last period",
+        "appointments": "Appointments",
+        "statusBreakdown": "Status breakdown",
+        "weeklyAppointments": "Weekly Appointments",
+        "weeklyVolume": "This week's appointment volume",
+        "todaySchedule": "Today's Schedule",
+        "recentActivity": "Recent Activity",
+        "latestActions": "Latest actions across the system",
+        "up": "Up",
+        "thisMonth": "+12 this month",
+        "onLeave": "1 on leave",
+        "thisWeek": "+8 this week",
+        "confirmed": "2 confirmed"
+    },
+    "appointments": {
+        "title": "Appointments",
+        "totalCount": "total appointments",
+        "bookAppointment": "Book Appointment",
+        "searchPlaceholder": "Search appointments…",
+        "noAppointments": "No appointments found",
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "completed": "Completed",
+        "cancelled": "Cancelled",
+        "all": "All",
+        "columns": {
+            "id": "ID",
+            "patient": "Patient",
+            "doctor": "Doctor",
+            "dateTime": "Date & Time",
+            "type": "Type",
+            "status": "Status",
+            "actions": "Actions"
+        },
+        "modal": {
+            "title": "Book Appointment",
+            "patient": "Patient",
+            "selectPatient": "Select patient…",
+            "doctor": "Doctor",
+            "selectDoctor": "Select doctor…",
+            "date": "Date",
+            "time": "Time",
+            "type": "Type",
+            "notes": "Notes",
+            "notesPlaceholder": "Reason for visit…",
+            "bookBtn": "Book Appointment"
+        },
+        "toast": {
+            "booked": "Appointment booked",
+            "fillRequired": "Fill all required fields"
+        }
+    },
+    "doctors": {
+        "title": "Doctors",
+        "onStaff": "doctors on staff",
+        "addDoctor": "Add Doctor",
+        "searchPlaceholder": "Search by name or specialization…",
+        "experience": "Experience",
+        "fee": "Fee",
+        "patients": "Patients",
+        "rating": "Rating",
+        "availableDays": "Available Days",
+        "modal": {
+            "addTitle": "Add Doctor",
+            "editTitle": "Edit Doctor",
+            "removeTitle": "Remove Doctor",
+            "fullName": "Full Name",
+            "fullNamePlaceholder": "Dr. Jane Smith",
+            "specialization": "Specialization",
+            "qualification": "Qualification",
+            "qualificationPlaceholder": "MD, FACC",
+            "email": "Email",
+            "emailPlaceholder": "doctor@mediadmin.com",
+            "phone": "Phone",
+            "phonePlaceholder": "+1 555-0200",
+            "experience": "Experience (years)",
+            "consultationFee": "Consultation Fee ($)",
+            "status": "Status",
+            "availability": "Availability",
+            "active": "Active",
+            "onLeave": "On Leave",
+            "inactive": "Inactive",
+            "removeConfirm": "from the system?",
+            "addBtn": "Add Doctor",
+            "saveBtn": "Save"
+        },
+        "toast": {
+            "added": "Doctor added",
+            "updated": "Doctor updated",
+            "removed": "Doctor removed"
+        }
+    },
+    "patients": {
+        "title": "Patients",
+        "totalRegistered": "total patients registered",
+        "addPatient": "Add Patient",
+        "searchPlaceholder": "Search by name, email or ID…",
+        "noPatients": "No patients found",
+        "columns": {
+            "patientId": "Patient ID",
+            "patient": "Patient",
+            "ageGender": "Age / Gender",
+            "blood": "Blood",
+            "phone": "Phone",
+            "status": "Status",
+            "actions": "Actions"
+        },
+        "modal": {
+            "addTitle": "Add New Patient",
+            "editTitle": "Edit Patient",
+            "viewTitle": "Patient Profile",
+            "deleteTitle": "Confirm Delete",
+            "fullName": "Full Name",
+            "fullNamePlaceholder": "James Harrington",
+            "email": "Email",
+            "emailPlaceholder": "patient@email.com",
+            "phone": "Phone",
+            "phonePlaceholder": "+1 555-0100",
+            "address": "Address",
+            "addressPlaceholder": "123 Oak St",
+            "age": "Age",
+            "gender": "Gender",
+            "male": "Male",
+            "female": "Female",
+            "other": "Other",
+            "bloodGroup": "Blood Group",
+            "status": "Status",
+            "active": "Active",
+            "inactive": "Inactive",
+            "addBtn": "Add Patient",
+            "saveBtn": "Save Changes",
+            "deleteConfirm": "Are you sure you want to remove",
+            "deleteUndone": "? This action cannot be undone.",
+            "deleteBtn": "Delete"
+        },
+        "view": {
+            "age": "Age",
+            "gender": "Gender",
+            "bloodGroup": "Blood Group",
+            "phone": "Phone",
+            "email": "Email",
+            "registered": "Registered",
+            "lastVisit": "Last Visit",
+            "address": "Address"
+        },
+        "toast": {
+            "added": "Patient added successfully",
+            "updated": "Patient updated successfully",
+            "removed": "Patient removed"
+        }
+    },
+    "medicines": {
+        "title": "Medicines",
+        "inInventory": "medicines in inventory",
+        "addMedicine": "Add Medicine",
+        "searchPlaceholder": "Search medicines…",
+        "noMedicines": "No medicines found",
+        "inStock": "In Stock",
+        "lowStock": "Low Stock",
+        "outOfStock": "Out of Stock",
+        "nearExpiry": "Near Expiry",
+        "columns": {
+            "medicine": "Medicine",
+            "category": "Category",
+            "stock": "Stock",
+            "price": "Price",
+            "expiry": "Expiry",
+            "status": "Status",
+            "actions": "Actions"
+        },
+        "modal": {
+            "addTitle": "Add Medicine",
+            "editTitle": "Edit Medicine",
+            "deleteTitle": "Delete Medicine",
+            "medicineName": "Medicine Name",
+            "medicineNamePlaceholder": "Amoxicillin 500mg",
+            "category": "Category",
+            "manufacturer": "Manufacturer",
+            "manufacturerPlaceholder": "PharmaCare Inc.",
+            "stockQuantity": "Stock Quantity",
+            "unit": "Unit",
+            "price": "Price ($)",
+            "expiryDate": "Expiry Date",
+            "addBtn": "Add Medicine",
+            "saveBtn": "Save",
+            "deleteConfirm": "Delete",
+            "fromInventory": "from inventory?",
+            "deleteBtn": "Delete"
+        },
+        "toast": {
+            "added": "Medicine added",
+            "updated": "Medicine updated",
+            "removed": "Medicine removed"
+        }
+    },
+    "prescriptions": {
+        "title": "Prescriptions",
+        "subtitle": "Manage and track patient prescriptions"
+    },
+    "reports": {
+        "title": "Reports",
+        "subtitle": "View analytics and generate reports"
+    },
+    "settings": {
+        "title": "Settings",
+        "subtitle": "Manage your account and system preferences",
+        "tabs": {
+            "profile": "Profile",
+            "changePassword": "Change Password",
+            "notifications": "Notifications",
+            "system": "System"
+        },
+        "profile": {
+            "title": "Admin Profile",
+            "subtitle": "Manage your personal information",
+            "fullName": "Full Name",
+            "emailAddress": "Email Address",
+            "phone": "Phone",
+            "department": "Department",
+            "role": "Role",
+            "saveProfile": "Save Profile",
+            "toast": {
+                "saved": "Profile updated successfully"
+            }
+        },
+        "password": {
+            "title": "Change Password",
+            "subtitle": "Keep your account secure with a strong password",
+            "current": "Current Password",
+            "new": "New Password",
+            "confirm": "Confirm New Password",
+            "hint": "Password must be at least 6 characters long",
+            "updateBtn": "Update Password",
+            "toast": {
+                "changed": "Password changed successfully",
+                "enterCurrent": "Enter current password",
+                "minLength": "New password must be 6+ characters",
+                "noMatch": "Passwords do not match"
+            }
+        },
+        "notifications": {
+            "title": "Notification Preferences",
+            "subtitle": "Choose what you want to be notified about",
+            "inApp": "In-App Notifications",
+            "delivery": "Delivery Methods",
+            "newAppointments": "New Appointments",
+            "newAppointmentsDesc": "When a new appointment is booked",
+            "prescriptions": "Prescriptions",
+            "prescriptionsDesc": "When a new prescription is created",
+            "medicineAlerts": "Medicine Alerts",
+            "medicineAlertsDesc": "Low stock and expiry warnings",
+            "weeklyReports": "Weekly Reports",
+            "weeklyReportsDesc": "Automated weekly summary report",
+            "emailNotifications": "Email Notifications",
+            "emailNotificationsDesc": "Receive alerts via email",
+            "smsNotifications": "SMS Notifications",
+            "smsNotificationsDesc": "Receive alerts via text message",
+            "savePreferences": "Save Preferences",
+            "toast": {
+                "saved": "Notification preferences saved"
+            }
+        },
+        "system": {
+            "title": "System Configuration",
+            "subtitle": "Configure global system settings",
+            "timezone": "Timezone",
+            "language": "Language",
+            "dateFormat": "Date Format",
+            "currency": "Currency",
+            "maintenanceMode": "Maintenance Mode",
+            "maintenanceModeDesc": "Temporarily disable access for non-admin users",
+            "saveSettings": "Save Settings",
+            "toast": {
+                "saved": "System settings saved",
+                "maintenanceEnabled": "⚠️ Maintenance mode enabled",
+                "maintenanceDisabled": "Maintenance mode disabled"
+            }
+        }
+    },
+    "landing": {
+        "nav": {
+            "features": "Features",
+            "modules": "Modules",
+            "howItWorks": "How It Works",
+            "pricing": "Pricing",
+            "testimonials": "Testimonials",
+            "login": "Login",
+            "getStarted": "Get Started",
+            "home": "Home",
+            "contact": "Contact",
+            "getStartedFree": "Get Started Free"
+        },
+        "footer": {
+            "product": "Product",
+            "company": "Company",
+            "support": "Support",
+            "legal": "Legal",
+            "changelog": "Changelog",
+            "roadmap": "Roadmap",
+            "aboutUs": "About Us",
+            "blog": "Blog",
+            "careers": "Careers",
+            "press": "Press",
+            "partners": "Partners",
+            "documentation": "Documentation",
+            "helpCenter": "Help Center",
+            "community": "Community",
+            "status": "Status",
+            "privacyPolicy": "Privacy Policy",
+            "termsOfService": "Terms of Service",
+            "cookiePolicy": "Cookie Policy",
+            "hipaa": "HIPAA Compliance",
+            "tagline": "The all-in-one hospital management platform trusted by clinics and hospitals worldwide to modernize patient care.",
+            "rights": "All rights reserved."
+        },
+        "hero": {
+            "badge": "Now with AI-powered diagnostics",
+            "title1": "Smart Doctor",
+            "titleHighlight": "Management System",
+            "title2": "Management System",
+            "title3": "for Modern Hospitals",
+            "subtitle": "Streamline your entire hospital workflow — from patient registrations and doctor scheduling to prescriptions, medicines, and analytics. All in one powerful, secure platform.",
+            "startTrial": "Start Free Trial",
+            "loginDashboard": "Login to Dashboard",
+            "hipaaCompliant": "HIPAA Compliant",
+            "noCreditCard": "No credit card required",
+            "freeTrial": "14-day free trial",
+            "todayOverview": "Today's Overview",
+            "hospitalDashboard": "Hospital Dashboard",
+            "weeklyAppointments": "Weekly Appointments",
+            "hipaaSecured": "HIPAA Secured",
+            "hospitals": "500+ hospitals",
+            "stats": {
+                "hospitalsTrust": "Hospitals Trust Us",
+                "patientsManaged": "Patients Managed",
+                "uptimeSla": "Uptime SLA",
+                "expertSupport": "Expert Support",
+                "hospitals": "Hospitals Trust Us",
+                "patients": "Patients Managed",
+                "uptime": "Uptime SLA",
+                "support": "Expert Support"
+            },
+            "trust": {
+                "hipaa": "HIPAA Compliant",
+                "noCard": "No credit card required",
+                "trial": "14-day free trial"
+            },
+            "dashboard": {
+                "overview": "Today's Overview",
+                "title": "Hospital Dashboard",
+                "patients": "Patients",
+                "doctors": "Doctors",
+                "medicines": "Medicines",
+                "appointments": "Appointments",
+                "weekly": "Weekly Appointments",
+                "hipaaSecured": "HIPAA Secured",
+                "hospitalCount": "500+ hospitals"
+            }
+        },
+        "features": {
+            "badge": "Features",
+            "title1": "Everything your hospital needs,",
+            "titleHighlight": "in one place",
+            "subtitle": "MediAdmin brings together all the tools a modern hospital needs to deliver better care more efficiently.",
+            "items": {
+                "patients": {
+                    "title": "Patient Management",
+                    "desc": "Maintain complete patient profiles, medical history, visit records, and health metrics in one place."
+                },
+                "doctors": {
+                    "title": "Doctor Scheduling",
+                    "desc": "Manage doctor availability, specializations, consultation fees, and daily appointment schedules."
+                },
+                "medicines": {
+                    "title": "Medicine Inventory",
+                    "desc": "Track medicine stock levels, expiry dates, and receive low-stock alerts automatically."
+                },
+                "prescriptions": {
+                    "title": "Prescription System",
+                    "desc": "Create, manage, and track digital prescriptions linked to patients and doctors seamlessly."
+                },
+                "appointments": {
+                    "title": "Appointment Booking",
+                    "desc": "Online appointment booking with real-time slot availability, reminders, and status tracking."
+                },
+                "reports": {
+                    "title": "Reports & Analytics",
+                    "desc": "Powerful dashboards with trend charts, KPIs, and exportable CSV reports for data-driven decisions."
+                },
+                "security": {
+                    "title": "HIPAA Compliant",
+                    "desc": "Enterprise-grade security with end-to-end encryption, audit logs, and full HIPAA compliance."
+                },
+                "notifications": {
+                    "title": "Smart Notifications",
+                    "desc": "Automated alerts for appointments, medicine expiry, low stock, and critical system events."
+                },
+                "mobile": {
+                    "title": "Mobile Responsive",
+                    "desc": "Fully responsive design that works seamlessly on desktop, tablet, and mobile devices."
+                }
+            }
+        },
+        "modules": {
+            "badge": "Modules",
+            "title1": "8 Powerful Modules,",
+            "titleHighlight": "One Platform",
+            "subtitle": "Each module is purpose-built for hospital operations, designed to work seamlessly together.",
+            "items": {
+                "dashboard": "Dashboard",
+                "dashboardDesc": "Real-time KPIs, charts & activity feed",
+                "patients": "Patients",
+                "patientsDesc": "Complete patient records & history",
+                "doctors": "Doctors",
+                "doctorsDesc": "Staff profiles, availability & schedules",
+                "medicines": "Medicines",
+                "medicinesDesc": "Inventory tracking & expiry alerts",
+                "prescriptions": "Prescriptions",
+                "prescriptionsDesc": "Digital prescriptions & history",
+                "appointments": "Appointments",
+                "appointmentsDesc": "Booking, scheduling & reminders",
+                "reports": "Reports",
+                "reportsDesc": "Analytics, trends & CSV exports",
+                "settings": "Settings",
+                "settingsDesc": "Profile, notifications & system config"
+            }
+        },
+        "howItWorks": {
+            "badge": "How It Works",
+            "title1": "Up and running in",
+            "titleHighlight": "minutes, not months",
+            "subtitle": "Our guided onboarding gets your hospital digitized quickly — with zero technical expertise needed.",
+            "steps": {
+                "one": {
+                    "title": "Create Your Account",
+                    "desc": "Sign up in under 2 minutes. No credit card needed for the free trial."
+                },
+                "two": {
+                    "title": "Setup Your Clinic",
+                    "desc": "Configure your hospital name, departments, billing settings, and preferences."
+                },
+                "three": {
+                    "title": "Add Doctors & Patients",
+                    "desc": "Onboard your medical staff and start registering patient profiles into the system."
+                },
+                "four": {
+                    "title": "Manage Appointments",
+                    "desc": "Start booking and tracking appointments with automated confirmations and reminders."
+                },
+                "five": {
+                    "title": "Track & Prescribe",
+                    "desc": "Issue digital prescriptions, manage inventory, and generate detailed reports."
+                }
+            }
+        },
+        "testimonials": {
+            "badge": "Testimonials",
+            "title": "Trusted by",
+            "titleHighlight": "500+ healthcare professionals",
+            "subtitle": "Join thousands of doctors and hospital administrators who love MediAdmin.",
+            "trustedBy": "Trusted by healthcare leaders worldwide",
+            "items": {
+                "sarah": {
+                    "name": "Dr. Sarah Mitchell",
+                    "title": "Chief Medical Officer",
+                    "hospital": "St. Luke's General Hospital",
+                    "quote": "MediAdmin has completely transformed how we manage our hospital operations. Patient records are now instantly accessible, appointment scheduling is seamless, and our staff productivity has improved by over 40%."
+                },
+                "james": {
+                    "name": "Dr. James Okafor",
+                    "title": "Hospital Director",
+                    "hospital": "City Medical Center",
+                    "quote": "The best investment our clinic made this year. The prescription system, combined with real-time medicine inventory alerts, has eliminated stockouts and prescription errors. Our patients are safer and happier."
+                },
+                "priya": {
+                    "name": "Dr. Priya Sharma",
+                    "title": "Department Head, Cardiology",
+                    "hospital": "Apollo Multi-Specialty Hospital",
+                    "quote": "Implementation was incredibly smooth. The support team was phenomenal and the HIPAA compliance features gave us peace of mind immediately. I recommend MediAdmin to every hospital looking to modernize."
+                }
+            }
+        },
+        "pricing": {
+            "badge": "Pricing",
+            "title": "Simple, transparent",
+            "titleHighlight": "pricing",
+            "subtitle": "No hidden fees. Cancel anytime. Start your 14-day free trial today — no credit card required.",
+            "mostPopular": "Most Popular",
+            "getStarted": "Get Started",
+            "contactSales": "Need a custom enterprise plan? Contact our sales team →",
+            "plans": {
+                "starter": {
+                    "name": "Starter",
+                    "desc": "Perfect for small clinics and solo practitioners.",
+                    "features": {
+                        "doctors": "Up to 2 Doctors",
+                        "patients": "Up to 500 Patients",
+                        "appointments": "Appointment Booking",
+                        "prescriptions": "Basic Prescriptions",
+                        "inventory": "Medicine Inventory",
+                        "support": "Email Support",
+                        "reports": "Advanced Reports",
+                        "branding": "Custom Branding",
+                        "api": "API Access",
+                        "priority": "Priority Support"
+                    }
+                },
+                "professional": {
+                    "name": "Professional",
+                    "desc": "The most popular choice for growing hospitals.",
+                    "features": {
+                        "doctors": "Up to 10 Doctors",
+                        "patients": "Up to 5,000 Patients",
+                        "appointments": "Appointment Booking",
+                        "prescriptions": "Full Prescription System",
+                        "inventory": "Medicine Inventory",
+                        "reports": "Advanced Reports & Analytics",
+                        "branding": "Custom Branding",
+                        "support": "Priority Email & Chat",
+                        "api": "API Access",
+                        "manager": "Dedicated Account Manager"
+                    }
+                },
+                "enterprise": {
+                    "name": "Enterprise",
+                    "desc": "For large hospital networks and multi-campus operations.",
+                    "features": {
+                        "doctors": "Unlimited Doctors",
+                        "patients": "Unlimited Patients",
+                        "appointments": "Appointment Booking",
+                        "prescriptions": "Full Prescription System",
+                        "inventory": "Medicine Inventory",
+                        "reports": "Advanced Reports & Analytics",
+                        "branding": "Custom Branding",
+                        "api": "API Access & Webhooks",
+                        "manager": "Dedicated Account Manager",
+                        "support": "24/7 Phone & SLA Support"
+                    }
+                }
+            }
+        },
+        "cta": {
+            "title": "Start managing your hospital",
+            "titleHighlight": "smarter today",
+            "subtitle": "Join over 500 hospitals and clinics already using MediAdmin to streamline operations, improve patient outcomes, and grow their practice.",
+            "startTrial": "Start Your Free Trial",
+            "signInDashboard": "Sign In to Dashboard",
+            "perks": {
+                "noCard": "No credit card required",
+                "hipaa": "HIPAA compliant from day one",
+                "trial": "14-day free trial",
+                "cancel": "Cancel anytime"
+            }
+        }
+    }
+}

@@ -9,6 +9,7 @@ import {
 	FaUserCircle,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../../context/AuthContext";
 
 interface NavbarProps {
@@ -16,6 +17,7 @@ interface NavbarProps {
 }
 
 export default function Navbar({ onMenuClick }: NavbarProps) {
+	const { t } = useTranslation();
 	const { user, logout } = useAuth();
 	const navigate = useNavigate();
 	const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -53,7 +55,7 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
 					<FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
 					<input
 						type="text"
-						placeholder="Search patients, doctors..."
+						placeholder={t("navbar.searchPlaceholder")}
 						className="pl-9 pr-4 py-2 text-sm bg-surface-secondary border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent w-64 transition-all"
 					/>
 				</div>
@@ -109,7 +111,7 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
 								className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
 							>
 								<FaUserCircle className="h-4 w-4 text-gray-400" />
-								Profile
+								{t("common.profile")}
 							</button>
 							<button
 								onClick={() => {
@@ -119,7 +121,7 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
 								className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
 							>
 								<FaCog className="h-4 w-4 text-gray-400" />
-								Settings
+								{t("common.settings")}
 							</button>
 							<div className="border-t border-gray-100">
 								<button
@@ -127,7 +129,7 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
 									className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-rose-600 hover:bg-rose-50 transition-colors"
 								>
 									<FaSignOutAlt className="h-4 w-4" />
-									Sign Out
+									{t("common.signOut")}
 								</button>
 							</div>
 						</div>

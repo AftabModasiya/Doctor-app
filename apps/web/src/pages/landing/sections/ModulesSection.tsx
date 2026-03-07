@@ -8,75 +8,77 @@ import {
 	FaUserInjured,
 	FaUserMd,
 } from "react-icons/fa";
-
-const modules = [
-	{
-		icon: FaTachometerAlt,
-		name: "Dashboard",
-		desc: "Real-time KPIs, charts & activity feed",
-		color: "from-sky-500 to-blue-600",
-	},
-	{
-		icon: FaUserInjured,
-		name: "Patients",
-		desc: "Complete patient records & history",
-		color: "from-emerald-500 to-teal-600",
-	},
-	{
-		icon: FaUserMd,
-		name: "Doctors",
-		desc: "Staff profiles, availability & schedules",
-		color: "from-violet-500 to-purple-600",
-	},
-	{
-		icon: FaPills,
-		name: "Medicines",
-		desc: "Inventory tracking & expiry alerts",
-		color: "from-amber-500 to-orange-600",
-	},
-	{
-		icon: FaNotesMedical,
-		name: "Prescriptions",
-		desc: "Digital prescriptions & history",
-		color: "from-rose-500 to-pink-600",
-	},
-	{
-		icon: FaCalendarCheck,
-		name: "Appointments",
-		desc: "Booking, scheduling & reminders",
-		color: "from-cyan-500 to-sky-600",
-	},
-	{
-		icon: FaChartBar,
-		name: "Reports",
-		desc: "Analytics, trends & CSV exports",
-		color: "from-indigo-500 to-blue-600",
-	},
-	{
-		icon: FaCog,
-		name: "Settings",
-		desc: "Profile, notifications & system config",
-		color: "from-gray-500 to-slate-600",
-	},
-];
+import { useTranslation } from "react-i18next";
 
 export default function ModulesSection() {
+	const { t } = useTranslation();
+
+	const modules = [
+		{
+			icon: FaTachometerAlt,
+			name: t("landing.modules.items.dashboard"),
+			desc: t("landing.modules.items.dashboardDesc"),
+			color: "from-sky-500 to-blue-600",
+		},
+		{
+			icon: FaUserInjured,
+			name: t("landing.modules.items.patients"),
+			desc: t("landing.modules.items.patientsDesc"),
+			color: "from-emerald-500 to-teal-600",
+		},
+		{
+			icon: FaUserMd,
+			name: t("landing.modules.items.doctors"),
+			desc: t("landing.modules.items.doctorsDesc"),
+			color: "from-violet-500 to-purple-600",
+		},
+		{
+			icon: FaPills,
+			name: t("landing.modules.items.medicines"),
+			desc: t("landing.modules.items.medicinesDesc"),
+			color: "from-amber-500 to-orange-600",
+		},
+		{
+			icon: FaNotesMedical,
+			name: t("landing.modules.items.prescriptions"),
+			desc: t("landing.modules.items.prescriptionsDesc"),
+			color: "from-rose-500 to-pink-600",
+		},
+		{
+			icon: FaCalendarCheck,
+			name: t("landing.modules.items.appointments"),
+			desc: t("landing.modules.items.appointmentsDesc"),
+			color: "from-cyan-500 to-sky-600",
+		},
+		{
+			icon: FaChartBar,
+			name: t("landing.modules.items.reports"),
+			desc: t("landing.modules.items.reportsDesc"),
+			color: "from-indigo-500 to-blue-600",
+		},
+		{
+			icon: FaCog,
+			name: t("landing.modules.items.settings"),
+			desc: t("landing.modules.items.settingsDesc"),
+			color: "from-gray-500 to-slate-600",
+		},
+	];
+
 	return (
 		<section id="modules" className="py-24 bg-gray-50 dark:bg-gray-900">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				<div className="text-center max-w-2xl mx-auto mb-16">
 					<span className="inline-block text-xs font-bold text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/30 px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">
-						Modules
+						{t("landing.modules.badge")}
 					</span>
 					<h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-						8 Powerful Modules,{" "}
+						{t("landing.modules.title1")}{" "}
 						<span className="bg-gradient-to-r from-teal-600 to-sky-500 bg-clip-text text-transparent">
-							One Platform
+							{t("landing.modules.titleHighlight")}
 						</span>
 					</h2>
 					<p className="text-lg text-gray-500 dark:text-gray-400">
-						Each module is purpose-built for hospital operations, designed to
-						work seamlessly together.
+						{t("landing.modules.subtitle")}
 					</p>
 				</div>
 

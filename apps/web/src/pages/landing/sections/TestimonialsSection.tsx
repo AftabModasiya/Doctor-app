@@ -1,55 +1,54 @@
 import { FaQuoteLeft, FaStar } from "react-icons/fa";
-
-const testimonials = [
-	{
-		name: "Dr. Sarah Mitchell",
-		title: "Chief Medical Officer",
-		hospital: "St. Luke's General Hospital",
-		avatar: "SM",
-		avatarColor: "from-sky-400 to-blue-500",
-		rating: 5,
-		quote:
-			"MediAdmin has completely transformed how we manage our hospital operations. Patient records are now instantly accessible, appointment scheduling is seamless, and our staff productivity has improved by over 40%.",
-	},
-	{
-		name: "Dr. James Okafor",
-		title: "Hospital Director",
-		hospital: "City Medical Center",
-		avatar: "JO",
-		avatarColor: "from-emerald-400 to-teal-500",
-		rating: 5,
-		quote:
-			"The best investment our clinic made this year. The prescription system, combined with real-time medicine inventory alerts, has eliminated stockouts and prescription errors. Our patients are safer and happier.",
-	},
-	{
-		name: "Dr. Priya Sharma",
-		title: "Department Head, Cardiology",
-		hospital: "Apollo Multi-Specialty Hospital",
-		avatar: "PS",
-		avatarColor: "from-violet-400 to-purple-500",
-		rating: 5,
-		quote:
-			"Implementation was incredibly smooth. The support team was phenomenal and the HIPAA compliance features gave us peace of mind immediately. I recommend MediAdmin to every hospital looking to modernize.",
-	},
-];
+import { useTranslation } from "react-i18next";
 
 export default function TestimonialsSection() {
+	const { t } = useTranslation();
+
+	const testimonials = [
+		{
+			name: t("landing.testimonials.items.sarah.name"),
+			title: t("landing.testimonials.items.sarah.title"),
+			hospital: t("landing.testimonials.items.sarah.hospital"),
+			avatar: "SM",
+			avatarColor: "from-sky-400 to-blue-500",
+			rating: 5,
+			quote: t("landing.testimonials.items.sarah.quote"),
+		},
+		{
+			name: t("landing.testimonials.items.james.name"),
+			title: t("landing.testimonials.items.james.title"),
+			hospital: t("landing.testimonials.items.james.hospital"),
+			avatar: "JO",
+			avatarColor: "from-emerald-400 to-teal-500",
+			rating: 5,
+			quote: t("landing.testimonials.items.james.quote"),
+		},
+		{
+			name: t("landing.testimonials.items.priya.name"),
+			title: t("landing.testimonials.items.priya.title"),
+			hospital: t("landing.testimonials.items.priya.hospital"),
+			avatar: "PS",
+			avatarColor: "from-violet-400 to-purple-500",
+			rating: 5,
+			quote: t("landing.testimonials.items.priya.quote"),
+		},
+	];
+
 	return (
 		<section className="py-24 bg-white dark:bg-gray-950">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				<div className="text-center max-w-2xl mx-auto mb-16">
 					<span className="inline-block text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">
-						Testimonials
+						{t("landing.testimonials.badge")}
 					</span>
 					<h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-						Trusted by{" "}
+						{t("landing.testimonials.title")}{" "}
 						<span className="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
-							500+ healthcare professionals
+							{t("landing.testimonials.titleHighlight")}
 						</span>
 					</h2>
 					<p className="text-lg text-gray-500 dark:text-gray-400">
-						Join thousands of doctors and hospital administrators who love
-						MediAdmin.
+						{t("landing.testimonials.subtitle")}
 					</p>
 				</div>
 
@@ -94,7 +93,7 @@ export default function TestimonialsSection() {
 
 				<div className="mt-16 text-center">
 					<p className="text-sm text-gray-400 dark:text-gray-500 mb-6 uppercase tracking-widest font-medium">
-						Trusted by healthcare leaders worldwide
+						{t("landing.testimonials.trustedBy")}
 					</p>
 					<div className="flex flex-wrap items-center justify-center gap-8">
 						{[

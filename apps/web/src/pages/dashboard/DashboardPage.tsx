@@ -8,6 +8,7 @@ import {
 	FaUserInjured,
 	FaUserMd,
 } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import {
 	Area,
 	AreaChart,
@@ -28,41 +29,6 @@ import {
 	mockActivity,
 	mockAppointments,
 } from "../../utils/mockData";
-
-const stats = [
-	{
-		label: "Total Patients",
-		value: "267",
-		change: "+12 this month",
-		icon: FaUserInjured,
-		color: "bg-sky-50 text-sky-600",
-		trend: "up",
-	},
-	{
-		label: "Total Doctors",
-		value: "6",
-		change: "1 on leave",
-		icon: FaUserMd,
-		color: "bg-violet-50 text-violet-600",
-		trend: "neutral",
-	},
-	{
-		label: "Prescriptions",
-		value: "48",
-		change: "+8 this week",
-		icon: FaNotesMedical,
-		color: "bg-emerald-50 text-emerald-600",
-		trend: "up",
-	},
-	{
-		label: "Appointments Today",
-		value: "4",
-		change: "2 confirmed",
-		icon: FaCalendarCheck,
-		color: "bg-amber-50 text-amber-600",
-		trend: "neutral",
-	},
-];
 
 const activityIcons: Record<string, React.ReactNode> = {
 	calendar: <FaCalendarAlt className="h-3.5 w-3.5" />,
@@ -91,15 +57,51 @@ const appointmentStatusVariant: Record<
 };
 
 export default function DashboardPage() {
+	const { t } = useTranslation();
 	const todayAppts = mockAppointments.filter((a) => a.date === "2025-03-05");
+
+	const stats = [
+		{
+			label: t("dashboard.totalPatients"),
+			value: "267",
+			change: t("dashboard.thisMonth"),
+			icon: FaUserInjured,
+			color: "bg-sky-50 text-sky-600",
+			trend: "up",
+		},
+		{
+			label: t("dashboard.totalDoctors"),
+			value: "6",
+			change: t("dashboard.onLeave"),
+			icon: FaUserMd,
+			color: "bg-violet-50 text-violet-600",
+			trend: "neutral",
+		},
+		{
+			label: t("dashboard.prescriptions"),
+			value: "48",
+			change: t("dashboard.thisWeek"),
+			icon: FaNotesMedical,
+			color: "bg-emerald-50 text-emerald-600",
+			trend: "up",
+		},
+		{
+			label: t("dashboard.appointmentsToday"),
+			value: "4",
+			change: t("dashboard.confirmed"),
+			icon: FaCalendarCheck,
+			color: "bg-amber-50 text-amber-600",
+			trend: "neutral",
+		},
+	];
 
 	return (
 		<div className="space-y-6">
 			{/* Header */}
 			<div>
-				<h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+				<h1 className="text-2xl font-bold text-gray-900">{t("dashboard.title")}</h1>
 				<p className="text-sm text-gray-500 mt-0.5">
-					Thursday, 5 March 2025 — Welcome back, Admin
+					{t("dashboard.subtitle")}
 				</p>
 			</div>
 
@@ -118,7 +120,7 @@ export default function DashboardPage() {
 							</div>
 							{trend === "up" && (
 								<span className="flex items-center gap-1 text-xs text-emerald-600 font-medium bg-emerald-50 px-2 py-1 rounded-lg">
-									<FaArrowUp className="h-2.5 w-2.5" /> Up
+									<FaArrowUp className="h-2.5 w-2.5" /> {t("dashboard.up")}
 								</span>
 							)}
 						</div>
@@ -136,12 +138,12 @@ export default function DashboardPage() {
 					<div className="flex items-center justify-between mb-5">
 						<div>
 							<h2 className="text-base font-semibold text-gray-900">
-								Patient Growth
+								{t("dashboard.patientGrowth")}
 							</h2>
-							<p className="text-xs text-gray-500 mt-0.5">Last 7 months</p>
+							<p className="text-xs text-gray-500 mt-0.5">{t("dashboard.last7Months")}</p>
 						</div>
 						<span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-2.5 py-1 rounded-lg">
-							+18% vs last period
+							{t("dashboard.vsLastPeriod")}
 						</span>
 					</div>
 					<ResponsiveContainer width="100%" height={220}>
@@ -190,9 +192,9 @@ export default function DashboardPage() {
 				{/* Appointment Distribution */}
 				<div className="bg-white rounded-2xl border border-gray-100 shadow-card p-6">
 					<h2 className="text-base font-semibold text-gray-900 mb-1">
-						Appointments
+						{t("dashboard.appointments")}
 					</h2>
-					<p className="text-xs text-gray-500 mb-5">Status breakdown</p>
+					<p className="text-xs text-gray-500 mb-5">{t("dashboard.statusBreakdown")}</p>
 					<ResponsiveContainer width="100%" height={160}>
 						<PieChart>
 							<Pie
@@ -238,10 +240,10 @@ export default function DashboardPage() {
 				{/* Weekly Bar Chart */}
 				<div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-card p-6">
 					<h2 className="text-base font-semibold text-gray-900 mb-1">
-						Weekly Appointments
+						{t("dashboard.weeklyAppointments")}
 					</h2>
 					<p className="text-xs text-gray-500 mb-5">
-						This week's appointment volume
+						{t("dashboard.weeklyVolume")}
 					</p>
 					<ResponsiveContainer width="100%" height={180}>
 						<BarChart
@@ -281,10 +283,10 @@ export default function DashboardPage() {
 				{/* Today's Appointments */}
 				<div className="bg-white rounded-2xl border border-gray-100 shadow-card p-6">
 					<h2 className="text-base font-semibold text-gray-900 mb-1">
-						Today's Schedule
+						{t("dashboard.todaySchedule")}
 					</h2>
 					<p className="text-xs text-gray-500 mb-4">
-						{todayAppts.length} appointments
+						{todayAppts.length} {t("nav.appointments").toLowerCase()}
 					</p>
 					<div className="space-y-3">
 						{todayAppts.map((appt) => (
@@ -317,10 +319,10 @@ export default function DashboardPage() {
 			<div className="bg-white rounded-2xl border border-gray-100 shadow-card p-6">
 				<div className="mb-5">
 					<h2 className="text-base font-semibold text-gray-900">
-						Recent Activity
+						{t("dashboard.recentActivity")}
 					</h2>
 					<p className="text-xs text-gray-500 mt-0.5">
-						Latest actions across the system
+						{t("dashboard.latestActions")}
 					</p>
 				</div>
 				<div className="space-y-3">

@@ -1,23 +1,25 @@
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { FaBars, FaHospital, FaMoon, FaSun, FaTimes } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
 
-const navLinks = [
-	{ label: "Home", href: "#home" },
-	{ label: "Features", href: "#features" },
-	{ label: "Modules", href: "#modules" },
-	{ label: "Pricing", href: "#pricing" },
-	{ label: "Contact", href: "#contact" },
-];
-
 export default function LandingNavbar() {
+	const { t } = useTranslation();
 	const [scrolled, setScrolled] = useState(false);
 	const [mobileOpen, setMobileOpen] = useState(false);
 	const { user } = useAuth();
 	const { theme, toggleTheme } = useTheme();
+
+	const navLinks = [
+		{ label: t("landing.nav.home"), href: "#home" },
+		{ label: t("landing.nav.features"), href: "#features" },
+		{ label: t("landing.nav.modules"), href: "#modules" },
+		{ label: t("landing.nav.pricing"), href: "#pricing" },
+		{ label: t("landing.nav.contact"), href: "#contact" },
+	];
 
 	useEffect(() => {
 		const onScroll = () => setScrolled(window.scrollY > 20);
@@ -121,13 +123,13 @@ export default function LandingNavbar() {
 										: "text-gray-700 hover:text-gray-900 hover:bg-gray-100",
 							)}
 						>
-							{user ? "Dashboard" : "Login"}
+							{user ? t("common.dashboard") : t("common.login")}
 						</Link>
 						<Link
 							to="/signup"
 							className="px-5 py-2 text-sm font-semibold bg-primary-600 hover:bg-primary-700 text-white rounded-xl shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5"
 						>
-							Get Started
+							{t("landing.nav.getStarted")}
 						</Link>
 					</div>
 
@@ -207,14 +209,14 @@ export default function LandingNavbar() {
 									: "text-gray-700 border-gray-200 hover:bg-gray-50",
 							)}
 						>
-							{user ? "Dashboard" : "Login"}
+							{user ? t("common.dashboard") : t("common.login")}
 						</Link>
 						<Link
 							to="/signup"
 							onClick={() => setMobileOpen(false)}
 							className="w-full text-center px-4 py-2.5 text-sm font-semibold bg-primary-600 text-white rounded-xl transition-colors hover:bg-primary-700"
 						>
-							Get Started Free
+							{t("landing.nav.getStartedFree")}
 						</Link>
 					</div>
 				</div>

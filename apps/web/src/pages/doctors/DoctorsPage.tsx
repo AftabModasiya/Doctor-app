@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FaEdit, FaPlus, FaSearch, FaStar, FaTrash } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import Badge from "../../components/ui/Badge";
 import Button from "../../components/ui/Button";
 import Modal from "../../components/ui/Modal";
@@ -29,6 +30,7 @@ const statusVariant: Record<string, "success" | "warning" | "neutral"> = {
 };
 
 export default function DoctorsPage() {
+	const { t } = useTranslation();
 	const [doctors, setDoctors] = useState<Doctor[]>(mockDoctors);
 	const [search, setSearch] = useState("");
 	const [modalOpen, setModalOpen] = useState(false);
@@ -69,7 +71,7 @@ export default function DoctorsPage() {
 			setDoctors((ds) =>
 				ds.map((d) => (d.id === editDoc.id ? { ...d, ...docData } : d)),
 			);
-			toast.success("Doctor updated");
+			toast.success(t("doctors.toast.updated"));
 		} else {
 			setDoctors((ds) => [
 				{
@@ -80,7 +82,7 @@ export default function DoctorsPage() {
 				},
 				...ds,
 			]);
-			toast.success("Doctor added");
+			toast.success(t("doctors.toast.added"));
 		}
 		setModalOpen(false);
 	};
@@ -89,13 +91,13 @@ export default function DoctorsPage() {
 		<div className="space-y-5">
 			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
 				<div>
-					<h1 className="text-2xl font-bold text-gray-900">Doctors</h1>
+					<h1 className="text-2xl font-bold text-gray-900">{t("doctors.title")}</h1>
 					<p className="text-sm text-gray-500 mt-0.5">
-						{doctors.length} doctors on staff
+						{doctors.length} {t("doctors.onStaff")}
 					</p>
 				</div>
 				<Button onClick={openAdd} leftIcon={<FaPlus className="h-3.5 w-3.5" />}>
-					Add Doctor
+					{t("doctors.addDoctor")}
 				</Button>
 			</div>
 
@@ -105,7 +107,7 @@ export default function DoctorsPage() {
 				<input
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}
-					placeholder="Search by name or specialization…"
+					placeholder={t("doctors.searchPlaceholder")}
 					className="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary-500"
 				/>
 			</div>
@@ -141,19 +143,19 @@ export default function DoctorsPage() {
 
 						<div className="grid grid-cols-2 gap-2 mb-4">
 							<div className="bg-surface-secondary rounded-xl p-2.5">
-								<p className="text-xs text-gray-500">Experience</p>
+								<p className="text-xs text-gray-500">{t("doctors.experience")}</p>
 								<p className="text-sm font-semibold text-gray-800">
 									{doc.experience} yrs
 								</p>
 							</div>
 							<div className="bg-surface-secondary rounded-xl p-2.5">
-								<p className="text-xs text-gray-500">Fee</p>
+								<p className="text-xs text-gray-500">{t("doctors.fee")}</p>
 								<p className="text-sm font-semibold text-gray-800">
 									${doc.consultationFee}
 								</p>
 							</div>
 							<div className="bg-surface-secondary rounded-xl p-2.5">
-								<p className="text-xs text-gray-500">Patients</p>
+								<p className="text-xs text-gray-500">{t("doctors.patients")}</p>
 								<p className="text-sm font-semibold text-gray-800">
 									{doc.patients}
 								</p>
@@ -165,12 +167,12 @@ export default function DoctorsPage() {
 										{doc.rating}
 									</p>
 								</div>
-								<p className="text-xs text-gray-500">Rating</p>
+								<p className="text-xs text-gray-500">{t("doctors.rating")}</p>
 							</div>
 						</div>
 
 						<div className="mb-4">
-							<p className="text-xs text-gray-500 mb-1.5">Available Days</p>
+							<p className="text-xs text-gray-500 mb-1.5">{t("doctors.availableDays")}</p>
 							<div className="flex gap-1 flex-wrap">
 								{DAYS.map((day) => (
 									<span
@@ -191,7 +193,7 @@ export default function DoctorsPage() {
 								onClick={() => openEdit(doc)}
 								leftIcon={<FaEdit className="h-3 w-3" />}
 							>
-								Edit
+								{t("common.edit")}
 							</Button>
 							<Button
 								size="sm"
@@ -209,15 +211,15 @@ export default function DoctorsPage() {
 			<Modal
 				isOpen={modalOpen}
 				onClose={() => setModalOpen(false)}
-				title={editDoc ? "Edit Doctor" : "Add Doctor"}
+				title={editDoc ? t("doctors.modal.editTitle") : t("doctors.modal.addTitle")}
 				size="lg"
 				footer={
 					<>
 						<Button variant="secondary" onClick={() => setModalOpen(false)}>
-							Cancel
+							{t("common.cancel")}
 						</Button>
 						<Button onClick={handleSubmit(onSubmit)}>
-							{editDoc ? "Save" : "Add Doctor"}
+							{editDoc ? t("doctors.modal.saveBtn") : t("doctors.modal.addBtn")}
 						</Button>
 					</>
 				}
@@ -225,17 +227,17 @@ export default function DoctorsPage() {
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 					<div className="sm:col-span-2">
 						<label className="block text-sm font-medium text-gray-700 mb-1.5">
-							Full Name
+							{t("doctors.modal.fullName")}
 						</label>
 						<input
 							{...register("name")}
-							placeholder="Dr. Jane Smith"
+							placeholder={t("doctors.modal.fullNamePlaceholder")}
 							className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
 						/>
 					</div>
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1.5">
-							Specialization
+							{t("doctors.modal.specialization")}
 						</label>
 						<select
 							{...register("specialization")}
@@ -250,38 +252,38 @@ export default function DoctorsPage() {
 					</div>
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1.5">
-							Qualification
+							{t("doctors.modal.qualification")}
 						</label>
 						<input
 							{...register("qualification")}
-							placeholder="MD, FACC"
+							placeholder={t("doctors.modal.qualificationPlaceholder")}
 							className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
 						/>
 					</div>
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1.5">
-							Email
+							{t("doctors.modal.email")}
 						</label>
 						<input
 							{...register("email")}
 							type="email"
-							placeholder="doctor@mediadmin.com"
+							placeholder={t("doctors.modal.emailPlaceholder")}
 							className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
 						/>
 					</div>
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1.5">
-							Phone
+							{t("doctors.modal.phone")}
 						</label>
 						<input
 							{...register("phone")}
-							placeholder="+1 555-0200"
+							placeholder={t("doctors.modal.phonePlaceholder")}
 							className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
 						/>
 					</div>
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1.5">
-							Experience (years)
+							{t("doctors.modal.experience")}
 						</label>
 						<input
 							{...register("experience")}
@@ -292,7 +294,7 @@ export default function DoctorsPage() {
 					</div>
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1.5">
-							Consultation Fee ($)
+							{t("doctors.modal.consultationFee")}
 						</label>
 						<input
 							{...register("consultationFee")}
@@ -303,20 +305,20 @@ export default function DoctorsPage() {
 					</div>
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1.5">
-							Status
+							{t("doctors.modal.status")}
 						</label>
 						<select
 							{...register("status")}
 							className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
 						>
-							<option value="Active">Active</option>
-							<option value="On Leave">On Leave</option>
-							<option value="Inactive">Inactive</option>
+							<option value="Active">{t("doctors.modal.active")}</option>
+							<option value="On Leave">{t("doctors.modal.onLeave")}</option>
+							<option value="Inactive">{t("doctors.modal.inactive")}</option>
 						</select>
 					</div>
 					<div className="sm:col-span-2">
 						<label className="block text-sm font-medium text-gray-700 mb-2">
-							Availability
+							{t("doctors.availableDays")}
 						</label>
 						<div className="flex gap-2 flex-wrap">
 							{DAYS.map((day) => (
@@ -339,7 +341,7 @@ export default function DoctorsPage() {
 				<Modal
 					isOpen={!!deleteConfirm}
 					onClose={() => setDeleteConfirm(null)}
-					title="Remove Doctor"
+					title={t("doctors.modal.removeTitle")}
 					size="sm"
 					footer={
 						<>
@@ -347,7 +349,7 @@ export default function DoctorsPage() {
 								variant="secondary"
 								onClick={() => setDeleteConfirm(null)}
 							>
-								Cancel
+								{t("common.cancel")}
 							</Button>
 							<Button
 								variant="danger"
@@ -356,16 +358,16 @@ export default function DoctorsPage() {
 										ds.filter((d) => d.id !== deleteConfirm.id),
 									);
 									setDeleteConfirm(null);
-									toast.success("Doctor removed");
+									toast.success(t("doctors.toast.removed"));
 								}}
 							>
-								Remove
+								{t("common.remove")}
 							</Button>
 						</>
 					}
 				>
 					<p className="text-sm text-gray-600">
-						Remove <strong>{deleteConfirm.name}</strong> from the system?
+						{t("common.remove")} <strong>{deleteConfirm.name}</strong> {t("doctors.modal.removeConfirm")}
 					</p>
 				</Modal>
 			)}

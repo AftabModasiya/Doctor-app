@@ -1,90 +1,92 @@
 import clsx from "clsx";
 import { FaCheck, FaStar, FaTimes } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-const plans = [
-	{
-		name: "Starter",
-		price: 49,
-		period: "/month",
-		description: "Perfect for small clinics and solo practitioners.",
-		highlight: false,
-		ctaClass:
-			"border border-primary-600 text-primary-600 hover:bg-primary-50 dark:border-primary-500 dark:text-primary-400 dark:hover:bg-primary-900/30",
-		features: [
-			{ text: "Up to 2 Doctors", included: true },
-			{ text: "Up to 500 Patients", included: true },
-			{ text: "Appointment Booking", included: true },
-			{ text: "Basic Prescriptions", included: true },
-			{ text: "Medicine Inventory", included: true },
-			{ text: "Email Support", included: true },
-			{ text: "Advanced Reports", included: false },
-			{ text: "Custom Branding", included: false },
-			{ text: "API Access", included: false },
-			{ text: "Priority Support", included: false },
-		],
-	},
-	{
-		name: "Professional",
-		price: 129,
-		period: "/month",
-		description: "The most popular choice for growing hospitals.",
-		highlight: true,
-		ctaClass:
-			"bg-primary-600 hover:bg-primary-700 text-white shadow-lg shadow-primary-200 dark:shadow-primary-900",
-		features: [
-			{ text: "Up to 10 Doctors", included: true },
-			{ text: "Up to 5,000 Patients", included: true },
-			{ text: "Appointment Booking", included: true },
-			{ text: "Full Prescription System", included: true },
-			{ text: "Medicine Inventory", included: true },
-			{ text: "Advanced Reports & Analytics", included: true },
-			{ text: "Custom Branding", included: true },
-			{ text: "Priority Email & Chat", included: true },
-			{ text: "API Access", included: false },
-			{ text: "Dedicated Account Manager", included: false },
-		],
-	},
-	{
-		name: "Enterprise",
-		price: 299,
-		period: "/month",
-		description: "For large hospital networks and multi-campus operations.",
-		highlight: false,
-		ctaClass:
-			"border border-gray-800 text-gray-800 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800",
-		features: [
-			{ text: "Unlimited Doctors", included: true },
-			{ text: "Unlimited Patients", included: true },
-			{ text: "Appointment Booking", included: true },
-			{ text: "Full Prescription System", included: true },
-			{ text: "Medicine Inventory", included: true },
-			{ text: "Advanced Reports & Analytics", included: true },
-			{ text: "Custom Branding", included: true },
-			{ text: "API Access & Webhooks", included: true },
-			{ text: "Dedicated Account Manager", included: true },
-			{ text: "24/7 Phone & SLA Support", included: true },
-		],
-	},
-];
-
 export default function PricingSection() {
+	const { t } = useTranslation();
+
+	const plans = [
+		{
+			name: t("landing.pricing.plans.starter.name"),
+			price: 49,
+			period: t("common.month", { defaultValue: "/month" }),
+			description: t("landing.pricing.plans.starter.desc"),
+			highlight: false,
+			ctaClass:
+				"border border-primary-600 text-primary-600 hover:bg-primary-50 dark:border-primary-500 dark:text-primary-400 dark:hover:bg-primary-900/30",
+			features: [
+				{ text: t("landing.pricing.plans.starter.features.doctors"), included: true },
+				{ text: t("landing.pricing.plans.starter.features.patients"), included: true },
+				{ text: t("landing.pricing.plans.starter.features.appointments"), included: true },
+				{ text: t("landing.pricing.plans.starter.features.prescriptions"), included: true },
+				{ text: t("landing.pricing.plans.starter.features.inventory"), included: true },
+				{ text: t("landing.pricing.plans.starter.features.support"), included: true },
+				{ text: t("landing.pricing.plans.starter.features.reports"), included: false },
+				{ text: t("landing.pricing.plans.starter.features.branding"), included: false },
+				{ text: t("landing.pricing.plans.starter.features.api"), included: false },
+				{ text: t("landing.pricing.plans.starter.features.priority"), included: false },
+			],
+		},
+		{
+			name: t("landing.pricing.plans.professional.name"),
+			price: 129,
+			period: t("common.month", { defaultValue: "/month" }),
+			description: t("landing.pricing.plans.professional.desc"),
+			highlight: true,
+			ctaClass:
+				"bg-primary-600 hover:bg-primary-700 text-white shadow-lg shadow-primary-200 dark:shadow-primary-900",
+			features: [
+				{ text: t("landing.pricing.plans.professional.features.doctors"), included: true },
+				{ text: t("landing.pricing.plans.professional.features.patients"), included: true },
+				{ text: t("landing.pricing.plans.professional.features.appointments"), included: true },
+				{ text: t("landing.pricing.plans.professional.features.prescriptions"), included: true },
+				{ text: t("landing.pricing.plans.professional.features.inventory"), included: true },
+				{ text: t("landing.pricing.plans.professional.features.reports"), included: true },
+				{ text: t("landing.pricing.plans.professional.features.branding"), included: true },
+				{ text: t("landing.pricing.plans.professional.features.support"), included: true },
+				{ text: t("landing.pricing.plans.professional.features.api"), included: false },
+				{ text: t("landing.pricing.plans.professional.features.manager"), included: false },
+			],
+		},
+		{
+			name: t("landing.pricing.plans.enterprise.name"),
+			price: 299,
+			period: t("common.month", { defaultValue: "/month" }),
+			description: t("landing.pricing.plans.enterprise.desc"),
+			highlight: false,
+			ctaClass:
+				"border border-gray-800 text-gray-800 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800",
+			features: [
+				{ text: t("landing.pricing.plans.enterprise.features.doctors"), included: true },
+				{ text: t("landing.pricing.plans.enterprise.features.patients"), included: true },
+				{ text: t("landing.pricing.plans.enterprise.features.appointments"), included: true },
+				{ text: t("landing.pricing.plans.enterprise.features.prescriptions"), included: true },
+				{ text: t("landing.pricing.plans.enterprise.features.inventory"), included: true },
+				{ text: t("landing.pricing.plans.enterprise.features.reports"), included: true },
+				{ text: t("landing.pricing.plans.enterprise.features.branding"), included: true },
+				{ text: t("landing.pricing.plans.enterprise.features.api"), included: true },
+				{ text: t("landing.pricing.plans.enterprise.features.manager"), included: true },
+				{ text: t("landing.pricing.plans.enterprise.features.support"), included: true },
+			],
+		},
+	];
+
 	return (
 		<section id="pricing" className="py-24 bg-gray-50 dark:bg-gray-900">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				<div className="text-center max-w-2xl mx-auto mb-16">
 					<span className="inline-block text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">
-						Pricing
+						{t("landing.pricing.badge")}
 					</span>
 					<h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-						Simple, transparent{" "}
+						{t("landing.pricing.title")}{" "}
 						<span className="bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
-							pricing
+							{t("landing.pricing.titleHighlight")}
 						</span>
 					</h2>
 					<p className="text-lg text-gray-500 dark:text-gray-400">
-						No hidden fees. Cancel anytime. Start your 14-day free trial today —
-						no credit card required.
+						{t("landing.pricing.subtitle")}
 					</p>
 				</div>
 
@@ -111,7 +113,7 @@ export default function PricingSection() {
 								{highlight && (
 									<div className="absolute -top-4 left-1/2 -translate-x-1/2">
 										<span className="inline-flex items-center gap-1.5 bg-primary-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm">
-											<FaStar className="h-3 w-3" /> Most Popular
+											<FaStar className="h-3 w-3" /> {t("landing.pricing.mostPopular")}
 										</span>
 									</div>
 								)}
@@ -140,7 +142,7 @@ export default function PricingSection() {
 										ctaClass,
 									)}
 								>
-									Get Started
+									{t("landing.pricing.getStarted")}
 								</Link>
 
 								<ul className="space-y-3">
@@ -170,12 +172,11 @@ export default function PricingSection() {
 				</div>
 
 				<p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-8">
-					Need a custom enterprise plan?{" "}
 					<a
 						href="#contact"
 						className="text-primary-600 dark:text-primary-400 font-medium hover:underline"
 					>
-						Contact our sales team →
+						{t("landing.pricing.contactSales")}
 					</a>
 				</p>
 			</div>

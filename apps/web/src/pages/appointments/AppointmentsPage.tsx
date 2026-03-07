@@ -9,6 +9,7 @@ import {
 	FaSearch,
 	FaTimes,
 } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import Badge from "../../components/ui/Badge";
 import Button from "../../components/ui/Button";
 import Modal from "../../components/ui/Modal";
@@ -29,6 +30,7 @@ const statusVariant: Record<string, "success" | "warning" | "info" | "danger"> =
 	};
 
 export default function AppointmentsPage() {
+	const { t } = useTranslation();
 	const [appointments, setAppointments] =
 		useState<Appointment[]>(mockAppointments);
 	const [search, setSearch] = useState("");
@@ -55,12 +57,12 @@ export default function AppointmentsPage() {
 		setAppointments((as) =>
 			as.map((a) => (a.id === id ? { ...a, status } : a)),
 		);
-		toast.success(`Appointment ${status.toLowerCase()}`);
+		toast.success(`${t("appointments.title")} ${status.toLowerCase()}`);
 	};
 
 	const handleBook = () => {
 		if (!form.patientId || !form.doctorId || !form.date || !form.time) {
-			toast.error("Fill all required fields");
+			toast.error(t("appointments.toast.fillRequired"));
 			return;
 		}
 		const patient = mockPatients.find((p) => p.id === form.patientId);
@@ -73,21 +75,21 @@ export default function AppointmentsPage() {
 			status: "Pending",
 		};
 		setAppointments((as) => [newAppt, ...as]);
-		toast.success("Appointment booked");
+		toast.success(t("appointments.toast.booked"));
 		setBookOpen(false);
 	};
 
 	const columns = [
 		{
 			key: "id",
-			header: "ID",
+			header: t("appointments.columns.id"),
 			render: (a: Appointment) => (
 				<span className="font-mono text-xs text-gray-500">{a.id}</span>
 			),
 		},
 		{
 			key: "patientName",
-			header: "Patient",
+			header: t("appointments.columns.patient"),
 			render: (a: Appointment) => (
 				<div className="flex items-center gap-2">
 					<div className="h-7 w-7 rounded-lg bg-primary-100 flex items-center justify-center text-primary-700 text-xs font-bold">
@@ -105,14 +107,14 @@ export default function AppointmentsPage() {
 		},
 		{
 			key: "doctorName",
-			header: "Doctor",
+			header: t("appointments.columns.doctor"),
 			render: (a: Appointment) => (
 				<span className="text-sm text-gray-700">{a.doctorName}</span>
 			),
 		},
 		{
 			key: "date",
-			header: "Date & Time",
+			header: t("appointments.columns.dateTime"),
 			render: (a: Appointment) => (
 				<div>
 					<p className="text-sm font-medium text-gray-900">
@@ -124,12 +126,12 @@ export default function AppointmentsPage() {
 		},
 		{
 			key: "type",
-			header: "Type",
+			header: t("appointments.columns.type"),
 			render: (a: Appointment) => <Badge variant="neutral">{a.type}</Badge>,
 		},
 		{
 			key: "status",
-			header: "Status",
+			header: t("appointments.columns.status"),
 			render: (a: Appointment) => (
 				<Badge variant={statusVariant[a.status]} dot>
 					{a.status}
@@ -138,14 +140,14 @@ export default function AppointmentsPage() {
 		},
 		{
 			key: "actions",
-			header: "Actions",
+			header: t("appointments.columns.actions"),
 			render: (a: Appointment) => (
 				<div className="flex items-center gap-1">
 					{a.status === "Pending" && (
 						<button
 							onClick={() => updateStatus(a.id, "Confirmed")}
 							className="p-1.5 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
-							title="Confirm"
+							title={t("appointments.confirmed")}
 						>
 							<FaCheckCircle className="h-3.5 w-3.5" />
 						</button>
@@ -154,7 +156,7 @@ export default function AppointmentsPage() {
 						<button
 							onClick={() => updateStatus(a.id, "Completed")}
 							className="p-1.5 text-gray-400 hover:text-sky-600 hover:bg-sky-50 rounded-lg transition-colors"
-							title="Complete"
+							title={t("appointments.completed")}
 						>
 							<FaCheckCircle className="h-3.5 w-3.5" />
 						</button>
@@ -163,7 +165,7 @@ export default function AppointmentsPage() {
 						<button
 							onClick={() => updateStatus(a.id, "Cancelled")}
 							className="p-1.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
-							title="Cancel"
+							title={t("appointments.cancelled")}
 						>
 							<FaTimes className="h-3.5 w-3.5" />
 						</button>
@@ -177,16 +179,16 @@ export default function AppointmentsPage() {
 		<div className="space-y-5">
 			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
 				<div>
-					<h1 className="text-2xl font-bold text-gray-900">Appointments</h1>
+					<h1 className="text-2xl font-bold text-gray-900">{t("appointments.title")}</h1>
 					<p className="text-sm text-gray-500 mt-0.5">
-						{appointments.length} total appointments
+						{appointments.length} {t("appointments.totalCount")}
 					</p>
 				</div>
 				<Button
 					onClick={() => setBookOpen(true)}
 					leftIcon={<FaPlus className="h-3.5 w-3.5" />}
 				>
-					Book Appointment
+					{t("appointments.bookAppointment")}
 				</Button>
 			</div>
 
@@ -194,25 +196,25 @@ export default function AppointmentsPage() {
 			<div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
 				{[
 					{
-						label: "Pending",
+						label: t("appointments.pending"),
 						count: appointments.filter((a) => a.status === "Pending").length,
 						icon: FaClock,
 						color: "bg-amber-50 text-amber-700 border-amber-200",
 					},
 					{
-						label: "Confirmed",
+						label: t("appointments.confirmed"),
 						count: appointments.filter((a) => a.status === "Confirmed").length,
 						icon: FaCalendarCheck,
 						color: "bg-sky-50 text-sky-700 border-sky-200",
 					},
 					{
-						label: "Completed",
+						label: t("appointments.completed"),
 						count: appointments.filter((a) => a.status === "Completed").length,
 						icon: FaCheckCircle,
 						color: "bg-emerald-50 text-emerald-700 border-emerald-200",
 					},
 					{
-						label: "Cancelled",
+						label: t("appointments.cancelled"),
 						count: appointments.filter((a) => a.status === "Cancelled").length,
 						icon: FaTimes,
 						color: "bg-rose-50 text-rose-700 border-rose-200",
@@ -238,28 +240,32 @@ export default function AppointmentsPage() {
 						<input
 							value={search}
 							onChange={(e) => setSearch(e.target.value)}
-							placeholder="Search appointments…"
+							placeholder={t("appointments.searchPlaceholder")}
 							className="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
 						/>
 					</div>
 					<div className="flex gap-2">
-						{["All", "Pending", "Confirmed", "Completed", "Cancelled"].map(
-							(s) => (
-								<button
-									key={s}
-									onClick={() => setFilter(s)}
-									className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${filter === s ? "bg-primary-600 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
-								>
-									{s}
-								</button>
-							),
-						)}
+						{[
+							{ label: t("appointments.all"), value: "All" },
+							{ label: t("appointments.pending"), value: "Pending" },
+							{ label: t("appointments.confirmed"), value: "Confirmed" },
+							{ label: t("appointments.completed"), value: "Completed" },
+							{ label: t("appointments.cancelled"), value: "Cancelled" },
+						].map((s) => (
+							<button
+								key={s.value}
+								onClick={() => setFilter(s.value)}
+								className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${filter === s.value ? "bg-primary-600 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
+							>
+								{s.label}
+							</button>
+						))}
 					</div>
 				</div>
 				<Table
 					columns={columns}
 					data={filtered}
-					emptyMessage="No appointments found"
+					emptyMessage={t("appointments.noAppointments")}
 					emptyIcon={<FaCalendarCheck />}
 				/>
 			</div>
@@ -267,21 +273,21 @@ export default function AppointmentsPage() {
 			<Modal
 				isOpen={bookOpen}
 				onClose={() => setBookOpen(false)}
-				title="Book Appointment"
+				title={t("appointments.modal.title")}
 				size="md"
 				footer={
 					<>
 						<Button variant="secondary" onClick={() => setBookOpen(false)}>
-							Cancel
+							{t("common.cancel")}
 						</Button>
-						<Button onClick={handleBook}>Book Appointment</Button>
+						<Button onClick={handleBook}>{t("appointments.modal.bookBtn")}</Button>
 					</>
 				}
 			>
 				<div className="space-y-4">
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1.5">
-							Patient <span className="text-rose-500">*</span>
+							{t("appointments.modal.patient")} <span className="text-rose-500">*</span>
 						</label>
 						<select
 							value={form.patientId}
@@ -290,7 +296,7 @@ export default function AppointmentsPage() {
 							}
 							className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
 						>
-							<option value="">Select patient…</option>
+							<option value="">{t("appointments.modal.selectPatient")}</option>
 							{mockPatients.map((p) => (
 								<option key={p.id} value={p.id}>
 									{p.name}
@@ -300,7 +306,7 @@ export default function AppointmentsPage() {
 					</div>
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1.5">
-							Doctor <span className="text-rose-500">*</span>
+							{t("appointments.modal.doctor")} <span className="text-rose-500">*</span>
 						</label>
 						<select
 							value={form.doctorId}
@@ -309,7 +315,7 @@ export default function AppointmentsPage() {
 							}
 							className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
 						>
-							<option value="">Select doctor…</option>
+							<option value="">{t("appointments.modal.selectDoctor")}</option>
 							{mockDoctors.map((d) => (
 								<option key={d.id} value={d.id}>
 									{d.name}
@@ -320,7 +326,7 @@ export default function AppointmentsPage() {
 					<div className="grid grid-cols-2 gap-3">
 						<div>
 							<label className="block text-sm font-medium text-gray-700 mb-1.5">
-								Date <span className="text-rose-500">*</span>
+								{t("appointments.modal.date")} <span className="text-rose-500">*</span>
 							</label>
 							<input
 								type="date"
@@ -333,7 +339,7 @@ export default function AppointmentsPage() {
 						</div>
 						<div>
 							<label className="block text-sm font-medium text-gray-700 mb-1.5">
-								Time <span className="text-rose-500">*</span>
+								{t("appointments.modal.time")} <span className="text-rose-500">*</span>
 							</label>
 							<input
 								type="time"
@@ -347,7 +353,7 @@ export default function AppointmentsPage() {
 					</div>
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1.5">
-							Type
+							{t("appointments.modal.type")}
 						</label>
 						<select
 							value={form.type}
@@ -370,7 +376,7 @@ export default function AppointmentsPage() {
 					</div>
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1.5">
-							Notes
+							{t("appointments.modal.notes")}
 						</label>
 						<textarea
 							value={form.notes}
@@ -378,7 +384,7 @@ export default function AppointmentsPage() {
 								setForm((f) => ({ ...f, notes: e.target.value }))
 							}
 							rows={2}
-							placeholder="Reason for visit…"
+							placeholder={t("appointments.modal.notesPlaceholder")}
 							className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
 						/>
 					</div>
