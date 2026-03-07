@@ -1,4 +1,6 @@
-import { PartialType } from "@nestjs/swagger";
-import { CreateCompanyDto } from "./create-company.dto";
+import { createZodDto } from "nestjs-zod";
+import { CreateCompanySchema } from "./create-company.dto";
 
-export class UpdateCompanyDto extends PartialType(CreateCompanyDto) {}
+export const UpdateCompanySchema = CreateCompanySchema.partial();
+
+export class UpdateCompanyDto extends createZodDto(UpdateCompanySchema) {}
