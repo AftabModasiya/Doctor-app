@@ -1,26 +1,44 @@
-import { Injectable } from "@nestjs/common";
-import type { CreateSpecializationDto } from "./dto/create-specialization.dto";
-import type { UpdateSpecializationDto } from "./dto/update-specialization.dto";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Specialization } from './entities/specialization.entity';
+import type { CreateSpecializationDto } from './dto/create-specialization.dto';
+import type { UpdateSpecializationDto } from './dto/update-specialization.dto';
 
 @Injectable()
 export class SpecializationService {
-	create(createSpecializationDto: CreateSpecializationDto) {
-		return "This action adds a new specialization";
+	constructor(
+		@InjectRepository(Specialization)
+		private readonly specializationRepository: Repository<Specialization>,
+	) { }
+
+	create(dto: CreateSpecializationDto): Promise<Specialization> {
+		const specialization = this.specializationRepository.create(dto);
+		return this.specializationRepository.save(specialization);
 	}
 
-	findAll() {
-		return `This action returns all specialization`;
+	findAll(): Promise<Specialization[]> {
+		return this.specializationRepository.find();
 	}
 
-	findOne(id: number) {
-		return `This action returns a #${id} specialization`;
+	findByCompany(companyId: number): Promise<Specialization[]> {
+		return this.specializationRepository.find({ where: { companyId } });
 	}
 
-	update(id: number, updateSpecializationDto: UpdateSpecializationDto) {
-		return `This action updates a #${id} specialization`;
+	async findOne(id: number): Promise<Specialization> {
+		const specialization = await this.specializationRepository.findOne({ where: { id } });
+		if (!specialization) throw new NotFoundException(`Specialization #${id} not found`);
+		return specialization;
 	}
 
-	remove(id: number) {
-		return `This action removes a #${id} specialization`;
+	async update(id: number, dto: UpdateSpecializationDto): Promise<Specialization> {
+		const specialization = await this.findOne(id);
+		Object.assign(specialization, dto);
+		return this.specializationRepository.save(specialization);
+	}
+
+	async remove(id: number): Promise<void> {
+		const specialization = await this.findOne(id);
+		await this.specializationRepository.softRemove(specialization);
 	}
 }

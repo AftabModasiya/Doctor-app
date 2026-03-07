@@ -1,29 +1,50 @@
-import { Injectable } from "@nestjs/common";
-import type { CreateMedicinePrescriptionDto } from "./dto/create-medicine-prescription.dto";
-import type { UpdateMedicinePrescriptionDto } from "./dto/update-medicine-prescription.dto";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { MedicinePrescription } from './entities/medicine-prescription.entity';
+import type { CreateMedicinePrescriptionDto } from './dto/create-medicine-prescription.dto';
+import type { UpdateMedicinePrescriptionDto } from './dto/update-medicine-prescription.dto';
 
 @Injectable()
 export class MedicinePrescriptionService {
-	create(createMedicinePrescriptionDto: CreateMedicinePrescriptionDto) {
-		return "This action adds a new medicinePrescription";
+	constructor(
+		@InjectRepository(MedicinePrescription)
+		private readonly mpRepository: Repository<MedicinePrescription>,
+	) { }
+
+	create(dto: CreateMedicinePrescriptionDto): Promise<MedicinePrescription> {
+		const mp = this.mpRepository.create(dto);
+		return this.mpRepository.save(mp);
 	}
 
-	findAll() {
-		return `This action returns all medicinePrescription`;
+	findAll(): Promise<MedicinePrescription[]> {
+		return this.mpRepository.find({ relations: ['medicine', 'prescription'] });
 	}
 
-	findOne(id: number) {
-		return `This action returns a #${id} medicinePrescription`;
+	findByPrescription(prescriptionId: number): Promise<MedicinePrescription[]> {
+		return this.mpRepository.find({
+			where: { prescriptionId },
+			relations: ['medicine'],
+		});
 	}
 
-	update(
-		id: number,
-		updateMedicinePrescriptionDto: UpdateMedicinePrescriptionDto,
-	) {
-		return `This action updates a #${id} medicinePrescription`;
+	async findOne(id: number): Promise<MedicinePrescription> {
+		const mp = await this.mpRepository.findOne({
+			where: { id },
+			relations: ['medicine', 'prescription'],
+		});
+		if (!mp) throw new NotFoundException(`MedicinePrescription #${id} not found`);
+		return mp;
 	}
 
-	remove(id: number) {
-		return `This action removes a #${id} medicinePrescription`;
+	async update(id: number, dto: UpdateMedicinePrescriptionDto): Promise<MedicinePrescription> {
+		const mp = await this.findOne(id);
+		Object.assign(mp, dto);
+		return this.mpRepository.save(mp);
+	}
+
+	async remove(id: number): Promise<void> {
+		const mp = await this.findOne(id);
+		await this.mpRepository.softRemove(mp);
 	}
 }
