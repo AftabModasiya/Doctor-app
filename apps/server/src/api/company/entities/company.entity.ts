@@ -1,16 +1,23 @@
-import { BaseEntity } from "src/database/entities/base.entity";
-import { Entity, Column } from "typeorm";
+import {
+	Column,
+	Entity,
+	OneToMany,
+} from 'typeorm';
+import { BaseEntity } from '../../common/entities/base.entity';
+import type { Patient } from '../../patient/entities/patient.entity';
+import type { Doctor } from '../../doctor/entities/doctor.entity';
+import type { CompanySetting } from '../../company-setting/entities/company-setting.entity';
 
-@Entity("companies")
-export class CompanyEntity extends BaseEntity {
-	@Column({ type: "varchar", length: 255, nullable: true })
+@Entity('companies')
+export class Company extends BaseEntity {
+	@Column({ type: 'varchar', length: 255, nullable: true })
 	name!: string;
 
-	@Column({ type: "text", nullable: true })
+	@Column({ type: 'text', nullable: true })
 	address!: string;
 
 	@Column({
-		type: "numeric",
+		type: 'numeric',
 		precision: 10,
 		scale: 7,
 		nullable: true,
@@ -18,7 +25,7 @@ export class CompanyEntity extends BaseEntity {
 	latitude?: number;
 
 	@Column({
-		type: "numeric",
+		type: 'numeric',
 		precision: 10,
 		scale: 7,
 		nullable: true,
@@ -26,9 +33,19 @@ export class CompanyEntity extends BaseEntity {
 	longitude?: number;
 
 	@Column({
-		type: "varchar",
+		type: 'varchar',
 		length: 500,
 		nullable: true,
 	})
 	logo?: string;
+
+	// ---- Relations ----
+	@OneToMany('Patient', (patient: Patient) => patient.company)
+	patients!: Patient[];
+
+	@OneToMany('Doctor', (doctor: Doctor) => doctor.company)
+	doctors!: Doctor[];
+
+	@OneToMany('CompanySetting', (setting: CompanySetting) => setting.company)
+	settings!: CompanySetting[];
 }

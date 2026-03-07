@@ -1,4 +1,6 @@
-import { PartialType } from "@nestjs/swagger";
-import { CreatePrescriptionDto } from "./create-prescription.dto";
+import { createZodDto } from "nestjs-zod";
+import { CreatePrescriptionSchema } from "./create-prescription.dto";
 
-export class UpdatePrescriptionDto extends PartialType(CreatePrescriptionDto) {}
+export const UpdatePrescriptionSchema = CreatePrescriptionSchema.partial();
+
+export class UpdatePrescriptionDto extends createZodDto(UpdatePrescriptionSchema) { }

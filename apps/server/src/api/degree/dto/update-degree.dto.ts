@@ -1,4 +1,6 @@
-import { PartialType } from "@nestjs/swagger";
-import { CreateDegreeDto } from "./create-degree.dto";
+import { createZodDto } from "nestjs-zod";
+import { CreateDegreeSchema } from "./create-degree.dto";
 
-export class UpdateDegreeDto extends PartialType(CreateDegreeDto) {}
+export const UpdateDegreeSchema = CreateDegreeSchema.partial();
+
+export class UpdateDegreeDto extends createZodDto(UpdateDegreeSchema) { }

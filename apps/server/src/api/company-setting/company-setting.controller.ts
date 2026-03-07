@@ -8,14 +8,16 @@ import {
 	Post,
 } from "@nestjs/common";
 import { CompanySettingService } from "./company-setting.service";
+import { CreateCompanySettingDto } from "./dto/create-company-setting.dto";
+import { UpdateCompanySettingDto } from "./dto/update-company-setting.dto";
 
 @Controller("company-setting")
 export class CompanySettingController {
-	constructor(private readonly companySettingService: CompanySettingService) {}
+	constructor(private readonly companySettingService: CompanySettingService) { }
 
 	@Post()
-	create() {
-		return this.companySettingService.create();
+	create(@Body() createCompanySettingDto: CreateCompanySettingDto) {
+		return this.companySettingService.create(createCompanySettingDto);
 	}
 
 	@Get()
@@ -29,8 +31,8 @@ export class CompanySettingController {
 	}
 
 	@Patch(":id")
-	update(@Param("id") id: string) {
-		return this.companySettingService.update(+id);
+	update(@Param("id") id: string, @Body() updateCompanySettingDto: UpdateCompanySettingDto) {
+		return this.companySettingService.update(+id, updateCompanySettingDto);
 	}
 
 	@Delete(":id")

@@ -1,26 +1,47 @@
-import { Injectable } from "@nestjs/common";
-import type { CreateUserDeviceDto } from "./dto/create-user-device.dto";
-import type { UpdateUserDeviceDto } from "./dto/update-user-device.dto";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { UserDevice } from './entities/user-device.entity';
+import type { CreateUserDeviceDto } from './dto/create-user-device.dto';
+import type { UpdateUserDeviceDto } from './dto/update-user-device.dto';
 
 @Injectable()
 export class UserDeviceService {
-	create(createUserDeviceDto: CreateUserDeviceDto) {
-		return "This action adds a new userDevice";
+	constructor(
+		@InjectRepository(UserDevice)
+		private readonly deviceRepository: Repository<UserDevice>,
+	) { }
+
+	create(dto: CreateUserDeviceDto): Promise<UserDevice> {
+		const device = this.deviceRepository.create(dto);
+		return this.deviceRepository.save(device);
 	}
 
-	findAll() {
-		return `This action returns all userDevice`;
+	findAll(): Promise<UserDevice[]> {
+		return this.deviceRepository.find({ relations: ['user'] });
 	}
 
-	findOne(id: number) {
-		return `This action returns a #${id} userDevice`;
+	findByUser(userId: number): Promise<UserDevice[]> {
+		return this.deviceRepository.find({ where: { userId }, relations: ['token'] });
 	}
 
-	update(id: number, updateUserDeviceDto: UpdateUserDeviceDto) {
-		return `This action updates a #${id} userDevice`;
+	async findOne(id: number): Promise<UserDevice> {
+		const device = await this.deviceRepository.findOne({
+			where: { id },
+			relations: ['user', 'token'],
+		});
+		if (!device) throw new NotFoundException(`UserDevice #${id} not found`);
+		return device;
 	}
 
-	remove(id: number) {
-		return `This action removes a #${id} userDevice`;
+	async update(id: number, dto: UpdateUserDeviceDto): Promise<UserDevice> {
+		const device = await this.findOne(id);
+		Object.assign(device, dto);
+		return this.deviceRepository.save(device);
+	}
+
+	async remove(id: number): Promise<void> {
+		const device = await this.findOne(id);
+		await this.deviceRepository.softRemove(device);
 	}
 }
