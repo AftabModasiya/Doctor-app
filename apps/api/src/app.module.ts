@@ -17,6 +17,7 @@ import { SpecializationModule } from "./specialization/specialization.module";
 import { TokenModule } from "./token/token.module";
 import { UserModule } from "./user/user.module";
 import { UserDeviceModule } from "./user-device/user-device.module";
+import { ServeStaticModule } from "@nestjs/serve-static";
 
 @Module({
 	imports: [
@@ -34,6 +35,9 @@ import { UserDeviceModule } from "./user-device/user-device.module";
 			},
 			resolvers: [new HeaderResolver(["x-lang"])],
 			typesOutputPath: path.join(process.cwd(), "generated/i18n.generated.ts"),
+		}),
+		ServeStaticModule.forRoot({
+			rootPath: path.join(process.cwd(), "..", "..", "web", "dist"),
 		}),
 
 		//* API Modules
