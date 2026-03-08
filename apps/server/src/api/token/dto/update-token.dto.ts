@@ -1,4 +1,6 @@
-import { PartialType } from "@nestjs/swagger";
-import { CreateTokenDto } from "./create-token.dto";
+import { createZodDto } from "nestjs-zod";
+import { CreateTokenSchema } from "./create-token.dto";
 
-export class UpdateTokenDto extends PartialType(CreateTokenDto) {}
+export const UpdateTokenSchema = CreateTokenSchema.partial();
+
+export class UpdateTokenDto extends createZodDto(UpdateTokenSchema) { }

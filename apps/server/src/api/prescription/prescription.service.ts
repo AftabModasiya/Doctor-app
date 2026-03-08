@@ -1,26 +1,59 @@
-import { Injectable } from "@nestjs/common";
-import type { CreatePrescriptionDto } from "./dto/create-prescription.dto";
-import type { UpdatePrescriptionDto } from "./dto/update-prescription.dto";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Prescription } from './entities/prescription.entity';
+import type { CreatePrescriptionDto } from './dto/create-prescription.dto';
+import type { UpdatePrescriptionDto } from './dto/update-prescription.dto';
 
 @Injectable()
 export class PrescriptionService {
-	create(createPrescriptionDto: CreatePrescriptionDto) {
-		return "This action adds a new prescription";
+	constructor(
+		@InjectRepository(Prescription)
+		private readonly prescriptionRepository: Repository<Prescription>,
+	) { }
+
+	create(dto: CreatePrescriptionDto): Promise<Prescription> {
+		const prescription = this.prescriptionRepository.create(dto);
+		return this.prescriptionRepository.save(prescription);
 	}
 
-	findAll() {
-		return `This action returns all prescription`;
+	findAll(): Promise<Prescription[]> {
+		return this.prescriptionRepository.find({
+			relations: ['patient', 'doctor', 'medicinePrescriptions', 'medicinePrescriptions.medicine'],
+		});
 	}
 
-	findOne(id: number) {
-		return `This action returns a #${id} prescription`;
+	async findOne(id: number): Promise<Prescription> {
+		const prescription = await this.prescriptionRepository.findOne({
+			where: { id },
+			relations: ['patient', 'doctor', 'medicinePrescriptions', 'medicinePrescriptions.medicine'],
+		});
+		if (!prescription) throw new NotFoundException(`Prescription #${id} not found`);
+		return prescription;
 	}
 
-	update(id: number, updatePrescriptionDto: UpdatePrescriptionDto) {
-		return `This action updates a #${id} prescription`;
+	findByPatient(patientId: number): Promise<Prescription[]> {
+		return this.prescriptionRepository.find({
+			where: { patientId },
+			relations: ['doctor', 'medicinePrescriptions', 'medicinePrescriptions.medicine'],
+		});
 	}
 
-	remove(id: number) {
-		return `This action removes a #${id} prescription`;
+	findByDoctor(doctorId: number): Promise<Prescription[]> {
+		return this.prescriptionRepository.find({
+			where: { doctorId },
+			relations: ['patient', 'medicinePrescriptions', 'medicinePrescriptions.medicine'],
+		});
+	}
+
+	async update(id: number, dto: UpdatePrescriptionDto): Promise<Prescription> {
+		const prescription = await this.findOne(id);
+		Object.assign(prescription, dto);
+		return this.prescriptionRepository.save(prescription);
+	}
+
+	async remove(id: number): Promise<void> {
+		const prescription = await this.findOne(id);
+		await this.prescriptionRepository.softRemove(prescription);
 	}
 }
