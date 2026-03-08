@@ -1,0 +1,11 @@
+services:
+  api:
+    container_name: doctor-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./apps/server/.env.prod
+    restart: always

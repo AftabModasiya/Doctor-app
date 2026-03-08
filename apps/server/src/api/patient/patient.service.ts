@@ -1,16 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Patient } from './entities/patient.entity';
-import type { CreatePatientDto } from './dto/create-patient.dto';
-import type { UpdatePatientDto } from './dto/update-patient.dto';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Patient } from "./entities/patient.entity";
+import type { CreatePatientDto } from "./dto/create-patient.dto";
+import type { UpdatePatientDto } from "./dto/update-patient.dto";
 
 @Injectable()
 export class PatientService {
 	constructor(
 		@InjectRepository(Patient)
 		private readonly patientRepository: Repository<Patient>,
-	) { }
+	) {}
 
 	create(dto: CreatePatientDto): Promise<Patient> {
 		const patient = this.patientRepository.create(dto);
@@ -18,13 +18,13 @@ export class PatientService {
 	}
 
 	findAll(): Promise<Patient[]> {
-		return this.patientRepository.find({ relations: ['user', 'company'] });
+		return this.patientRepository.find({ relations: ["user", "company"] });
 	}
 
 	async findOne(id: number): Promise<Patient> {
 		const patient = await this.patientRepository.findOne({
 			where: { id },
-			relations: ['user', 'company'],
+			relations: ["user", "company"],
 		});
 		if (!patient) throw new NotFoundException(`Patient #${id} not found`);
 		return patient;

@@ -3,4 +3,6 @@ import { CreateSpecializationSchema } from "./create-specialization.dto";
 
 export const UpdateSpecializationSchema = CreateSpecializationSchema.partial();
 
-export class UpdateSpecializationDto extends createZodDto(UpdateSpecializationSchema) { }
+export class UpdateSpecializationDto extends createZodDto(
+	UpdateSpecializationSchema,
+) {}

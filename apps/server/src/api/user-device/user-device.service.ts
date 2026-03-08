@@ -1,16 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { UserDevice } from './entities/user-device.entity';
-import type { CreateUserDeviceDto } from './dto/create-user-device.dto';
-import type { UpdateUserDeviceDto } from './dto/update-user-device.dto';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { UserDevice } from "./entities/user-device.entity";
+import type { CreateUserDeviceDto } from "./dto/create-user-device.dto";
+import type { UpdateUserDeviceDto } from "./dto/update-user-device.dto";
 
 @Injectable()
 export class UserDeviceService {
 	constructor(
 		@InjectRepository(UserDevice)
 		private readonly deviceRepository: Repository<UserDevice>,
-	) { }
+	) {}
 
 	create(dto: CreateUserDeviceDto): Promise<UserDevice> {
 		const device = this.deviceRepository.create(dto);
@@ -18,17 +18,20 @@ export class UserDeviceService {
 	}
 
 	findAll(): Promise<UserDevice[]> {
-		return this.deviceRepository.find({ relations: ['user'] });
+		return this.deviceRepository.find({ relations: ["user"] });
 	}
 
 	findByUser(userId: number): Promise<UserDevice[]> {
-		return this.deviceRepository.find({ where: { userId }, relations: ['token'] });
+		return this.deviceRepository.find({
+			where: { userId },
+			relations: ["token"],
+		});
 	}
 
 	async findOne(id: number): Promise<UserDevice> {
 		const device = await this.deviceRepository.findOne({
 			where: { id },
-			relations: ['user', 'token'],
+			relations: ["user", "token"],
 		});
 		if (!device) throw new NotFoundException(`UserDevice #${id} not found`);
 		return device;
