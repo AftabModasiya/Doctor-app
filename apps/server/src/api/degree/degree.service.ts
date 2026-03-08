@@ -1,16 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Degree } from './entities/degree.entity';
-import type { CreateDegreeDto } from './dto/create-degree.dto';
-import type { UpdateDegreeDto } from './dto/update-degree.dto';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Degree } from "./entities/degree.entity";
+import type { CreateDegreeDto } from "./dto/create-degree.dto";
+import type { UpdateDegreeDto } from "./dto/update-degree.dto";
 
 @Injectable()
 export class DegreeService {
 	constructor(
 		@InjectRepository(Degree)
 		private readonly degreeRepository: Repository<Degree>,
-	) { }
+	) {}
 
 	create(dto: CreateDegreeDto): Promise<Degree> {
 		const degree = this.degreeRepository.create(dto);

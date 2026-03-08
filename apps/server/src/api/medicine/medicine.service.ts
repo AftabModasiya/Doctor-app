@@ -1,16 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Medicine } from './entities/medicine.entity';
-import type { CreateMedicineDto } from './dto/create-medicine.dto';
-import type { UpdateMedicineDto } from './dto/update-medicine.dto';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Medicine } from "./entities/medicine.entity";
+import type { CreateMedicineDto } from "./dto/create-medicine.dto";
+import type { UpdateMedicineDto } from "./dto/update-medicine.dto";
 
 @Injectable()
 export class MedicineService {
 	constructor(
 		@InjectRepository(Medicine)
 		private readonly medicineRepository: Repository<Medicine>,
-	) { }
+	) {}
 
 	create(dto: CreateMedicineDto): Promise<Medicine> {
 		const medicine = this.medicineRepository.create(dto);

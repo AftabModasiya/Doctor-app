@@ -1,8 +1,8 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { CompanySettingController } from './company-setting.controller';
-import { CompanySettingService } from './company-setting.service';
-import { CompanySetting } from './entities/company-setting.entity';
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { CompanySettingController } from "./company-setting.controller";
+import { CompanySettingService } from "./company-setting.service";
+import { CompanySetting } from "./entities/company-setting.entity";
 
 @Module({
 	imports: [TypeOrmModule.forFeature([CompanySetting])],
@@ -10,4 +10,4 @@ import { CompanySetting } from './entities/company-setting.entity';
 	providers: [CompanySettingService],
 	exports: [CompanySettingService],
 })
-export class CompanySettingModule { }
+export class CompanySettingModule {}

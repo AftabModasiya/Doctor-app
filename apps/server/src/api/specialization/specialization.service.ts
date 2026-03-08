@@ -1,16 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Specialization } from './entities/specialization.entity';
-import type { CreateSpecializationDto } from './dto/create-specialization.dto';
-import type { UpdateSpecializationDto } from './dto/update-specialization.dto';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Specialization } from "./entities/specialization.entity";
+import type { CreateSpecializationDto } from "./dto/create-specialization.dto";
+import type { UpdateSpecializationDto } from "./dto/update-specialization.dto";
 
 @Injectable()
 export class SpecializationService {
 	constructor(
 		@InjectRepository(Specialization)
 		private readonly specializationRepository: Repository<Specialization>,
-	) { }
+	) {}
 
 	create(dto: CreateSpecializationDto): Promise<Specialization> {
 		const specialization = this.specializationRepository.create(dto);
@@ -26,12 +26,18 @@ export class SpecializationService {
 	}
 
 	async findOne(id: number): Promise<Specialization> {
-		const specialization = await this.specializationRepository.findOne({ where: { id } });
-		if (!specialization) throw new NotFoundException(`Specialization #${id} not found`);
+		const specialization = await this.specializationRepository.findOne({
+			where: { id },
+		});
+		if (!specialization)
+			throw new NotFoundException(`Specialization #${id} not found`);
 		return specialization;
 	}
 
-	async update(id: number, dto: UpdateSpecializationDto): Promise<Specialization> {
+	async update(
+		id: number,
+		dto: UpdateSpecializationDto,
+	): Promise<Specialization> {
 		const specialization = await this.findOne(id);
 		Object.assign(specialization, dto);
 		return this.specializationRepository.save(specialization);
