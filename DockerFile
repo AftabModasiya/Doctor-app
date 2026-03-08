@@ -1,30 +1,28 @@
-# Base image
+# ---------- BUILD STAGE ----------
 FROM node:24-alpine AS builder
 
 WORKDIR /app
 
-# Copy root files
-COPY package*.json ./
-COPY turbo.json ./
+# copy root files first for caching
+COPY package*.json turbo.json ./
 
 RUN npm install
 
-# Copy repo
+# copy repo
 COPY . .
 
-# Build apps
+# build monorepo
 RUN npx turbo run build
 
-# Production stage
+
+# ---------- RUNTIME STAGE ----------
 FROM node:24-alpine AS runner
 
 WORKDIR /app
 
-COPY --from=base /app .
+# copy built app
+COPY --from=builder /app .
 
-ENV NODE_ENV=production
-
-# NestJS port
 EXPOSE 3000
 
 CMD ["node", "apps/server/dist/main.js"]
