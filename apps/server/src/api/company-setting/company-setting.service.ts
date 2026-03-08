@@ -1,16 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { CompanySetting } from './entities/company-setting.entity';
-import type { CreateCompanySettingDto } from './dto/create-company-setting.dto';
-import type { UpdateCompanySettingDto } from './dto/update-company-setting.dto';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { CompanySetting } from "./entities/company-setting.entity";
+import type { CreateCompanySettingDto } from "./dto/create-company-setting.dto";
+import type { UpdateCompanySettingDto } from "./dto/update-company-setting.dto";
 
 @Injectable()
 export class CompanySettingService {
 	constructor(
 		@InjectRepository(CompanySetting)
 		private readonly settingRepository: Repository<CompanySetting>,
-	) { }
+	) {}
 
 	create(dto: CreateCompanySettingDto): Promise<CompanySetting> {
 		const setting = this.settingRepository.create(dto);
@@ -27,11 +27,15 @@ export class CompanySettingService {
 
 	async findOne(id: number): Promise<CompanySetting> {
 		const setting = await this.settingRepository.findOne({ where: { id } });
-		if (!setting) throw new NotFoundException(`CompanySetting #${id} not found`);
+		if (!setting)
+			throw new NotFoundException(`CompanySetting #${id} not found`);
 		return setting;
 	}
 
-	async update(id: number, dto: UpdateCompanySettingDto): Promise<CompanySetting> {
+	async update(
+		id: number,
+		dto: UpdateCompanySettingDto,
+	): Promise<CompanySetting> {
 		const setting = await this.findOne(id);
 		Object.assign(setting, dto);
 		return this.settingRepository.save(setting);

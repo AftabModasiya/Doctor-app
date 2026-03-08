@@ -13,7 +13,7 @@ import { UpdateCompanySettingDto } from "./dto/update-company-setting.dto";
 
 @Controller("company-setting")
 export class CompanySettingController {
-	constructor(private readonly companySettingService: CompanySettingService) { }
+	constructor(private readonly companySettingService: CompanySettingService) {}
 
 	@Post()
 	create(@Body() createCompanySettingDto: CreateCompanySettingDto) {
@@ -31,7 +31,10 @@ export class CompanySettingController {
 	}
 
 	@Patch(":id")
-	update(@Param("id") id: string, @Body() updateCompanySettingDto: UpdateCompanySettingDto) {
+	update(
+		@Param("id") id: string,
+		@Body() updateCompanySettingDto: UpdateCompanySettingDto,
+	) {
 		return this.companySettingService.update(+id, updateCompanySettingDto);
 	}
 

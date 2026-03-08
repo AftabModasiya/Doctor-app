@@ -49,10 +49,15 @@ patchNestJsSwagger();
 				watch: true,
 			},
 			resolvers: [new HeaderResolver(["x-lang"])],
-			typesOutputPath: path.join(process.cwd(), "generated/i18n.generated.ts"),
+			typesOutputPath: path.join(
+				__dirname,
+				"..",
+				"..",
+				"generated/i18n.generated.ts",
+			),
 		}),
 		ServeStaticModule.forRoot({
-			rootPath: path.join(process.cwd(), "..", "..", "..", "web", "dist"),
+			rootPath: path.join(__dirname, "../../../web/dist"),
 		}),
 
 		//* API Modules

@@ -1,16 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Token } from './entities/token.entity';
-import type { CreateTokenDto } from './dto/create-token.dto';
-import type { UpdateTokenDto } from './dto/update-token.dto';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Token } from "./entities/token.entity";
+import type { CreateTokenDto } from "./dto/create-token.dto";
+import type { UpdateTokenDto } from "./dto/update-token.dto";
 
 @Injectable()
 export class TokenService {
 	constructor(
 		@InjectRepository(Token)
 		private readonly tokenRepository: Repository<Token>,
-	) { }
+	) {}
 
 	create(dto: CreateTokenDto): Promise<Token> {
 		const token = this.tokenRepository.create(dto as unknown as Partial<Token>);
@@ -18,7 +18,7 @@ export class TokenService {
 	}
 
 	findAll(): Promise<Token[]> {
-		return this.tokenRepository.find({ relations: ['userDevice'] });
+		return this.tokenRepository.find({ relations: ["userDevice"] });
 	}
 
 	findByUser(userId: number): Promise<Token[]> {
@@ -28,7 +28,7 @@ export class TokenService {
 	async findOne(id: number): Promise<Token> {
 		const token = await this.tokenRepository.findOne({
 			where: { id },
-			relations: ['userDevice'],
+			relations: ["userDevice"],
 		});
 		if (!token) throw new NotFoundException(`Token #${id} not found`);
 		return token;

@@ -1,16 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Doctor } from './entities/doctor.entity';
-import type { CreateDoctorDto } from './dto/create-doctor.dto';
-import type { UpdateDoctorDto } from './dto/update-doctor.dto';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Doctor } from "./entities/doctor.entity";
+import type { CreateDoctorDto } from "./dto/create-doctor.dto";
+import type { UpdateDoctorDto } from "./dto/update-doctor.dto";
 
 @Injectable()
 export class DoctorService {
 	constructor(
 		@InjectRepository(Doctor)
 		private readonly doctorRepository: Repository<Doctor>,
-	) { }
+	) {}
 
 	create(dto: CreateDoctorDto): Promise<Doctor> {
 		const doctor = this.doctorRepository.create(dto);
@@ -19,14 +19,14 @@ export class DoctorService {
 
 	findAll(): Promise<Doctor[]> {
 		return this.doctorRepository.find({
-			relations: ['user', 'company', 'specializations', 'degrees'],
+			relations: ["user", "company", "specializations", "degrees"],
 		});
 	}
 
 	async findOne(id: number): Promise<Doctor> {
 		const doctor = await this.doctorRepository.findOne({
 			where: { id },
-			relations: ['user', 'company', 'specializations', 'degrees'],
+			relations: ["user", "company", "specializations", "degrees"],
 		});
 		if (!doctor) throw new NotFoundException(`Doctor #${id} not found`);
 		return doctor;
