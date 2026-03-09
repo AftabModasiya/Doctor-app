@@ -1,51 +1,36 @@
-import { Navigate, Route, Routes } from "react-router-dom";
-import Layout from "./components/layout/Layout";
-import AppointmentsPage from "./pages/appointments/AppointmentsPage";
-import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
-// Auth Pages
-import LoginPage from "./pages/auth/LoginPage";
-import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
-import SignupPage from "./pages/auth/SignupPage";
-// Admin Pages
-import DashboardPage from "./pages/dashboard/DashboardPage";
-import DoctorsPage from "./pages/doctors/DoctorsPage";
-// Landing Page
-import LandingPage from "./pages/landing/LandingPage";
-import MedicinesPage from "./pages/medicines/MedicinesPage";
-import PatientsPage from "./pages/patients/PatientsPage";
-import PrescriptionsPage from "./pages/prescriptions/PrescriptionsPage";
-import ReportsPage from "./pages/reports/ReportsPage";
-import SettingsPage from "./pages/settings/SettingsPage";
-import ProtectedRoute from "./routes/ProtectedRoute";
+import { Suspense } from "react";
+import { Toaster } from "react-hot-toast";
+import AppRoutesProvider from "@routes";
+import { ThemeProvider } from "@context/ThemeContext";
+import { AuthProvider } from "@context/AuthContext";
 
 export default function App() {
-	return (
-		<Routes>
-			{/* Landing Page — public root */}
-			<Route path="/" element={<LandingPage />} />
-
-			{/* Public Auth Routes */}
-			<Route path="/login" element={<LoginPage />} />
-			<Route path="/signup" element={<SignupPage />} />
-			<Route path="/forgot-password" element={<ForgotPasswordPage />} />
-			<Route path="/reset-password" element={<ResetPasswordPage />} />
-
-			{/* Protected Admin Routes */}
-			<Route element={<ProtectedRoute />}>
-				<Route element={<Layout />}>
-					<Route path="/dashboard" element={<DashboardPage />} />
-					<Route path="/patients" element={<PatientsPage />} />
-					<Route path="/doctors" element={<DoctorsPage />} />
-					<Route path="/medicines" element={<MedicinesPage />} />
-					<Route path="/prescriptions" element={<PrescriptionsPage />} />
-					<Route path="/appointments" element={<AppointmentsPage />} />
-					<Route path="/reports" element={<ReportsPage />} />
-					<Route path="/settings" element={<SettingsPage />} />
-				</Route>
-			</Route>
-
-			{/* 404 → back to landing */}
-			<Route path="*" element={<Navigate to="/" replace />} />
-		</Routes>
-	);
+  return (
+    <Suspense fallback={<>Loading...</>}>
+      <ThemeProvider>
+        <AuthProvider>
+          <AppRoutesProvider />
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 3000,
+              style: {
+                background: "#fff",
+                color: "#1a1a1a",
+                borderRadius: "12px",
+                border: "1px solid #f0f0f0",
+                boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1)",
+                fontSize: "14px",
+                fontFamily: "DM Sans, sans-serif",
+              },
+              success: {
+                iconTheme: { primary: "#22c55e", secondary: "#fff" },
+              },
+              error: { iconTheme: { primary: "#f43f5e", secondary: "#fff" } },
+            }}
+          />
+        </AuthProvider>
+      </ThemeProvider>
+    </Suspense>
+  );
 }
