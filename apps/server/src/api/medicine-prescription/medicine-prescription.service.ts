@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { MedicinePrescription } from "./entities/medicine-prescription.entity";
 import type { CreateMedicinePrescriptionDto } from "./dto/create-medicine-prescription.dto";
 import type { UpdateMedicinePrescriptionDto } from "./dto/update-medicine-prescription.dto";
+import { MedicinePrescription } from "./entities/medicine-prescription.entity";
 
 @Injectable()
 export class MedicinePrescriptionService {

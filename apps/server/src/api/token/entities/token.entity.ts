@@ -7,8 +7,8 @@ import {
 	OneToOne,
 } from "typeorm";
 import { BaseEntity } from "../../common/entities/base.entity";
-import type { UserDevice } from "../../user-device/entities/user-device.entity";
 import type { User } from "../../user/entities/user.entity";
+import type { UserDevice } from "../../user-device/entities/user-device.entity";
 
 export enum TokenType {
 	ACCESS = "access",
