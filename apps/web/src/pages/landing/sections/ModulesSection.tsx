@@ -44,12 +44,12 @@ export default function ModulesSection() {
 			desc: t("landing.modules.items.prescriptionsDesc"),
 			color: "from-rose-500 to-pink-600",
 		},
-		{
-			icon: FaCalendarCheck,
-			name: t("landing.modules.items.appointments"),
-			desc: t("landing.modules.items.appointmentsDesc"),
-			color: "from-cyan-500 to-sky-600",
-		},
+		// {
+		// 	icon: FaCalendarCheck,
+		// 	name: t("landing.modules.items.appointments"),
+		// 	desc: t("landing.modules.items.appointmentsDesc"),
+		// 	color: "from-cyan-500 to-sky-600",
+		// },
 		{
 			icon: FaChartBar,
 			name: t("landing.modules.items.reports"),

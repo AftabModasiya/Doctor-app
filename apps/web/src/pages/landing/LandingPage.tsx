@@ -17,8 +17,8 @@ export default function LandingPage() {
 				<FeaturesSection />
 				<ModulesSection />
 				<HowItWorks />
-				<TestimonialsSection />
-				<PricingSection />
+				{/* <TestimonialsSection /> */}
+				{/* <PricingSection /> */}
 				<CTASection />
 			</main>
 			<LandingFooter />

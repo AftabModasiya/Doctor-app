@@ -16,7 +16,8 @@
         "add": "Add",
         "saveChanges": "Save Changes",
         "loading": "Loading...",
-        "dashboard": "Dashboard"
+        "dashboard": "Dashboard",
+        "login": "Login"
     },
     "validation": {
         "nameMin": "Min 2 characters",
@@ -511,7 +512,7 @@
         },
         "modules": {
             "badge": "Modules",
-            "title1": "8 Powerful Modules,",
+            "title1": "7 Powerful Modules,",
             "titleHighlight": "One Platform",
             "subtitle": "Each module is purpose-built for hospital operations, designed to work seamlessly together.",
             "items": {
@@ -650,7 +651,7 @@
         "cta": {
             "title": "Start managing your hospital",
             "titleHighlight": "smarter today",
-            "subtitle": "Join over 500 hospitals and clinics already using MediAdmin to streamline operations, improve patient outcomes, and grow their practice.",
+            "subtitle": "Join hospitals and clinics already using MediAdmin to streamline operations, improve patient outcomes, and grow their practice.",
             "startTrial": "Start Your Free Trial",
             "signInDashboard": "Sign In to Dashboard",
             "perks": {
