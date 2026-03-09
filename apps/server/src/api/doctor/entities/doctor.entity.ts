@@ -10,11 +10,11 @@ import {
 	OneToOne,
 } from "typeorm";
 import { BaseEntity } from "../../common/entities/base.entity";
-import type { User } from "../../user/entities/user.entity";
 import type { Company } from "../../company/entities/company.entity";
-import type { Specialization } from "../../specialization/entities/specialization.entity";
 import type { Degree } from "../../degree/entities/degree.entity";
 import type { Prescription } from "../../prescription/entities/prescription.entity";
+import type { Specialization } from "../../specialization/entities/specialization.entity";
+import type { User } from "../../user/entities/user.entity";
 
 @Entity("doctors")
 export class Doctor extends BaseEntity {

@@ -8,9 +8,9 @@ import {
 	OneToOne,
 } from "typeorm";
 import { BaseEntity } from "../../common/entities/base.entity";
-import type { User } from "../../user/entities/user.entity";
 import type { Company } from "../../company/entities/company.entity";
 import type { Prescription } from "../../prescription/entities/prescription.entity";
+import type { User } from "../../user/entities/user.entity";
 
 @Entity("patients")
 export class Patient extends BaseEntity {

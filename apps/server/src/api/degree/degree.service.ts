@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Degree } from "./entities/degree.entity";
 import type { CreateDegreeDto } from "./dto/create-degree.dto";
 import type { UpdateDegreeDto } from "./dto/update-degree.dto";
+import { Degree } from "./entities/degree.entity";
 
 @Injectable()
 export class DegreeService {

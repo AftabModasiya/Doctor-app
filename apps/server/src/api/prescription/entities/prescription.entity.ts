@@ -7,10 +7,10 @@ import {
 	OneToMany,
 } from "typeorm";
 import { BaseEntity } from "../../common/entities/base.entity";
-import type { Patient } from "../../patient/entities/patient.entity";
-import type { Doctor } from "../../doctor/entities/doctor.entity";
 import type { Company } from "../../company/entities/company.entity";
+import type { Doctor } from "../../doctor/entities/doctor.entity";
 import type { MedicinePrescription } from "../../medicine-prescription/entities/medicine-prescription.entity";
+import type { Patient } from "../../patient/entities/patient.entity";
 
 @Entity("prescriptions")
 export class Prescription extends BaseEntity {
