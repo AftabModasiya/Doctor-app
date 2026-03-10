@@ -7,7 +7,9 @@ import { GracefulShutdownModule } from "nestjs-graceful-shutdown";
 import { HeaderResolver, I18nModule } from "nestjs-i18n";
 import { ZodSerializerInterceptor, ZodValidationPipe } from "nestjs-zod";
 import { DatabaseModule } from "src/database/database.module";
-import { ResponseInterceptor } from "src/shared/intereptors/response.interceptor";
+import { GlobalExceptionsFilter } from "src/shared/filters/global-exception.filter";
+import { HttpExceptionFilter } from "src/shared/filters/http-exception.filter";
+import { ResponseInterceptor } from "src/shared/interceptors/response.interceptor";
 import { ZodValidationExceptionFilter } from "../shared/filters/zod-validation-exception.filter";
 import { AppController } from "./app.controller";
 import { CompanyModule } from "./company/company.module";
@@ -78,6 +80,14 @@ import { UserDeviceModule } from "./user-device/user-device.module";
 		{
 			provide: APP_INTERCEPTOR,
 			useClass: ZodSerializerInterceptor,
+		},
+		{
+			provide: APP_FILTER,
+			useClass: GlobalExceptionsFilter,
+		},
+		{
+			provide: APP_FILTER,
+			useClass: HttpExceptionFilter,
 		},
 		{
 			provide: APP_INTERCEPTOR,

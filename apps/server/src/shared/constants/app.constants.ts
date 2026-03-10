@@ -3,3 +3,18 @@ export const getAppMetadataKeys = () => {
 		BY_PASS_RESPONSE_INTERCEPTOR_KEY: "byPassResponseInterceptor",
 	};
 };
+
+export const getNodeEnvironments = () => {
+	return {
+		LOCAL: "local",
+		DEVELOPMENT: "development",
+		STAGING: "staging",
+		PRODUCTION: "production",
+	};
+};
+
+export const getHttpStatusCodes = () => {
+	return {
+		INTERNAL_SERVER_ERROR: 500,
+	};
+};

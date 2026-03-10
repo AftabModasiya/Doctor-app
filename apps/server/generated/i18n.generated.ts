@@ -5,6 +5,11 @@
 import type { Path } from "nestjs-i18n";
 /* prettier-ignore */
 export type I18nTranslations = {
+    "error": {
+        "UNKNOWN": {
+            "INTERNAL_SERVER_ERROR": string;
+        };
+    };
     "success": {
         "DASHBOARD": {
             "COUNT": string;

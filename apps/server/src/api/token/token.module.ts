@@ -8,6 +8,6 @@ import { TokenService } from "./token.service";
 	imports: [TypeOrmModule.forFeature([Token])],
 	controllers: [TokenController],
 	providers: [TokenService],
-	exports: [TokenService, TypeOrmModule],
+	exports: [TokenService],
 })
 export class TokenModule {}

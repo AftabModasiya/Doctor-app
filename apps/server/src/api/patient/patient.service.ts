@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DataSource, Repository } from "typeorm";
 import { User } from "../user/entities/user.entity";
+import { UserService } from "../user/user.service";
 import type { CreatePatientDto } from "./dto/create-patient.dto";
 import type { UpdatePatientDto } from "./dto/update-patient.dto";
 import { Patient } from "./entities/patient.entity";
@@ -13,8 +14,7 @@ export class PatientService {
 		@InjectRepository(Patient)
 		private readonly patientRepository: Repository<Patient>,
 		private readonly dataSource: DataSource,
-		@InjectRepository(User)
-		private readonly userRepository: Repository<User>,
+		private readonly userService: UserService,
 	) {}
 
 	async create(dto: CreatePatientDto): Promise<Patient> {
@@ -99,7 +99,7 @@ export class PatientService {
 	async remove(id: number) {
 		const patient = await this.findOne(id);
 		await this.patientRepository.softRemove(patient);
-		await this.userRepository.softDelete(patient.userId);
+		await this.userService.remove(patient.userId);
 		return {
 			message: "Patient deleted successfully",
 		};

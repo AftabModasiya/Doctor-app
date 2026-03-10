@@ -16,6 +16,6 @@ import { Doctor } from "./entities/doctor.entity";
 	],
 	controllers: [DoctorController],
 	providers: [DoctorService],
-	exports: [DoctorService, TypeOrmModule],
+	exports: [DoctorService],
 })
 export class DoctorModule {}
