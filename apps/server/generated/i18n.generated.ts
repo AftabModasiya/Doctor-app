@@ -9,13 +9,134 @@ export type I18nTranslations = {
         "UNKNOWN": {
             "INTERNAL_SERVER_ERROR": string;
         };
+        "PATIENT": {
+            "NOT_FOUND": string;
+        };
+        "DOCTOR": {
+            "NOT_FOUND": string;
+        };
+        "PRESCRIPTION": {
+            "NOT_FOUND": string;
+        };
+        "MEDICINE": {
+            "NOT_FOUND": string;
+        };
+        "COMPANY": {
+            "NOT_FOUND": string;
+        };
+        "COMPANY_SETTING": {
+            "NOT_FOUND": string;
+        };
+        "DEGREE": {
+            "NOT_FOUND": string;
+        };
+        "SPECIALIZATION": {
+            "NOT_FOUND": string;
+        };
+        "USER": {
+            "NOT_FOUND": string;
+        };
+        "TOKEN": {
+            "NOT_FOUND": string;
+        };
+        "USER_DEVICE": {
+            "NOT_FOUND": string;
+        };
+        "MEDICINE_PRESCRIPTION": {
+            "NOT_FOUND": string;
+        };
     };
     "success": {
         "DASHBOARD": {
             "COUNT": string;
             "PATIENT_CHART": string;
         };
+        "PATIENT": {
+            "LIST": string;
+            "CREATE": string;
+            "VIEW": string;
+            "UPDATE": string;
+            "DELETE": string;
+        };
+        "DOCTOR": {
+            "LIST": string;
+            "CREATE": string;
+            "VIEW": string;
+            "UPDATE": string;
+            "DELETE": string;
+        };
+        "PRESCRIPTION": {
+            "LIST": string;
+            "CREATE": string;
+            "VIEW": string;
+            "UPDATE": string;
+            "DELETE": string;
+        };
+        "MEDICINE": {
+            "LIST": string;
+            "CREATE": string;
+            "VIEW": string;
+            "UPDATE": string;
+            "DELETE": string;
+        };
+        "COMPANY": {
+            "LIST": string;
+            "CREATE": string;
+            "VIEW": string;
+            "UPDATE": string;
+            "DELETE": string;
+        };
+        "COMPANY_SETTING": {
+            "LIST": string;
+            "CREATE": string;
+            "VIEW": string;
+            "UPDATE": string;
+            "DELETE": string;
+        };
+        "DEGREE": {
+            "LIST": string;
+            "CREATE": string;
+            "VIEW": string;
+            "UPDATE": string;
+            "DELETE": string;
+        };
+        "SPECIALIZATION": {
+            "LIST": string;
+            "CREATE": string;
+            "VIEW": string;
+            "UPDATE": string;
+            "DELETE": string;
+        };
+        "USER": {
+            "LIST": string;
+            "CREATE": string;
+            "VIEW": string;
+            "UPDATE": string;
+            "DELETE": string;
+        };
+        "TOKEN": {
+            "LIST": string;
+            "CREATE": string;
+            "VIEW": string;
+            "UPDATE": string;
+            "DELETE": string;
+        };
+        "USER_DEVICE": {
+            "LIST": string;
+            "CREATE": string;
+            "VIEW": string;
+            "UPDATE": string;
+            "DELETE": string;
+        };
+        "MEDICINE_PRESCRIPTION": {
+            "LIST": string;
+            "CREATE": string;
+            "VIEW": string;
+            "UPDATE": string;
+            "DELETE": string;
+        };
     };
 };
 /* prettier-ignore */
 export type I18nPath = Path<I18nTranslations>;
+

@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { I18nTranslations } from "generated/i18n.generated";
+import { I18nService } from "nestjs-i18n";
 import { Repository } from "typeorm";
 import type { CreateDegreeDto } from "./dto/create-degree.dto";
 import type { UpdateDegreeDto } from "./dto/update-degree.dto";
@@ -10,6 +12,7 @@ export class DegreeService {
 	constructor(
 		@InjectRepository(Degree)
 		private readonly degreeRepository: Repository<Degree>,
+		private readonly i18nService: I18nService<I18nTranslations>,
 	) {}
 
 	create(dto: CreateDegreeDto): Promise<Degree> {
@@ -27,7 +30,8 @@ export class DegreeService {
 
 	async findOne(id: number): Promise<Degree> {
 		const degree = await this.degreeRepository.findOne({ where: { id } });
-		if (!degree) throw new NotFoundException(`Degree #${id} not found`);
+		if (!degree)
+			throw new NotFoundException(this.i18nService.t(`error.DEGREE.NOT_FOUND`));
 		return degree;
 	}
 

@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { I18nTranslations } from "generated/i18n.generated";
+import { I18nService } from "nestjs-i18n";
 import { Repository } from "typeorm";
 import type { CreateSpecializationDto } from "./dto/create-specialization.dto";
 import type { UpdateSpecializationDto } from "./dto/update-specialization.dto";
@@ -10,6 +12,7 @@ export class SpecializationService {
 	constructor(
 		@InjectRepository(Specialization)
 		private readonly specializationRepository: Repository<Specialization>,
+		private readonly i18nService: I18nService<I18nTranslations>,
 	) {}
 
 	create(dto: CreateSpecializationDto): Promise<Specialization> {
@@ -30,7 +33,9 @@ export class SpecializationService {
 			where: { id },
 		});
 		if (!specialization)
-			throw new NotFoundException(`Specialization #${id} not found`);
+			throw new NotFoundException(
+				this.i18nService.t(`error.SPECIALIZATION.NOT_FOUND`),
+			);
 		return specialization;
 	}
 
