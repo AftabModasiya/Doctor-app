@@ -106,7 +106,7 @@
         "prescriptions": "Prescriptions",
         "appointmentsToday": "Appointments Today",
         "patientGrowth": "Patient Growth",
-        "last7Months": "Last 7 months",
+        "last7Months": "Last 12 months",
         "vsLastPeriod": "+18% vs last period",
         "appointments": "Appointments",
         "statusBreakdown": "Status breakdown",

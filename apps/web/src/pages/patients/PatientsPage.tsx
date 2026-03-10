@@ -200,19 +200,28 @@ export default function PatientsPage() {
 			render: (p: IPatient) => (
 				<div className="flex items-center gap-1">
 					<button
-						onClick={() => setViewPatient(p)}
+						onClick={(e) => {
+							e.stopPropagation();
+							setViewPatient(p);
+						}}
 						className="p-1.5 text-gray-400 hover:text-sky-600 hover:bg-sky-50 rounded-lg transition-colors"
 					>
 						<FaEye className="h-3.5 w-3.5" />
 					</button>
 					<button
-						onClick={() => openEdit(p)}
+						onClick={(e) => {
+							e.stopPropagation();
+							openEdit(p);
+						}}
 						className="p-1.5 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
 					>
 						<FaEdit className="h-3.5 w-3.5" />
 					</button>
 					<button
-						onClick={() => setDeleteConfirm(p)}
+						onClick={(e) => {
+							e.stopPropagation();
+							setDeleteConfirm(p);
+						}}
 						className="p-1.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
 					>
 						<FaTrash className="h-3.5 w-3.5" />
@@ -282,6 +291,7 @@ export default function PatientsPage() {
 					data={paged}
 					emptyMessage={t("patients.noPatients")}
 					emptyIcon={<FaUserInjured />}
+					onRowClick={(row) => setViewPatient(row)}
 				/>
 				<div className="px-4 border-t border-gray-50">
 					<Pagination
