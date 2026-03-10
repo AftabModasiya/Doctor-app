@@ -23,7 +23,7 @@ import {
 	getPatientsAsyncThunk,
 	updatePatientAsyncThunk,
 } from "@store/patient/patient-async-thunk";
-import Loader from "../../components/common/Loader";
+import Loader from "@shared/components/Loader";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -107,12 +107,14 @@ export default function PatientsPage() {
 				updatePatientAsyncThunk({ id: String(editPatient.id), body: payload }),
 			).then((res) => {
 				if (updatePatientAsyncThunk.fulfilled.match(res)) {
+					dispatch(getPatientsAsyncThunk());
 					setModalOpen(false);
 				}
 			});
 		} else {
 			dispatch(createPatientAsyncThunk(payload)).then((res) => {
 				if (createPatientAsyncThunk.fulfilled.match(res)) {
+					dispatch(getPatientsAsyncThunk());
 					setModalOpen(false);
 				}
 			});
@@ -122,6 +124,7 @@ export default function PatientsPage() {
 	const handleDelete = (p: IPatient) => {
 		dispatch(deletePatientAsyncThunk(String(p.id))).then((res) => {
 			if (deletePatientAsyncThunk.fulfilled.match(res)) {
+				dispatch(getPatientsAsyncThunk());
 				setDeleteConfirm(null);
 			}
 		});
