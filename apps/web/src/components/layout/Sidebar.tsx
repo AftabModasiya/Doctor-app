@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import {
-	FaBars,
 	FaCalendarCheck,
 	FaChartBar,
 	FaCog,
@@ -13,6 +12,7 @@ import {
 	FaUserInjured,
 	FaUserMd,
 } from "react-icons/fa";
+import { IoIosArrowDropleftCircle, IoIosArrowDroprightCircle } from "react-icons/io";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../context/AuthContext";
@@ -55,30 +55,32 @@ export default function Sidebar({
 			{/* Logo */}
 			<div
 				className={clsx(
-					"flex items-center gap-3 px-4 py-5 border-b border-gray-100",
+					"relative flex items-center gap-3 px-4 py-5 border-b border-gray-100",
 					collapsed ? "justify-center" : "",
 				)}
 			>
 				<div className="flex-shrink-0 h-9 w-9 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-sm">
 					<FaHospital className="h-4 w-4 text-white" />
 				</div>
-				{!collapsed && (
-					<div className="overflow-hidden">
+				<div
+					className={clsx(
+						"overflow-hidden transition-all duration-150 ease-out",
+						collapsed
+							? "max-w-0 opacity-0 -translate-x-1"
+							: "max-w-[180px] opacity-100 translate-x-0",
+					)}
+				>
 						<p className="text-sm font-bold text-gray-900 leading-tight">
 							{t("common.appName")}
 						</p>
 						<p className="text-xs text-gray-500">{t("sidebar.hospitalManagement")}</p>
-					</div>
-				)}
+				</div>
 				<button
-					onClick={onToggle}
-					className="ml-auto p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors hidden lg:block"
+					onClick={onMobileClose}
+					className="ml-auto p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors lg:hidden"
+					aria-label="Close sidebar"
 				>
-					{collapsed ? (
-						<FaBars className="h-4 w-4" />
-					) : (
-						<FaTimes className="h-4 w-4" />
-					)}
+					<FaTimes className="h-4 w-4" />
 				</button>
 			</div>
 
@@ -99,7 +101,16 @@ export default function Sidebar({
 						title={collapsed ? label : undefined}
 					>
 						<Icon className="h-4 w-4 flex-shrink-0" />
-						{!collapsed && <span className="truncate">{label}</span>}
+						<span
+							className={clsx(
+								"truncate transition-all duration-150 ease-out",
+								collapsed
+									? "max-w-0 opacity-0 -translate-x-1"
+									: "max-w-[140px] opacity-100 translate-x-0",
+							)}
+						>
+							{label}
+						</span>
 					</NavLink>
 				))}
 			</nav>
@@ -122,7 +133,16 @@ export default function Sidebar({
 					)}
 				>
 					<FaSignOutAlt className="h-4 w-4 flex-shrink-0" />
-					{!collapsed && t("common.logout")}
+					<span
+						className={clsx(
+							"truncate transition-all duration-150 ease-out",
+							collapsed
+								? "max-w-0 opacity-0 -translate-x-1"
+								: "max-w-[100px] opacity-100 translate-x-0",
+						)}
+					>
+						{t("common.logout")}
+					</span>
 				</button>
 			</div>
 		</div>
@@ -131,25 +151,43 @@ export default function Sidebar({
 	return (
 		<>
 			{/* Mobile Overlay */}
-			{mobileOpen && (
-				<div className="fixed inset-0 z-40 lg:hidden">
-					<div
-						className="absolute inset-0 bg-gray-900/50 backdrop-blur-sm"
-						onClick={onMobileClose}
-					/>
-					<aside className="absolute left-0 top-0 h-full w-64 bg-white shadow-elevated animate-slide-in">
-						<SidebarContent />
-					</aside>
-				</div>
-			)}
+			<div
+				className={clsx(
+					"fixed inset-0 z-40 lg:hidden transition-opacity duration-200",
+					mobileOpen
+						? "opacity-100 pointer-events-auto"
+						: "opacity-0 pointer-events-none",
+				)}
+			>
+				<div className="absolute inset-0 bg-gray-900/40" onClick={onMobileClose} />
+				<aside
+					className={clsx(
+						"absolute left-0 top-0 h-full w-64 bg-white shadow-elevated transform-gpu will-change-transform transition-transform duration-200 ease-out",
+						mobileOpen ? "translate-x-0" : "-translate-x-full",
+					)}
+				>
+					<SidebarContent />
+				</aside>
+			</div>
 
 			{/* Desktop Sidebar */}
 			<aside
 				className={clsx(
-					"hidden lg:flex flex-col h-full bg-white border-r border-gray-100 transition-all duration-300 flex-shrink-0",
+					"relative hidden lg:flex flex-col h-full bg-white border-r border-gray-100 flex-shrink-0 overflow-visible transition-[width] duration-300 ease-in-out will-change-[width]",
 					collapsed ? "w-16" : "w-60",
 				)}
 			>
+				<button
+					onClick={onToggle}
+					className="absolute left-full top-7 z-40 hidden -translate-x-1/2 p-1 text-primary-600 hover:text-primary-700 transition-all duration-200 ease-out lg:flex"
+					aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+				>
+					{collapsed ? (
+						<IoIosArrowDroprightCircle className="m-0 h-4 w-4" />
+					) : (
+						<IoIosArrowDropleftCircle className="m-0 h-4 w-4" />
+					)}
+				</button>
 				<SidebarContent />
 			</aside>
 		</>

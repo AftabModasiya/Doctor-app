@@ -73,6 +73,18 @@ export default {
 				"slide-in": "slideIn 0.3s ease-out",
 				"slide-in-right": "slideInRight 0.3s ease-out",
 				"pulse-dot": "pulseDot 2s cubic-bezier(0.4,0,0.6,1) infinite",
+				"medical-pulse": "medicalPulse 2s ease-in-out infinite",
+				"orbit-slow": "orbitSlow 3.5s linear infinite",
+				breathing: "breathing 2.2s ease-in-out infinite",
+				heartbeat: "heartbeat 1.2s ease-in-out infinite",
+				"ecg-scan": "ecgScan 1.5s ease-in-out infinite",
+				"doctor-float": "doctorFloat 1.8s ease-in-out infinite",
+				"stetho-swing": "stethoSwing 1.4s ease-in-out infinite",
+				"head-bob": "headBob 1.2s ease-in-out infinite",
+				"arm-left": "armLeft 1.2s ease-in-out infinite",
+				"arm-right": "armRight 1.2s ease-in-out infinite",
+				"leg-left": "legLeft 1s ease-in-out infinite",
+				"leg-right": "legRight 1s ease-in-out infinite",
 			},
 			keyframes: {
 				fadeIn: {
@@ -90,6 +102,57 @@ export default {
 				pulseDot: {
 					"0%, 100%": { opacity: "1" },
 					"50%": { opacity: "0.5" },
+				},
+				medicalPulse: {
+					"0%, 100%": { transform: "scale(0.9)", opacity: "0.45" },
+					"50%": { transform: "scale(1.08)", opacity: "0.75" },
+				},
+				orbitSlow: {
+					"0%": { transform: "rotate(0deg)" },
+					"100%": { transform: "rotate(360deg)" },
+				},
+				breathing: {
+					"0%, 100%": { transform: "scale(1)" },
+					"50%": { transform: "scale(1.05)" },
+				},
+				heartbeat: {
+					"0%, 100%": { transform: "scale(1)" },
+					"15%": { transform: "scale(1.18)" },
+					"30%": { transform: "scale(1)" },
+					"45%": { transform: "scale(1.12)" },
+					"60%": { transform: "scale(1)" },
+				},
+				ecgScan: {
+					"0%": { transform: "translateX(-120%)" },
+					"100%": { transform: "translateX(420%)" },
+				},
+				doctorFloat: {
+					"0%, 100%": { transform: "translateY(0px)" },
+					"50%": { transform: "translateY(-5px)" },
+				},
+				stethoSwing: {
+					"0%, 100%": { transform: "rotate(-8deg)" },
+					"50%": { transform: "rotate(8deg)" },
+				},
+				headBob: {
+					"0%, 100%": { transform: "translateX(-50%) translateY(0px)" },
+					"50%": { transform: "translateX(-50%) translateY(-2px)" },
+				},
+				armLeft: {
+					"0%, 100%": { transform: "rotate(16deg)" },
+					"50%": { transform: "rotate(-12deg)" },
+				},
+				armRight: {
+					"0%, 100%": { transform: "rotate(-16deg)" },
+					"50%": { transform: "rotate(12deg)" },
+				},
+				legLeft: {
+					"0%, 100%": { transform: "rotate(8deg)" },
+					"50%": { transform: "rotate(-8deg)" },
+				},
+				legRight: {
+					"0%, 100%": { transform: "rotate(-8deg)" },
+					"50%": { transform: "rotate(8deg)" },
 				},
 			},
 			borderRadius: {
