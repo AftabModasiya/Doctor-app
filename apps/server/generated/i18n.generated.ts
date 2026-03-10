@@ -8,6 +8,7 @@ export type I18nTranslations = {
     "success": {
         "DASHBOARD": {
             "COUNT": string;
+            "PATIENT_CHART": string;
         };
     };
 };

@@ -45,7 +45,7 @@ export class DoctorService {
 			});
 			const savedDoctor = await manager.save(doctor);
 
-			return this.findOne(savedDoctor.id);
+			return savedDoctor;
 		});
 	}
 
@@ -102,7 +102,7 @@ export class DoctorService {
 
 			await manager.save(Doctor, doctor);
 
-			return this.findOne(id);
+			return doctor;
 		});
 	}
 

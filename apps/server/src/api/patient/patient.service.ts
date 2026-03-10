@@ -40,7 +40,7 @@ export class PatientService {
 			});
 			const savedPatient = await manager.save(patient);
 
-			return this.findOne(savedPatient.id);
+			return savedPatient;
 		});
 	}
 
@@ -92,7 +92,7 @@ export class PatientService {
 				await manager.update(Patient, id, patientUpdate);
 			}
 
-			return this.findOne(id);
+			return patient;
 		});
 	}
 
@@ -107,5 +107,119 @@ export class PatientService {
 
 	countPatentByCompanyId(companyId: number) {
 		return this.patientRepository.count({ where: { companyId } });
+	}
+
+	async getPatientGrowthData(
+		companyId: number,
+		startDate?: string,
+		endDate?: string,
+	) {
+		// If no dates provided, use 12 months (6 months back + current month + 5 months forward)
+		const today = new Date();
+
+		const parsedStartDate = startDate ? new Date(startDate) : undefined;
+		const parsedEndDate = endDate ? new Date(endDate) : undefined;
+
+		const finalStartDate =
+			parsedStartDate || new Date(today.getFullYear(), today.getMonth() - 6, 1);
+
+		const finalEndDate =
+			parsedEndDate || new Date(today.getFullYear(), today.getMonth() + 6, 0);
+
+		// Fetch all patients for the company
+		const patients = await this.patientRepository
+			.createQueryBuilder("patient")
+			.select("patient.createdAt")
+			.where("patient.companyId = :companyId", { companyId })
+			.andWhere("patient.createdAt BETWEEN :start AND :end", {
+				start: finalStartDate,
+				end: finalEndDate,
+			})
+			.getMany();
+
+		// Generate all months in the date range
+		const monthsData = this.generateMonthsInRange(finalStartDate, finalEndDate);
+		const monthlyData = new Map<string, { label: string; count: number }>();
+
+		// Initialize all months with 0
+		monthsData.forEach(({ label }) => {
+			monthlyData.set(label, { label, count: 0 });
+		});
+
+		// Count patients by month
+		patients.forEach((patient) => {
+			const monthLabel = this.getMonthLabelWithYear(patient.createdAt);
+			if (monthlyData.has(monthLabel)) {
+				const data = monthlyData.get(monthLabel);
+				if (data) {
+					data.count += 1;
+				}
+			}
+		});
+
+		// Build response in order
+		const labels = monthsData.map(({ label }) => label);
+		const data = monthsData.map(
+			({ label }) => monthlyData.get(label)?.count ?? 0,
+		);
+
+		return {
+			labels,
+			data,
+		};
+	}
+
+	private generateMonthsInRange(
+		startDate: Date,
+		endDate: Date,
+	): Array<{ label: string; date: Date }> {
+		const result: Array<{ label: string; date: Date }> = [];
+		const monthNames = [
+			"Jan",
+			"Feb",
+			"Mar",
+			"Apr",
+			"May",
+			"Jun",
+			"Jul",
+			"Aug",
+			"Sep",
+			"Oct",
+			"Nov",
+			"Dec",
+		];
+
+		const current = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
+
+		while (current <= endDate) {
+			const label = monthNames[current.getMonth()];
+
+			result.push({
+				label,
+				date: new Date(current),
+			});
+
+			current.setMonth(current.getMonth() + 1);
+		}
+
+		return result;
+	}
+
+	private getMonthLabelWithYear(date: Date): string {
+		const monthNames = [
+			"Jan",
+			"Feb",
+			"Mar",
+			"Apr",
+			"May",
+			"Jun",
+			"Jul",
+			"Aug",
+			"Sep",
+			"Oct",
+			"Nov",
+			"Dec",
+		];
+		return monthNames[date.getMonth()];
 	}
 }
