@@ -6,6 +6,8 @@ import { Repository } from "typeorm";
 import type { CreateSpecializationDto } from "./dto/create-specialization.dto";
 import type { UpdateSpecializationDto } from "./dto/update-specialization.dto";
 import { Specialization } from "./entities/specialization.entity";
+import { I18nTranslations } from "generated/i18n.generated";
+import { I18nService } from "nestjs-i18n";
 
 @Injectable()
 export class SpecializationService {
@@ -20,8 +22,12 @@ export class SpecializationService {
 		return this.specializationRepository.save(specialization);
 	}
 
-	findAll(): Promise<Specialization[]> {
-		return this.specializationRepository.find();
+	async findAll() {
+		return {
+			count: await this.specializationRepository.count(),
+			list: await this.specializationRepository.find(),
+			message: this.i18nService.t("success.SPECIALIZATION.LIST"),
+		};
 	}
 
 	findByCompany(companyId: number): Promise<Specialization[]> {

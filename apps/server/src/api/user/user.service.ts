@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException, ConflictException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
@@ -15,7 +15,16 @@ export class UserService {
 		private readonly i18nService: I18nService<I18nTranslations>,
 	) {}
 
-	create(dto: CreateUserDto): Promise<User> {
+	async create(dto: CreateUserDto): Promise<User> {
+		if (dto.email) {
+			const existingUser = await this.userRepository.findOne({
+				where: { email: dto.email as string },
+			});
+			if (existingUser) {
+				throw new ConflictException("Email already exists.");
+			}
+		}
+		
 		const user = this.userRepository.create(dto as unknown as Partial<User>);
 		return this.userRepository.save(user);
 	}
@@ -33,6 +42,16 @@ export class UserService {
 
 	async update(id: number, dto: UpdateUserDto): Promise<User> {
 		const user = await this.findOne(id);
+
+		if (dto.email && dto.email !== user.email) {
+			const existingUser = await this.userRepository.findOne({
+				where: { email: dto.email as string },
+			});
+			if (existingUser) {
+				throw new ConflictException("Email already exists.");
+			}
+		}
+
 		Object.assign(user, dto);
 		return this.userRepository.save(user);
 	}

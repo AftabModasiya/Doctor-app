@@ -14,6 +14,7 @@ import { ZodValidationExceptionFilter } from "../shared/filters/zod-validation-e
 import { AppController } from "./app.controller";
 import { CompanyModule } from "./company/company.module";
 import { CompanySettingModule } from "./company-setting/company-setting.module";
+import { CategoryModule } from "./category/category.module";
 import { DashboardModule } from "./dashboard/dashboard.module";
 import { DegreeModule } from "./degree/degree.module";
 import { DoctorModule } from "./doctor/doctor.module";
@@ -65,6 +66,7 @@ import { UserDeviceModule } from "./user-device/user-device.module";
 		MedicinePrescriptionModule,
 		CompanyModule,
 		CompanySettingModule,
+		CategoryModule,
 		DashboardModule,
 	],
 	controllers: [AppController],

@@ -6,6 +6,8 @@ import { Repository } from "typeorm";
 import type { CreateDegreeDto } from "./dto/create-degree.dto";
 import type { UpdateDegreeDto } from "./dto/update-degree.dto";
 import { Degree } from "./entities/degree.entity";
+import { I18nTranslations } from "generated/i18n.generated";
+import { I18nService } from "nestjs-i18n";
 
 @Injectable()
 export class DegreeService {
@@ -20,8 +22,12 @@ export class DegreeService {
 		return this.degreeRepository.save(degree);
 	}
 
-	findAll(): Promise<Degree[]> {
-		return this.degreeRepository.find();
+	async findAll() {
+		return {
+			count: await this.degreeRepository.count(),
+			list: await this.degreeRepository.find(),
+			message: this.i18nService.t("success.DEGREE.LIST"),
+		};
 	}
 
 	findByCompany(companyId: number): Promise<Degree[]> {

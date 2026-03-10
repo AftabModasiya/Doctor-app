@@ -3,6 +3,8 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
 import { Repository } from "typeorm";
+import { I18nTranslations } from "generated/i18n.generated";
+import { I18nService } from "nestjs-i18n";
 import type { CreateMedicineDto } from "./dto/create-medicine.dto";
 import type { UpdateMedicineDto } from "./dto/update-medicine.dto";
 import { Medicine } from "./entities/medicine.entity";
@@ -20,8 +22,12 @@ export class MedicineService {
 		return this.medicineRepository.save(medicine);
 	}
 
-	findAll(): Promise<Medicine[]> {
-		return this.medicineRepository.find();
+	async findAll() {
+		return {
+			count: await this.medicineRepository.count(),
+			list: await this.medicineRepository.find({ relations: ["category"] }),
+			message: this.i18nService.t("success.MEDICINE.LIST"),
+		};
 	}
 
 	findByCompany(companyId: number): Promise<Medicine[]> {

@@ -13,6 +13,9 @@ export class MedicinePrescription extends BaseEntity {
 	@Column({ name: "prescription_id" })
 	prescriptionId!: number;
 
+	@Column({ type: "int", default: 1 })
+	quantity!: number;
+
 	// ---- Relations ----
 	@ManyToOne("Medicine", (medicine: Medicine) => medicine.medicinePrescriptions)
 	@JoinColumn({ name: "medicine_id" })

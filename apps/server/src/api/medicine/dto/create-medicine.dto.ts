@@ -3,6 +3,7 @@ import { z } from "zod";
 
 export const CreateMedicineSchema = z.object({
 	name: z.string().trim().min(1).max(255),
+	categoryId: z.coerce.number().int().positive(),
 	companyId: z.coerce.number().int().positive(),
 });
 
