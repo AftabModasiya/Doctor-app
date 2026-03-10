@@ -13,7 +13,7 @@ import { UpdateDoctorDto } from "./dto/update-doctor.dto";
 
 @Controller("doctor")
 export class DoctorController {
-	constructor(private readonly doctorService: DoctorService) { }
+	constructor(private readonly doctorService: DoctorService) {}
 
 	@Post()
 	create(@Body() createDoctorDto: CreateDoctorDto) {

@@ -1,8 +1,8 @@
 import { Test, type TestingModule } from "@nestjs/testing";
-import { PatientService } from "./patient.service";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { Patient } from "./entities/patient.entity";
 import { DataSource } from "typeorm";
+import { Patient } from "./entities/patient.entity";
+import { PatientService } from "./patient.service";
 
 describe("PatientService", () => {
 	let service: PatientService;

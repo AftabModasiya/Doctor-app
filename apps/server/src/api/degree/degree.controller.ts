@@ -13,7 +13,7 @@ import { UpdateDegreeDto } from "./dto/update-degree.dto";
 
 @Controller("degree")
 export class DegreeController {
-	constructor(private readonly degreeService: DegreeService) { }
+	constructor(private readonly degreeService: DegreeService) {}
 
 	@Post()
 	create(@Body() createDegreeDto: CreateDegreeDto) {

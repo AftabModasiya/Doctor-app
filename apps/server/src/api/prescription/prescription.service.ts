@@ -75,4 +75,8 @@ export class PrescriptionService {
 		const prescription = await this.findOne(id);
 		await this.prescriptionRepository.softRemove(prescription);
 	}
+
+	countPrescriptionByCompanyId(companyId: number) {
+		return this.prescriptionRepository.count({ where: { companyId } });
+	}
 }

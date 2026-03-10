@@ -1,1 +1,6 @@
-{}
+{
+	"DASHBOARD": {
+		"COUNT": "Dashboard counts fetched successfully",
+		"PATIENT_CHART": "Patient growth chart data fetched successfully"
+	}
+}

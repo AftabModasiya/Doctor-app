@@ -1,3 +1,4 @@
+import { BaseEntity } from "src/common/entities/base.entity";
 import {
 	Column,
 	Entity,
@@ -6,7 +7,6 @@ import {
 	ManyToOne,
 	OneToMany,
 } from "typeorm";
-import { BaseEntity } from "../../common/entities/base.entity";
 import type { Company } from "../../company/entities/company.entity";
 import type { MedicinePrescription } from "../../medicine-prescription/entities/medicine-prescription.entity";
 

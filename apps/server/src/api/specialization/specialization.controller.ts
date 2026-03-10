@@ -13,7 +13,7 @@ import { SpecializationService } from "./specialization.service";
 
 @Controller("specialization")
 export class SpecializationController {
-	constructor(private readonly specializationService: SpecializationService) { }
+	constructor(private readonly specializationService: SpecializationService) {}
 
 	@Post()
 	create(@Body() createSpecializationDto: CreateSpecializationDto) {

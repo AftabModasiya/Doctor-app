@@ -1,5 +1,5 @@
+import { BaseEntity } from "src/common/entities/base.entity";
 import { Column, Entity, OneToMany } from "typeorm";
-import { BaseEntity } from "../../common/entities/base.entity";
 import type { CompanySetting } from "../../company-setting/entities/company-setting.entity";
 import type { Doctor } from "../../doctor/entities/doctor.entity";
 import type { Patient } from "../../patient/entities/patient.entity";
