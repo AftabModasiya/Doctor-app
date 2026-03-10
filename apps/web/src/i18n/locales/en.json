@@ -89,6 +89,7 @@
         "prescriptions": "Prescriptions",
         "appointments": "Appointments",
         "reports": "Reports",
+        "appSettings": "App Settings",
         "settings": "Settings"
     },
     "sidebar": {
@@ -709,6 +710,48 @@
                 "trial": "14-day free trial",
                 "cancel": "Cancel anytime"
             }
+        }
+    },
+    "appSettings": {
+        "title": "App Settings",
+        "subtitle": "Configure global settings for Categories, Specializations, and Degrees",
+        "tabs": {
+            "category": "Category",
+            "specialization": "Specialization",
+            "degree": "Degree"
+        },
+        "columns": {
+            "id": "ID",
+            "name": "Name",
+            "actions": "Actions"
+        },
+        "category": {
+            "total": "categories managed",
+            "add": "Add Category",
+            "empty": "No categories found",
+            "addTitle": "Add Category",
+            "editTitle": "Edit Category",
+            "namePlaceholder": "Enter category name..."
+        },
+        "specialization": {
+            "total": "specializations managed",
+            "add": "Add Specialization",
+            "empty": "No specializations found",
+            "addTitle": "Add Specialization",
+            "editTitle": "Edit Specialization",
+            "namePlaceholder": "Enter specialization name..."
+        },
+        "degree": {
+            "total": "degrees managed",
+            "add": "Add Degree",
+            "empty": "No degrees found",
+            "addTitle": "Add Degree",
+            "editTitle": "Edit Degree",
+            "namePlaceholder": "Enter degree name..."
+        },
+        "modal": {
+            "deleteTitle": "Confirm Delete",
+            "deleteConfirm": "Are you sure you want to delete"
         }
     }
 }

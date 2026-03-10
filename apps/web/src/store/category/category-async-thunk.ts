@@ -1,18 +1,18 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AxiosError } from "axios";
 import {
-  getDegreesApi,
-  getDegreeByIdApi,
-  createDegreeApi,
-  updateDegreeApi,
-  deleteDegreeApi,
-} from "@services/degree-service";
-import type { ICreateDegreeRequest } from "@models/degree";
+  getCategoriesApi,
+  getCategoryByIdApi,
+  createCategoryApi,
+  updateCategoryApi,
+  deleteCategoryApi,
+} from "@services/category-service";
+import type { ICreateCategoryRequest } from "@models/category";
 import {
   enqueueErrorToast,
   successToast,
 } from "@shared/services/toast-service";
-import { DegreeActionTypes } from "@constants/degree-constant";
+import { CategoryActionTypes } from "@constants/category-constant";
 
 const getErrorMessage = (
   error: unknown,
@@ -22,11 +22,11 @@ const getErrorMessage = (
   return axiosError?.response?.data?.message || axiosError?.message || fallback;
 };
 
-const getDegreesAsyncThunk = createAsyncThunk(
-  DegreeActionTypes.DEGREE_GET_ALL,
+const getCategoriesAsyncThunk = createAsyncThunk(
+  CategoryActionTypes.CATEGORY_GET_ALL,
   async (_, { rejectWithValue }) => {
     try {
-      const response = await getDegreesApi();
+      const response = await getCategoriesApi();
       return response.data;
     } catch (error: unknown) {
       const message = getErrorMessage(error);
@@ -36,11 +36,11 @@ const getDegreesAsyncThunk = createAsyncThunk(
   },
 );
 
-const getDegreeByIdAsyncThunk = createAsyncThunk(
-  DegreeActionTypes.DEGREE_GET_BY_ID,
+const getCategoryByIdAsyncThunk = createAsyncThunk(
+  CategoryActionTypes.CATEGORY_GET_BY_ID,
   async (id: string, { rejectWithValue }) => {
     try {
-      const response = await getDegreeByIdApi(id);
+      const response = await getCategoryByIdApi(id);
       return response.data;
     } catch (error: unknown) {
       const message = getErrorMessage(error);
@@ -50,12 +50,12 @@ const getDegreeByIdAsyncThunk = createAsyncThunk(
   },
 );
 
-const createDegreeAsyncThunk = createAsyncThunk(
-  DegreeActionTypes.DEGREE_CREATE,
-  async (body: ICreateDegreeRequest, { rejectWithValue }) => {
+const createCategoryAsyncThunk = createAsyncThunk(
+  CategoryActionTypes.CATEGORY_CREATE,
+  async (body: ICreateCategoryRequest, { rejectWithValue }) => {
     try {
-      const response = await createDegreeApi(body);
-      successToast("Degree created successfully");
+      const response = await createCategoryApi(body);
+      successToast("Category created successfully");
       return response.data;
     } catch (error: unknown) {
       const message = getErrorMessage(error);
@@ -65,15 +65,15 @@ const createDegreeAsyncThunk = createAsyncThunk(
   },
 );
 
-const updateDegreeAsyncThunk = createAsyncThunk(
-  DegreeActionTypes.DEGREE_UPDATE,
+const updateCategoryAsyncThunk = createAsyncThunk(
+  CategoryActionTypes.CATEGORY_UPDATE,
   async (
-    { id, body }: { id: string; body: Partial<ICreateDegreeRequest> },
+    { id, body }: { id: string; body: Partial<ICreateCategoryRequest> },
     { rejectWithValue },
   ) => {
     try {
-      const response = await updateDegreeApi(id, body);
-      successToast("Degree updated successfully");
+      const response = await updateCategoryApi(id, body);
+      successToast("Category updated successfully");
       return response.data;
     } catch (error: unknown) {
       const message = getErrorMessage(error);
@@ -83,12 +83,12 @@ const updateDegreeAsyncThunk = createAsyncThunk(
   },
 );
 
-const deleteDegreeAsyncThunk = createAsyncThunk(
-  DegreeActionTypes.DEGREE_DELETE,
+const deleteCategoryAsyncThunk = createAsyncThunk(
+  CategoryActionTypes.CATEGORY_DELETE,
   async (id: string, { rejectWithValue }) => {
     try {
-      const response = await deleteDegreeApi(id);
-      successToast("Degree deleted successfully");
+      const response = await deleteCategoryApi(id);
+      successToast("Category deleted successfully");
       return response.data;
     } catch (error: unknown) {
       const message = getErrorMessage(error);
@@ -99,9 +99,9 @@ const deleteDegreeAsyncThunk = createAsyncThunk(
 );
 
 export {
-  getDegreesAsyncThunk,
-  getDegreeByIdAsyncThunk,
-  createDegreeAsyncThunk,
-  updateDegreeAsyncThunk,
-  deleteDegreeAsyncThunk,
+  getCategoriesAsyncThunk,
+  getCategoryByIdAsyncThunk,
+  createCategoryAsyncThunk,
+  updateCategoryAsyncThunk,
+  deleteCategoryAsyncThunk,
 };

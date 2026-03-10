@@ -1,11 +1,33 @@
 import { DegreeEndpoints } from "@endpoints/degree-endpoint";
-import type { IDegreeListResponse } from "@models/degree";
-import { GET } from "@shared/services/api-service";
+import type {
+  ICreateDegreeRequest,
+  IDegreeListResponse,
+  ISingleDegreeResponse,
+} from "@models/degree";
+import { DELETE, GET, PATCH, POST } from "@shared/services/api-service";
 
-const getDegreesApi = () => {
-  return GET<IDegreeListResponse>({
-    URL: DegreeEndpoints.getDegrees,
+const getDegreesApi = () =>
+  GET<IDegreeListResponse>({ URL: DegreeEndpoints.getDegrees });
+
+const getDegreeByIdApi = (id: string) =>
+  GET<ISingleDegreeResponse>({ URL: DegreeEndpoints.getDegreeById(id) });
+
+const createDegreeApi = (body: ICreateDegreeRequest) =>
+  POST<ICreateDegreeRequest>({ URL: DegreeEndpoints.createDegree, body });
+
+const updateDegreeApi = (id: string, body: Partial<ICreateDegreeRequest>) =>
+  PATCH<Partial<ICreateDegreeRequest>>({
+    URL: DegreeEndpoints.updateDegree(id),
+    body,
   });
-};
 
-export { getDegreesApi };
+const deleteDegreeApi = (id: string) =>
+  DELETE<undefined>({ URL: DegreeEndpoints.deleteDegree(id) });
+
+export {
+  getDegreesApi,
+  getDegreeByIdApi,
+  createDegreeApi,
+  updateDegreeApi,
+  deleteDegreeApi,
+};
