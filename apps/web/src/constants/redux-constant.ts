@@ -6,6 +6,7 @@ const SliceNames = {
   DEGREE: "degree",
   DASHBOARD: "dashboard",
   CATEGORY: "category",
+  MEDICINE: "medicine",
   METADATA: "metadata",
 };
 

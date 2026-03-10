@@ -6,6 +6,7 @@ import specializationReducer from "./specialization/specialization-slice";
 import degreeReducer from "./degree/degree-slice";
 import dashboardReducer from "./dashboard/dashboard-slice";
 import categoryReducer from "./category/category-slice";
+import medicineReducer from "./medicine/medicine-slice";
 import metadataReducer from "./metadata/metadata-slice";
 
 const rootReducer = combineReducers({
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   degree: degreeReducer,
   dashboard: dashboardReducer,
   category: categoryReducer,
+  medicine: medicineReducer,
   metadata: metadataReducer,
 });
 
