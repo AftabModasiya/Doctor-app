@@ -1,4 +1,5 @@
 import { BaseEntity } from "src/common/entities/base.entity";
+import type { Relation } from "typeorm";
 import {
 	Column,
 	Entity,
@@ -7,8 +8,8 @@ import {
 	ManyToOne,
 	OneToOne,
 } from "typeorm";
-import type { Token } from "../../token/entities/token.entity";
-import type { User } from "../../user/entities/user.entity";
+import { Token } from "../../token/entities/token.entity";
+import { User } from "../../user/entities/user.entity";
 
 @Entity("user_devices")
 export class UserDevice extends BaseEntity {
@@ -23,12 +24,19 @@ export class UserDevice extends BaseEntity {
 	userId!: number;
 
 	// ---- Relations ----
-	@ManyToOne("User", (user: User) => user.devices)
+	@ManyToOne(
+		() => User,
+		(user: User) => user.devices,
+	)
 	@JoinColumn({ name: "user_id" })
-	user!: User;
+	user!: Relation<User>;
 
-	@OneToOne("Token", (token: Token) => token.userDevice, {
-		cascade: ["insert", "soft-remove"],
-	})
-	token!: Token;
+	@OneToOne(
+		() => Token,
+		(token: Token) => token.userDevice,
+		{
+			cascade: ["insert", "soft-remove"],
+		},
+	)
+	token!: Relation<Token>;
 }

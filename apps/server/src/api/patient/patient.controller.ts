@@ -39,6 +39,16 @@ export class PatientController {
 		};
 	}
 
+	@Get("/metadata")
+	async getPatientList() {
+		const { list, count } = await this.patientService.findAllPatientMetadata();
+		return {
+			list,
+			count,
+			message: this.i18nService.t("success.PATIENT.LIST"),
+		};
+	}
+
 	@Get(":id")
 	async findOne(@Param("id") id: string) {
 		const patient = await this.patientService.findOne(+id);

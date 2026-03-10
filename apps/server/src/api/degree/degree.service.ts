@@ -6,8 +6,6 @@ import { Repository } from "typeorm";
 import type { CreateDegreeDto } from "./dto/create-degree.dto";
 import type { UpdateDegreeDto } from "./dto/update-degree.dto";
 import { Degree } from "./entities/degree.entity";
-import { I18nTranslations } from "generated/i18n.generated";
-import { I18nService } from "nestjs-i18n";
 
 @Injectable()
 export class DegreeService {

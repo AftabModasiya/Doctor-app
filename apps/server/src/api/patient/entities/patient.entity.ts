@@ -3,6 +3,7 @@ import {
 	BloodGroup,
 	PatientStatus,
 } from "src/shared/constants/enums.constants";
+import type { Relation } from "typeorm";
 import {
 	Column,
 	Entity,
@@ -47,15 +48,15 @@ export class Patient extends BaseEntity {
 	// ---- Relations ----
 	@OneToOne("User", (user: User) => user.patient)
 	@JoinColumn({ name: "user_id" })
-	user!: User;
+	user!: Relation<User>;
 
 	@ManyToOne("Company", (company: Company) => company.patients)
 	@JoinColumn({ name: "company_id" })
-	company!: Company;
+	company!: Relation<Company>;
 
 	@OneToMany(
 		"Prescription",
 		(prescription: Prescription) => prescription.patient,
 	)
-	prescriptions!: Prescription[];
+	prescriptions!: Relation<Prescription[]>;
 }

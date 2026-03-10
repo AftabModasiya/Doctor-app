@@ -3,10 +3,10 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
 import { DataSource, Repository } from "typeorm";
+import { MedicinePrescription } from "../medicine-prescription/entities/medicine-prescription.entity";
 import type { CreatePrescriptionDto } from "./dto/create-prescription.dto";
 import type { UpdatePrescriptionDto } from "./dto/update-prescription.dto";
 import { Prescription } from "./entities/prescription.entity";
-import { MedicinePrescription } from "../medicine-prescription/entities/medicine-prescription.entity";
 
 @Injectable()
 export class PrescriptionService {

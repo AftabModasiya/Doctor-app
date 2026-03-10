@@ -3,8 +3,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
 import { Repository } from "typeorm";
-import { I18nTranslations } from "generated/i18n.generated";
-import { I18nService } from "nestjs-i18n";
 import type { CreateMedicineDto } from "./dto/create-medicine.dto";
 import type { UpdateMedicineDto } from "./dto/update-medicine.dto";
 import { Medicine } from "./entities/medicine.entity";

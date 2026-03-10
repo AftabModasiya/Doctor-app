@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ConflictException } from "@nestjs/common";
+import {
+	ConflictException,
+	Injectable,
+	NotFoundException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
@@ -24,7 +28,7 @@ export class UserService {
 				throw new ConflictException("Email already exists.");
 			}
 		}
-		
+
 		const user = this.userRepository.create(dto as unknown as Partial<User>);
 		return this.userRepository.save(user);
 	}

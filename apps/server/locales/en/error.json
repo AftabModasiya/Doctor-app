@@ -38,7 +38,7 @@
 	"MEDICINE_PRESCRIPTION": {
 		"NOT_FOUND": "Medicine prescription not found"
 	},
-    "VALIDATION": {
-      "EMAIL_EXISTS": "Email already exists."
-    }
+	"VALIDATION": {
+		"EMAIL_EXISTS": "Email already exists."
+	}
 }

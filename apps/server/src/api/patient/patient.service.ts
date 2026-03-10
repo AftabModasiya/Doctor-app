@@ -57,6 +57,14 @@ export class PatientService {
 		};
 	}
 
+	async findAllPatientMetadata() {
+		const [list, count] = await this.patientRepository.findAndCount({
+			select: { id: true, user: { id: true, name: true } },
+			relations: { user: true },
+		});
+		return { list, count };
+	}
+
 	async findOne(id: number): Promise<Patient> {
 		const patient = await this.patientRepository.findOne({
 			where: { id },

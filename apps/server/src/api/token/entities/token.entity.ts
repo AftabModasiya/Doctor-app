@@ -1,5 +1,6 @@
 import { BaseEntity } from "src/common/entities/base.entity";
 import { TokenType } from "src/shared/constants/enums.constants";
+import type { Relation } from "typeorm";
 import {
 	Column,
 	Entity,
@@ -8,8 +9,8 @@ import {
 	ManyToOne,
 	OneToOne,
 } from "typeorm";
-import type { User } from "../../user/entities/user.entity";
-import type { UserDevice } from "../../user-device/entities/user-device.entity";
+import { User } from "../../user/entities/user.entity";
+import { UserDevice } from "../../user-device/entities/user-device.entity";
 
 @Entity("tokens")
 export class Token extends BaseEntity {
@@ -37,11 +38,17 @@ export class Token extends BaseEntity {
 	userId!: number;
 
 	// ---- Relations ----
-	@OneToOne("UserDevice", (device: UserDevice) => device.token)
+	@OneToOne(
+		() => UserDevice,
+		(device: UserDevice) => device.token,
+	)
 	@JoinColumn({ name: "user_device_id" })
-	userDevice!: UserDevice;
+	userDevice!: Relation<UserDevice>;
 
-	@ManyToOne("User", (user: User) => user.devices)
+	@ManyToOne(
+		() => User,
+		(user: User) => user.devices,
+	)
 	@JoinColumn({ name: "user_id" })
-	user!: User;
+	user!: Relation<User>;
 }
