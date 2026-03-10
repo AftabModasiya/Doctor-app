@@ -308,7 +308,27 @@
     },
     "reports": {
         "title": "Reports",
-        "subtitle": "View analytics and generate reports"
+        "subtitle": "View analytics and generate reports",
+        "stats": {
+            "totalPatients": "Total Patients",
+            "active": "Active",
+            "totalPrescriptions": "Total Prescriptions",
+            "totalAppointments": "Total Appointments"
+        },
+        "chart": {
+            "patientsByGender": "Patients by Gender",
+            "appointmentsByMonth": "Appointments by Month",
+            "prescriptionsByMonth": "Prescriptions by Month",
+            "title": "Charts",
+            "subtitle": "View analytics and generate reports",
+            "appointments": "Appointments",
+            "prescriptions": "Prescriptions",
+            "patients": "Patients"
+        },
+        "tabs": {
+            "patientReport": "Patient Report",
+            "prescriptionReport": "Prescription Report"
+        }
     },
     "settings": {
         "title": "Settings",

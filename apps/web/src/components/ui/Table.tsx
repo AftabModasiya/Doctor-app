@@ -42,7 +42,7 @@ function TableSkeleton({
 	);
 }
 
-export default function Table<T extends { id?: string }>({
+export default function Table<T extends { id?: string | number }>({
 	columns,
 	data,
 	emptyMessage = "No records found",

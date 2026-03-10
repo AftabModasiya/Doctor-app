@@ -1,41 +1,63 @@
 type IPatient = {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  age: number;
-  gender: "Male" | "Female" | "Other";
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  createdBy: string | null;
+  updatedBy: string | null;
+  userId: number;
+  companyId: number;
   address: string;
-  createdAt?: string;
-  updatedAt?: string;
+  bloodGroup: string;
+  status: "active" | "inactive";
+  user: {
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    createdBy: string | null;
+    updatedBy: string | null;
+    name: string;
+    gender: "male" | "female" | "other";
+    age: number;
+    email: string;
+    mobile: string;
+  };
+  company: {
+    id: number;
+    name: string;
+    address: string;
+    logo: string;
+  };
 }
 
 type IPatientResponse = {
+  success: boolean;
   data: IPatient[];
-  message: string;
-  status: number;
+  statusCode: number;
 }
 
 type ISinglePatientResponse = {
+  success: boolean;
   data: IPatient;
-  message: string;
-  status: number;
+  statusCode: number;
 }
 
 type ICreatePatientRequest = {
   name: string;
   email: string;
-  phone: string;
+  mobile: string;
   age: number;
-  gender: "Male" | "Female" | "Other";
+  gender: "male" | "female" | "other";
   address: string;
+  bloodGroup: string;
+  status: "active" | "inactive";
+  companyId: number;
 }
-
-
 
 export type {
   IPatientResponse,
   ISinglePatientResponse,
   ICreatePatientRequest,
   IPatient
-}
+};

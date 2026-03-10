@@ -4,7 +4,7 @@ import type {
   IPatientResponse,
   ISinglePatientResponse,
 } from "@models/patient";
-import { DELETE, GET, POST, PUT } from "@shared/services/api-service";
+import { DELETE, GET, PATCH, POST } from "@shared/services/api-service";
 
 const getPatientsApi = () => {
   return GET<IPatientResponse>({
@@ -25,15 +25,15 @@ const createPatientApi = (body: ICreatePatientRequest) => {
   });
 };
 
-const updatePatientApi = (id: string, body: ICreatePatientRequest) => {
-  return PUT<ICreatePatientRequest>({
+const updatePatientApi = (id: string, body: Partial<ICreatePatientRequest>) => {
+  return PATCH<Partial<ICreatePatientRequest>>({
     URL: PatientEndpoints.updatePatient(id),
     body,
   });
 };
 
 const deletePatientApi = (id: string) => {
-  return DELETE<any>({
+  return DELETE<undefined>({
     URL: PatientEndpoints.deletePatient(id),
   });
 };

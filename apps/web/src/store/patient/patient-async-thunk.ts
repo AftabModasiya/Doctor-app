@@ -8,8 +8,8 @@ import {
 } from "@services/patient-service";
 import type {
   ICreatePatientRequest,
-  IUpdatePatientRequest,
 } from "@models/patient";
+import { enqueueErrorToast, successToast } from "@shared/services/toast-service";
 
 const getPatientsAsyncThunk = createAsyncThunk(
   "patient/getPatients",
@@ -18,9 +18,9 @@ const getPatientsAsyncThunk = createAsyncThunk(
       const response = await getPatientsApi();
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.message || "Something went wrong",
-      );
+      const message = error.response?.data?.message || "Something went wrong";
+      enqueueErrorToast(message);
+      return rejectWithValue(message);
     }
   },
 );
@@ -32,9 +32,9 @@ const getPatientByIdAsyncThunk = createAsyncThunk(
       const response = await getPatientByIdApi(id);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.message || "Something went wrong",
-      );
+      const message = error.response?.data?.message || "Something went wrong";
+      enqueueErrorToast(message);
+      return rejectWithValue(message);
     }
   },
 );
@@ -44,11 +44,12 @@ const createPatientAsyncThunk = createAsyncThunk(
   async (body: ICreatePatientRequest, { rejectWithValue }) => {
     try {
       const response = await createPatientApi(body);
+      successToast("Patient created successfully");
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.message || "Something went wrong",
-      );
+      const message = error.response?.data?.message || "Something went wrong";
+      enqueueErrorToast(message);
+      return rejectWithValue(message);
     }
   },
 );
@@ -56,16 +57,17 @@ const createPatientAsyncThunk = createAsyncThunk(
 const updatePatientAsyncThunk = createAsyncThunk(
   "patient/updatePatient",
   async (
-    { id, body }: { id: string; body: IUpdatePatientRequest },
+    { id, body }: { id: string; body: Partial<ICreatePatientRequest> },
     { rejectWithValue },
   ) => {
     try {
       const response = await updatePatientApi(id, body);
+      successToast("Patient updated successfully");
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.message || "Something went wrong",
-      );
+      const message = error.response?.data?.message || "Something went wrong";
+      enqueueErrorToast(message);
+      return rejectWithValue(message);
     }
   },
 );
@@ -75,11 +77,12 @@ const deletePatientAsyncThunk = createAsyncThunk(
   async (id: string, { rejectWithValue }) => {
     try {
       const response = await deletePatientApi(id);
+      successToast("Patient deleted successfully");
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.message || "Something went wrong",
-      );
+      const message = error.response?.data?.message || "Something went wrong";
+      enqueueErrorToast(message);
+      return rejectWithValue(message);
     }
   },
 );
