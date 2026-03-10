@@ -86,5 +86,12 @@
 		"VIEW": "Medicine prescription retrieved successfully",
 		"UPDATE": "Medicine prescription updated successfully",
 		"DELETE": "Medicine prescription deleted successfully"
-	}
+	},
+    "CATEGORY": {
+      "LIST": "Categories retrieved successfully",
+      "CREATE": "Category created successfully",
+      "VIEW": "Category retrieved successfully",
+      "UPDATE": "Category updated successfully",
+      "DELETE": "Category deleted successfully"
+    }
 }

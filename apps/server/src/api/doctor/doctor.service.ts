@@ -1,5 +1,5 @@
 import * as crypto from "node:crypto";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException, ConflictException} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
@@ -26,6 +26,15 @@ export class DoctorService {
 
 	async create(dto: CreateDoctorDto): Promise<Doctor> {
 		return this.dataSource.transaction(async (manager) => {
+			// Check for duplicate email
+			const existingUser = await manager.findOne(User, {
+				where: { email: dto.email }
+			});
+
+			if (existingUser) {
+				throw new ConflictException('Email already exists.');
+			}
+
 			// 1. Create User
 			const user = manager.create(User, {
 				name: dto.name,

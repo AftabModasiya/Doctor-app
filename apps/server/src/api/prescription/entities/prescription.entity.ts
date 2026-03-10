@@ -26,6 +26,12 @@ export class Prescription extends BaseEntity {
 	@Column({ name: "company_id" })
 	companyId!: number;
 
+	@Column({ type: "text", nullable: true })
+	diagnosis?: string;
+
+	@Column({ type: "text", nullable: true })
+	notes?: string;
+
 	// ---- Relations ----
 	@ManyToOne("Patient", (patient: Patient) => patient.prescriptions)
 	@JoinColumn({ name: "patient_id" })
