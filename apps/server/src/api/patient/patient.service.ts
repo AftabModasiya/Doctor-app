@@ -1,8 +1,11 @@
 import * as crypto from "node:crypto";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { I18nTranslations } from "generated/i18n.generated";
+import { I18nService } from "nestjs-i18n";
 import { DataSource, Repository } from "typeorm";
 import { User } from "../user/entities/user.entity";
+import { UserService } from "../user/user.service";
 import type { CreatePatientDto } from "./dto/create-patient.dto";
 import type { UpdatePatientDto } from "./dto/update-patient.dto";
 import { Patient } from "./entities/patient.entity";
@@ -13,8 +16,8 @@ export class PatientService {
 		@InjectRepository(Patient)
 		private readonly patientRepository: Repository<Patient>,
 		private readonly dataSource: DataSource,
-		@InjectRepository(User)
-		private readonly userRepository: Repository<User>,
+		private readonly userService: UserService,
+		private readonly i18nService: I18nService<I18nTranslations>,
 	) {}
 
 	async create(dto: CreatePatientDto): Promise<Patient> {
@@ -46,11 +49,10 @@ export class PatientService {
 
 	async findAll() {
 		const patients = await this.patientRepository.find({
-			relations: ["user", "company"],
+			relations: { user: true, company: true },
 		});
 		return {
-			patients,
-			message: "Patients retrieved successfully",
+			list: patients,
 			count: patients.length,
 		};
 	}
@@ -58,9 +60,12 @@ export class PatientService {
 	async findOne(id: number): Promise<Patient> {
 		const patient = await this.patientRepository.findOne({
 			where: { id },
-			relations: ["user", "company"],
+			relations: { user: true, company: true },
 		});
-		if (!patient) throw new NotFoundException(`Patient #${id} not found`);
+		if (!patient)
+			throw new NotFoundException(
+				this.i18nService.t(`error.PATIENT.NOT_FOUND`),
+			);
 
 		return patient;
 	}
@@ -99,10 +104,7 @@ export class PatientService {
 	async remove(id: number) {
 		const patient = await this.findOne(id);
 		await this.patientRepository.softRemove(patient);
-		await this.userRepository.softDelete(patient.userId);
-		return {
-			message: "Patient deleted successfully",
-		};
+		await this.userService.remove(patient.userId);
 	}
 
 	countPatentByCompanyId(companyId: number) {

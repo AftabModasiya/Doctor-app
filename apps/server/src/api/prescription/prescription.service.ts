@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { I18nTranslations } from "generated/i18n.generated";
+import { I18nService } from "nestjs-i18n";
 import { Repository } from "typeorm";
 import type { CreatePrescriptionDto } from "./dto/create-prescription.dto";
 import type { UpdatePrescriptionDto } from "./dto/update-prescription.dto";
@@ -10,6 +12,7 @@ export class PrescriptionService {
 	constructor(
 		@InjectRepository(Prescription)
 		private readonly prescriptionRepository: Repository<Prescription>,
+		private readonly i18nService: I18nService<I18nTranslations>,
 	) {}
 
 	create(dto: CreatePrescriptionDto): Promise<Prescription> {
@@ -19,49 +22,48 @@ export class PrescriptionService {
 
 	findAll(): Promise<Prescription[]> {
 		return this.prescriptionRepository.find({
-			relations: [
-				"patient",
-				"doctor",
-				"medicinePrescriptions",
-				"medicinePrescriptions.medicine",
-			],
+			relations: {
+				patient: true,
+				doctor: true,
+				medicinePrescriptions: { medicine: true },
+			},
 		});
 	}
 
 	async findOne(id: number): Promise<Prescription> {
 		const prescription = await this.prescriptionRepository.findOne({
 			where: { id },
-			relations: [
-				"patient",
-				"doctor",
-				"medicinePrescriptions",
-				"medicinePrescriptions.medicine",
-			],
+			relations: {
+				patient: true,
+				doctor: true,
+				medicinePrescriptions: { medicine: true },
+			},
 		});
 		if (!prescription)
-			throw new NotFoundException(`Prescription #${id} not found`);
+			throw new NotFoundException(
+				this.i18nService.t(`error.PRESCRIPTION.NOT_FOUND`),
+			);
 		return prescription;
 	}
 
 	findByPatient(patientId: number): Promise<Prescription[]> {
 		return this.prescriptionRepository.find({
 			where: { patientId },
-			relations: [
-				"doctor",
-				"medicinePrescriptions",
-				"medicinePrescriptions.medicine",
-			],
+			relations: {
+				doctor: true,
+				medicinePrescriptions: { medicine: true },
+			},
 		});
 	}
 
 	findByDoctor(doctorId: number): Promise<Prescription[]> {
 		return this.prescriptionRepository.find({
 			where: { doctorId },
-			relations: [
-				"patient",
-				"medicinePrescriptions",
-				"medicinePrescriptions.medicine",
-			],
+			relations: {
+				patient: true,
+				medicinePrescriptions: { medicine: true },
+				doctor: true,
+			},
 		});
 	}
 

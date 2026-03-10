@@ -8,6 +8,6 @@ import { UserDeviceService } from "./user-device.service";
 	imports: [TypeOrmModule.forFeature([UserDevice])],
 	controllers: [UserDeviceController],
 	providers: [UserDeviceService],
-	exports: [UserDeviceService, TypeOrmModule],
+	exports: [UserDeviceService],
 })
 export class UserDeviceModule {}

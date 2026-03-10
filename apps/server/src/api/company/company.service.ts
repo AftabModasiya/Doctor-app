@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { I18nTranslations } from "generated/i18n.generated";
+import { I18nService } from "nestjs-i18n";
 import { Repository } from "typeorm";
 import type { CreateCompanyDto } from "./dto/create-company.dto";
 import type { UpdateCompanyDto } from "./dto/update-company.dto";
@@ -10,6 +12,7 @@ export class CompanyService {
 	constructor(
 		@InjectRepository(Company)
 		private readonly companyRepository: Repository<Company>,
+		private readonly i18nService: I18nService<I18nTranslations>,
 	) {}
 
 	create(dto: CreateCompanyDto): Promise<Company> {
@@ -23,7 +26,10 @@ export class CompanyService {
 
 	async findOne(id: number): Promise<Company> {
 		const company = await this.companyRepository.findOne({ where: { id } });
-		if (!company) throw new NotFoundException(`Company #${id} not found`);
+		if (!company)
+			throw new NotFoundException(
+				this.i18nService.t(`error.COMPANY.NOT_FOUND`),
+			);
 		return company;
 	}
 

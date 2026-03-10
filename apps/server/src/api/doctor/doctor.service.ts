@@ -1,6 +1,8 @@
 import * as crypto from "node:crypto";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { I18nTranslations } from "generated/i18n.generated";
+import { I18nService } from "nestjs-i18n";
 import { DataSource, Repository } from "typeorm";
 import { User } from "../user/entities/user.entity";
 import { UserService } from "../user/user.service";
@@ -19,6 +21,7 @@ export class DoctorService {
 		// private readonly specializationService: SpecializationService,
 		// private readonly degreeService: DegreeService,
 		private readonly dataSource: DataSource,
+		private readonly i18nService: I18nService<I18nTranslations>,
 	) {}
 
 	async create(dto: CreateDoctorDto): Promise<Doctor> {
@@ -51,11 +54,15 @@ export class DoctorService {
 
 	async findAll() {
 		const doctors = await this.doctorRepository.find({
-			relations: ["user", "company", "specializations", "degrees"],
+			relations: {
+				user: true,
+				company: true,
+				specializations: true,
+				degrees: true,
+			},
 		});
 		return {
-			doctors,
-			message: "Doctors retrieved successfully",
+			list: doctors,
 			count: doctors.length,
 		};
 	}
@@ -63,9 +70,15 @@ export class DoctorService {
 	async findOne(id: number): Promise<Doctor> {
 		const doctor = await this.doctorRepository.findOne({
 			where: { id },
-			relations: ["user", "company", "specializations", "degrees"],
+			relations: {
+				user: true,
+				company: true,
+				specializations: true,
+				degrees: true,
+			},
 		});
-		if (!doctor) throw new NotFoundException(`Doctor #${id} not found`);
+		if (!doctor)
+			throw new NotFoundException(this.i18nService.t(`error.DOCTOR.NOT_FOUND`));
 
 		return doctor;
 	}
@@ -110,9 +123,6 @@ export class DoctorService {
 		const doctor = await this.findOne(id);
 		await this.doctorRepository.softRemove(doctor);
 		await this.userService.remove(doctor.userId);
-		return {
-			message: "Doctor deleted successfully",
-		};
 	}
 
 	countDoctorByCompanyId(companyId: number) {

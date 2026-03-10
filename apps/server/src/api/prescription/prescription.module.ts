@@ -8,6 +8,6 @@ import { PrescriptionService } from "./prescription.service";
 	imports: [TypeOrmModule.forFeature([Prescription])],
 	controllers: [PrescriptionController],
 	providers: [PrescriptionService],
-	exports: [PrescriptionService, TypeOrmModule],
+	exports: [PrescriptionService],
 })
 export class PrescriptionModule {}

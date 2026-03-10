@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { I18nTranslations } from "generated/i18n.generated";
+import { I18nService } from "nestjs-i18n";
 import { Repository } from "typeorm";
 import type { CreateUserDeviceDto } from "./dto/create-user-device.dto";
 import type { UpdateUserDeviceDto } from "./dto/update-user-device.dto";
@@ -10,6 +12,7 @@ export class UserDeviceService {
 	constructor(
 		@InjectRepository(UserDevice)
 		private readonly deviceRepository: Repository<UserDevice>,
+		private readonly i18nService: I18nService<I18nTranslations>,
 	) {}
 
 	create(dto: CreateUserDeviceDto): Promise<UserDevice> {
@@ -18,22 +21,25 @@ export class UserDeviceService {
 	}
 
 	findAll(): Promise<UserDevice[]> {
-		return this.deviceRepository.find({ relations: ["user"] });
+		return this.deviceRepository.find({ relations: { user: true } });
 	}
 
 	findByUser(userId: number): Promise<UserDevice[]> {
 		return this.deviceRepository.find({
 			where: { userId },
-			relations: ["token"],
+			relations: { token: true },
 		});
 	}
 
 	async findOne(id: number): Promise<UserDevice> {
 		const device = await this.deviceRepository.findOne({
 			where: { id },
-			relations: ["user", "token"],
+			relations: { user: true, token: true },
 		});
-		if (!device) throw new NotFoundException(`UserDevice #${id} not found`);
+		if (!device)
+			throw new NotFoundException(
+				this.i18nService.t(`error.USER_DEVICE.NOT_FOUND`),
+			);
 		return device;
 	}
 
