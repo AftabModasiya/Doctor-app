@@ -1,6 +1,7 @@
 const SliceNames = {
 	PATIENT: "patient",
 	AUTH: "auth",
+	DASHBOARD: "dashboard",
 };
 
 const REDUX_PERSISTENT_STORE_ENCRYPT_KEY = 'redux$persistentStore$key';
