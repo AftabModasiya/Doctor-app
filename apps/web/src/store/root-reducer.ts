@@ -7,6 +7,7 @@ import degreeReducer from "./degree/degree-slice";
 import dashboardReducer from "./dashboard/dashboard-slice";
 import categoryReducer from "./category/category-slice";
 import medicineReducer from "./medicine/medicine-slice";
+import metadataReducer from "./metadata/metadata-slice";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   dashboard: dashboardReducer,
   category: categoryReducer,
   medicine: medicineReducer,
+  metadata: metadataReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
