@@ -12,13 +12,15 @@ import { SliceNames } from "@constants/redux-constant";
 interface DoctorState {
   doctors: IDoctor[];
   selectedDoctor: IDoctor | null;
-  loading: boolean;
+  isFetching: boolean; // true only during GET /doctor list — drives full-page Loader
+  loading: boolean; // true during create / update / delete — drives button spinners
   error: string | null;
 }
 
 const initialState: DoctorState = {
   doctors: [],
   selectedDoctor: null,
+  isFetching: false,
   loading: false,
   error: null,
 };
@@ -36,13 +38,13 @@ const doctorSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Get Doctors
+      // ── Get All Doctors (uses isFetching for full-page loader)
       .addCase(getDoctorsAsyncThunk.pending, (state) => {
-        state.loading = true;
+        state.isFetching = true;
         state.error = null;
       })
       .addCase(getDoctorsAsyncThunk.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isFetching = false;
         const data = action.payload?.data;
         state.doctors = Array.isArray(data?.doctors)
           ? data.doctors
@@ -51,10 +53,10 @@ const doctorSlice = createSlice({
             : [];
       })
       .addCase(getDoctorsAsyncThunk.rejected, (state, action) => {
-        state.loading = false;
+        state.isFetching = false;
         state.error = action.payload as string;
       })
-      // Get Doctor By Id
+      // ── Get Doctor By Id
       .addCase(getDoctorByIdAsyncThunk.pending, (state) => {
         state.loading = true;
       })
@@ -67,22 +69,20 @@ const doctorSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-      // Create Doctor
+      // ── Create Doctor
       .addCase(createDoctorAsyncThunk.pending, (state) => {
         state.loading = true;
       })
       .addCase(createDoctorAsyncThunk.fulfilled, (state, action) => {
         state.loading = false;
         const newDoctor = action.payload?.data?.doctor || action.payload?.data;
-        if (newDoctor) {
-          state.doctors.unshift(newDoctor);
-        }
+        if (newDoctor) state.doctors.unshift(newDoctor);
       })
       .addCase(createDoctorAsyncThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
-      // Update Doctor
+      // ── Update Doctor
       .addCase(updateDoctorAsyncThunk.pending, (state) => {
         state.loading = true;
       })
@@ -94,9 +94,7 @@ const doctorSlice = createSlice({
           const index = state.doctors.findIndex(
             (d) => d.id === updatedDoctor.id,
           );
-          if (index !== -1) {
-            state.doctors[index] = updatedDoctor;
-          }
+          if (index !== -1) state.doctors[index] = updatedDoctor;
           if (state.selectedDoctor?.id === updatedDoctor.id) {
             state.selectedDoctor = updatedDoctor;
           }
@@ -106,7 +104,7 @@ const doctorSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-      // Delete Doctor
+      // ── Delete Doctor
       .addCase(deleteDoctorAsyncThunk.pending, (state) => {
         state.loading = true;
       })

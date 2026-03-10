@@ -25,6 +25,9 @@ const AppointmentsPage = lazy(
 );
 const ReportsPage = lazy(() => import("@pages/reports/ReportsPage"));
 const SettingsPage = lazy(() => import("@pages/settings/SettingsPage"));
+const AppSettingsPage = lazy(
+  () => import("@pages/app-settings/AppSettingsPage"),
+);
 
 const router = createBrowserRouter([
   {
@@ -85,6 +88,10 @@ const router = createBrowserRouter([
           {
             path: "/settings",
             element: <SettingsPage />,
+          },
+          {
+            path: "/app-settings",
+            element: <AppSettingsPage />,
           },
         ],
       },

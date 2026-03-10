@@ -1,3 +1,8 @@
+type ICreateDegreeRequest = {
+  name: string;
+  companyId: number;
+};
+
 type IDegree = {
   id: number;
   createdAt: string;
@@ -19,4 +24,16 @@ type IDegreeListResponse = {
   message: string;
 };
 
-export type { IDegree, IDegreeListResponse };
+type ISingleDegreeResponse = {
+  success: boolean;
+  data: IDegree;
+  statusCode: number;
+  message: string;
+};
+
+export type {
+  IDegree,
+  IDegreeListResponse,
+  ISingleDegreeResponse,
+  ICreateDegreeRequest,
+};
