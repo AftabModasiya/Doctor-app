@@ -1,3 +1,4 @@
+import { SliceNames } from "@constants/redux-constant";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
@@ -19,7 +20,7 @@ const initialState: AuthState = {
 };
 
 const authSlice = createSlice({
-  name: "auth",
+  name: SliceNames.AUTH,
   initialState,
   reducers: {
     loginAction: (

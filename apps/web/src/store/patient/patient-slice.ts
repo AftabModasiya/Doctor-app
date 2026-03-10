@@ -7,6 +7,7 @@ import {
   getPatientsAsyncThunk,
   updatePatientAsyncThunk,
 } from "./patient-async-thunk";
+import { SliceNames } from "@constants/redux-constant";
 
 interface PatientState {
   patients: IPatient[];
@@ -23,7 +24,7 @@ const initialState: PatientState = {
 };
 
 const patientSlice = createSlice({
-  name: "patient",
+  name: SliceNames.PATIENT,
   initialState,
   reducers: {
     clearPatientError: (state) => {
@@ -42,19 +43,17 @@ const patientSlice = createSlice({
       })
       .addCase(getPatientsAsyncThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.patients = action.payload.data;
+        const data = action.payload?.data;
+        state.patients = Array.isArray(data?.patients) ? data.patients : (Array.isArray(data) ? data : []);
       })
       .addCase(getPatientsAsyncThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
       // Get Patient By Id
-      .addCase(getPatientByIdAsyncThunk.pending, (state) => {
-        state.loading = true;
-      })
       .addCase(getPatientByIdAsyncThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.selectedPatient = action.payload.data;
+        state.selectedPatient = action.payload?.data?.patient || action.payload?.data || null;
       })
       .addCase(getPatientByIdAsyncThunk.rejected, (state, action) => {
         state.loading = false;
@@ -66,7 +65,10 @@ const patientSlice = createSlice({
       })
       .addCase(createPatientAsyncThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.patients.push(action.payload.data);
+        const newPatient = action.payload?.data?.patient || action.payload?.data;
+        if (newPatient) {
+          state.patients.unshift(newPatient);
+        }
       })
       .addCase(createPatientAsyncThunk.rejected, (state, action) => {
         state.loading = false;
@@ -78,14 +80,17 @@ const patientSlice = createSlice({
       })
       .addCase(updatePatientAsyncThunk.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.patients.findIndex(
-          (p) => p.id === action.payload.data.id,
-        );
-        if (index !== -1) {
-          state.patients[index] = action.payload.data;
-        }
-        if (state.selectedPatient?.id === action.payload.data.id) {
-          state.selectedPatient = action.payload.data;
+        const updatedPatient = action.payload?.data?.patient || action.payload?.data;
+        if (updatedPatient) {
+          const index = state.patients.findIndex(
+            (p) => p.id === updatedPatient.id,
+          );
+          if (index !== -1) {
+            state.patients[index] = updatedPatient;
+          }
+          if (state.selectedPatient?.id === updatedPatient.id) {
+            state.selectedPatient = updatedPatient;
+          }
         }
       })
       .addCase(updatePatientAsyncThunk.rejected, (state, action) => {
@@ -98,7 +103,13 @@ const patientSlice = createSlice({
       })
       .addCase(deletePatientAsyncThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.patients = state.patients.filter((p) => p.id !== action.meta.arg);
+        // The delete thunk returns the response which for delete might not contain the id in data
+        // We use the meta.arg which is the id passed to the thunk
+        const deletedId = Number(action.meta.arg);
+        state.patients = state.patients.filter((p) => Number(p.id) !== deletedId);
+        if (state.selectedPatient?.id === deletedId) {
+          state.selectedPatient = null;
+        }
       })
       .addCase(deletePatientAsyncThunk.rejected, (state, action) => {
         state.loading = false;

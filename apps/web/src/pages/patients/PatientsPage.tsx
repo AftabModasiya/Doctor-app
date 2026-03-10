@@ -1,6 +1,5 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import {
 	FaEdit,
 	FaEye,
@@ -16,8 +15,15 @@ import Button from "../../components/ui/Button";
 import Modal from "../../components/ui/Modal";
 import Pagination from "../../components/ui/Pagination";
 import Table from "../../components/ui/Table";
-import type { Patient } from "../../types";
-import { mockPatients } from "../../utils/mockData";
+import type { IPatient, ICreatePatientRequest } from "@models/patient";
+import { useAppDispatch, useAppSelector } from "@store/store";
+import {
+	createPatientAsyncThunk,
+	deletePatientAsyncThunk,
+	getPatientsAsyncThunk,
+	updatePatientAsyncThunk,
+} from "@store/patient/patient-async-thunk";
+import Loader from "../../components/common/Loader";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -25,25 +31,34 @@ type FilterStatus = "All" | "Active" | "Inactive";
 
 export default function PatientsPage() {
 	const { t } = useTranslation();
-	const [patients, setPatients] = useState<Patient[]>(mockPatients);
+	const dispatch = useAppDispatch();
+	const { patients, loading } = useAppSelector((state) => state.patient);
+
 	const [search, setSearch] = useState("");
 	const [filterStatus, setFilterStatus] = useState<FilterStatus>("All");
 	const [currentPage, setCurrentPage] = useState(1);
 	const [modalOpen, setModalOpen] = useState(false);
-	const [editPatient, setEditPatient] = useState<Patient | null>(null);
-	const [viewPatient, setViewPatient] = useState<Patient | null>(null);
-	const [deleteConfirm, setDeleteConfirm] = useState<Patient | null>(null);
+	const [editPatient, setEditPatient] = useState<IPatient | null>(null);
+	const [viewPatient, setViewPatient] = useState<IPatient | null>(null);
+	const [deleteConfirm, setDeleteConfirm] = useState<IPatient | null>(null);
+
 	const { register, handleSubmit, reset, setValue } =
-		useForm<Omit<Patient, "id" | "registeredDate">>();
+		useForm<ICreatePatientRequest>();
+
+	useEffect(() => {
+		dispatch(getPatientsAsyncThunk());
+	}, [dispatch]);
 
 	const filtered = useMemo(
 		() =>
-			patients.filter((p) => {
+			(Array.isArray(patients) ? patients : []).filter((p) => {
 				const matchSearch =
-					p.name.toLowerCase().includes(search.toLowerCase()) ||
-					p.email.toLowerCase().includes(search.toLowerCase()) ||
-					p.id.toLowerCase().includes(search.toLowerCase());
-				const matchStatus = filterStatus === "All" || p.status === filterStatus;
+					p?.user?.name?.toLowerCase().includes(search?.toLowerCase()) ||
+					p?.user?.email?.toLowerCase().includes(search?.toLowerCase()) ||
+					String(p?.id).toLowerCase().includes(search?.toLowerCase());
+				const matchStatus =
+					filterStatus === "All" ||
+					p?.status?.toLowerCase() === filterStatus?.toLowerCase();
 				return matchSearch && matchStatus;
 			}),
 		[patients, search, filterStatus],
@@ -57,71 +72,84 @@ export default function PatientsPage() {
 
 	const openAdd = () => {
 		setEditPatient(null);
-		reset();
+		reset({
+			gender: "male",
+			status: "active",
+			bloodGroup: "A+",
+		});
 		setModalOpen(true);
 	};
-	const openEdit = (p: Patient) => {
+
+	const openEdit = (p: IPatient) => {
 		setEditPatient(p);
-		setValue("name", p.name);
-		setValue("email", p.email);
-		setValue("phone", p.phone);
+		setValue("name", p.user.name);
+		setValue("email", p.user.email);
+		setValue("mobile", p.user.mobile);
 		setValue("address", p.address);
-		setValue("age", p.age);
-		setValue("gender", p.gender);
+		setValue("age", p.user.age);
+		setValue("gender", p.user.gender);
 		setValue("bloodGroup", p.bloodGroup);
 		setValue("status", p.status);
-		setValue("lastVisit", p.lastVisit);
 		setModalOpen(true);
 	};
 
-	const onSubmit = (data: Omit<Patient, "id" | "registeredDate">) => {
+	const onSubmit = (data: ICreatePatientRequest) => {
+		const payload = {
+			...data,
+			age: Number(data.age),
+			companyId: 1, // Static for now
+			gender: data.gender.toLowerCase() as any,
+			status: data.status.toLowerCase() as any,
+		};
+
 		if (editPatient) {
-			setPatients((ps) =>
-				ps.map((p) => (p.id === editPatient.id ? { ...p, ...data } : p)),
-			);
-			toast.success(t("patients.toast.updated"));
+			dispatch(
+				updatePatientAsyncThunk({ id: String(editPatient.id), body: payload }),
+			).then((res) => {
+				if (updatePatientAsyncThunk.fulfilled.match(res)) {
+					setModalOpen(false);
+				}
+			});
 		} else {
-			const newPatient: Patient = {
-				...data,
-				id: `P${(patients.length + 1).toString().padStart(3, "0")}`,
-				registeredDate: new Date().toISOString().split("T")[0],
-				lastVisit: "",
-			} as Patient;
-			setPatients((ps) => [newPatient, ...ps]);
-			toast.success(t("patients.toast.added"));
+			dispatch(createPatientAsyncThunk(payload)).then((res) => {
+				if (createPatientAsyncThunk.fulfilled.match(res)) {
+					setModalOpen(false);
+				}
+			});
 		}
-		setModalOpen(false);
 	};
 
-	const handleDelete = (p: Patient) => {
-		setPatients((ps) => ps.filter((x) => x.id !== p.id));
-		toast.success(t("patients.toast.removed"));
-		setDeleteConfirm(null);
+	const handleDelete = (p: IPatient) => {
+		dispatch(deletePatientAsyncThunk(String(p.id))).then((res) => {
+			if (deletePatientAsyncThunk.fulfilled.match(res)) {
+				setDeleteConfirm(null);
+			}
+		});
 	};
 
 	const columns = [
 		{
 			key: "id",
 			header: t("patients.columns.patientId"),
-			render: (p: Patient) => (
+			render: (p: IPatient) => (
 				<span className="font-mono text-xs text-gray-500">{p.id}</span>
 			),
 		},
 		{
 			key: "name",
 			header: t("patients.columns.patient"),
-			render: (p: Patient) => (
+			render: (p: IPatient) => (
 				<div className="flex items-center gap-2.5">
 					<div className="h-8 w-8 rounded-xl bg-primary-100 flex items-center justify-center text-primary-700 text-xs font-bold">
-						{p.name
-							.split(" ")
-							.map((n) => n[0])
-							.slice(0, 2)
-							.join("")}
+						{p?.user?.name
+							?.split(" ")
+							?.map((n) => n[0])
+							?.slice(0, 2)
+							?.join("")}
 					</div>
 					<div>
-						<p className="text-sm font-semibold text-gray-900">{p.name}</p>
-						<p className="text-xs text-gray-400">{p.email}</p>
+						<p className="text-sm font-semibold text-gray-900">{p?.user?.name}</p>
+						<p className="text-xs text-gray-400">{p?.user?.email}</p>
 					</div>
 				</div>
 			),
@@ -129,41 +157,44 @@ export default function PatientsPage() {
 		{
 			key: "age",
 			header: t("patients.columns.ageGender"),
-			render: (p: Patient) => (
+			render: (p: IPatient) => (
 				<span className="text-sm">
-					{p.age}y · {p.gender}
+					{p?.user?.age}y · {p?.user?.gender}
 				</span>
 			),
 		},
 		{
 			key: "bloodGroup",
 			header: t("patients.columns.blood"),
-			render: (p: Patient) => (
+			render: (p: IPatient) => (
 				<span className="font-mono text-xs font-semibold text-rose-600 bg-rose-50 px-2 py-1 rounded-lg">
-					{p.bloodGroup}
+					{p?.bloodGroup}
 				</span>
 			),
 		},
 		{
 			key: "phone",
 			header: t("patients.columns.phone"),
-			render: (p: Patient) => (
-				<span className="text-sm text-gray-600">{p.phone}</span>
+			render: (p: IPatient) => (
+				<span className="text-sm text-gray-600">{p?.user?.mobile}</span>
 			),
 		},
 		{
 			key: "status",
 			header: t("patients.columns.status"),
-			render: (p: Patient) => (
-				<Badge variant={p.status === "Active" ? "success" : "neutral"} dot>
-					{p.status}
+			render: (p: IPatient) => (
+				<Badge
+					variant={p?.status?.toLowerCase() === "active" ? "success" : "neutral"}
+					dot
+				>
+					{p?.status}
 				</Badge>
 			),
 		},
 		{
 			key: "actions",
 			header: t("patients.columns.actions"),
-			render: (p: Patient) => (
+			render: (p: IPatient) => (
 				<div className="flex items-center gap-1">
 					<button
 						onClick={() => setViewPatient(p)}
@@ -188,13 +219,19 @@ export default function PatientsPage() {
 		},
 	];
 
+	if (loading && (!patients || (Array.isArray(patients) && patients.length === 0))) {
+		return <Loader />;
+	}
+
 	return (
 		<div className="space-y-5">
 			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
 				<div>
-					<h1 className="text-2xl font-bold text-gray-900">{t("patients.title")}</h1>
+					<h1 className="text-2xl font-bold text-gray-900">
+						{t("patients.title")}
+					</h1>
 					<p className="text-sm text-gray-500 mt-0.5">
-						{patients.length} {t("patients.totalRegistered")}
+						{Array.isArray(patients) ? patients.length : 0} {t("patients.totalRegistered")}
 					</p>
 				</div>
 				<Button onClick={openAdd} leftIcon={<FaPlus className="h-3.5 w-3.5" />}>
@@ -258,61 +295,73 @@ export default function PatientsPage() {
 			<Modal
 				isOpen={modalOpen}
 				onClose={() => setModalOpen(false)}
-				title={editPatient ? t("patients.modal.editTitle") : t("patients.modal.addTitle")}
+				title={
+					editPatient
+						? t("patients.modal.editTitle")
+						: t("patients.modal.addTitle")
+				}
 				size="lg"
 				footer={
 					<>
 						<Button variant="secondary" onClick={() => setModalOpen(false)}>
 							{t("common.cancel")}
 						</Button>
-						<Button onClick={handleSubmit(onSubmit)}>
-							{editPatient ? t("patients.modal.saveBtn") : t("patients.modal.addBtn")}
+						<Button onClick={handleSubmit(onSubmit)} loading={loading}>
+							{editPatient
+								? t("patients.modal.saveBtn")
+								: t("patients.modal.addBtn")}
 						</Button>
 					</>
 				}
 			>
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-					{[
-						{
-							name: "name" as const,
-							label: t("patients.modal.fullName"),
-							placeholder: t("patients.modal.fullNamePlaceholder"),
-						},
-						{
-							name: "email" as const,
-							label: t("patients.modal.email"),
-							type: "email",
-							placeholder: t("patients.modal.emailPlaceholder"),
-						},
-						{
-							name: "phone" as const,
-							label: t("patients.modal.phone"),
-							placeholder: t("patients.modal.phonePlaceholder"),
-						},
-						{
-							name: "address" as const,
-							label: t("patients.modal.address"),
-							placeholder: t("patients.modal.addressPlaceholder"),
-						},
-					].map((f) => (
-						<div key={f.name}>
-							<label className="block text-sm font-medium text-gray-700 mb-1.5">
-								{f.label}
-							</label>
-							<input
-								{...register(f.name)}
-								type={f.type || "text"}
-								placeholder={f.placeholder}
-								className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
-							/>
-						</div>
-					))}
+					<div>
+						<label className="block text-sm font-medium text-gray-700 mb-1.5">
+							{t("patients.modal.fullName")}
+						</label>
+						<input
+							{...register("name", { required: true })}
+							placeholder={t("patients.modal.fullNamePlaceholder")}
+							className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
+						/>
+					</div>
+					<div>
+						<label className="block text-sm font-medium text-gray-700 mb-1.5">
+							{t("patients.modal.email")}
+						</label>
+						<input
+							{...register("email", { required: true })}
+							type="email"
+							placeholder={t("patients.modal.emailPlaceholder")}
+							className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
+						/>
+					</div>
+					<div>
+						<label className="block text-sm font-medium text-gray-700 mb-1.5">
+							{t("patients.modal.phone")}
+						</label>
+						<input
+							{...register("mobile", { required: true })}
+							placeholder={t("patients.modal.phonePlaceholder")}
+							className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
+						/>
+					</div>
+					<div>
+						<label className="block text-sm font-medium text-gray-700 mb-1.5">
+							{t("patients.modal.address")}
+						</label>
+						<input
+							{...register("address", { required: true })}
+							placeholder={t("patients.modal.addressPlaceholder")}
+							className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
+						/>
+					</div>
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1.5">
 							{t("patients.modal.age")}
 						</label>
 						<input
-							{...register("age")}
+							{...register("age", { required: true })}
 							type="number"
 							placeholder="30"
 							className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
@@ -323,12 +372,12 @@ export default function PatientsPage() {
 							{t("patients.modal.gender")}
 						</label>
 						<select
-							{...register("gender")}
+							{...register("gender", { required: true })}
 							className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
 						>
-							<option value="Male">{t("patients.modal.male")}</option>
-							<option value="Female">{t("patients.modal.female")}</option>
-							<option value="Other">{t("patients.modal.other")}</option>
+							<option value="male">{t("patients.modal.male")}</option>
+							<option value="female">{t("patients.modal.female")}</option>
+							<option value="other">{t("patients.modal.other")}</option>
 						</select>
 					</div>
 					<div>
@@ -336,7 +385,7 @@ export default function PatientsPage() {
 							{t("patients.modal.bloodGroup")}
 						</label>
 						<select
-							{...register("bloodGroup")}
+							{...register("bloodGroup", { required: true })}
 							className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
 						>
 							{["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map((g) => (
@@ -351,11 +400,11 @@ export default function PatientsPage() {
 							{t("patients.modal.status")}
 						</label>
 						<select
-							{...register("status")}
+							{...register("status", { required: true })}
 							className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
 						>
-							<option value="Active">{t("patients.modal.active")}</option>
-							<option value="Inactive">{t("patients.modal.inactive")}</option>
+							<option value="active">{t("patients.modal.active")}</option>
+							<option value="inactive">{t("patients.modal.inactive")}</option>
 						</select>
 					</div>
 				</div>
@@ -377,36 +426,40 @@ export default function PatientsPage() {
 					<div className="space-y-4">
 						<div className="flex items-center gap-4 p-4 bg-primary-50 rounded-xl">
 							<div className="h-14 w-14 rounded-2xl bg-primary-600 flex items-center justify-center text-white text-xl font-bold">
-								{viewPatient.name
-									.split(" ")
-									.map((n) => n[0])
-									.slice(0, 2)
-									.join("")}
+								{viewPatient?.user?.name
+									?.split(" ")
+									?.map((n) => n[0])
+									?.slice(0, 2)
+									?.join("")}
 							</div>
 							<div>
 								<p className="text-lg font-bold text-gray-900">
-									{viewPatient.name}
+									{viewPatient?.user?.name}
 								</p>
-								<p className="text-sm text-gray-500">{viewPatient.id}</p>
+								<p className="text-sm text-gray-500">ID: {viewPatient?.id}</p>
 								<Badge
 									variant={
-										viewPatient.status === "Active" ? "success" : "neutral"
+										viewPatient?.status?.toLowerCase() === "active"
+											? "success"
+											: "neutral"
 									}
 								>
-									{viewPatient.status}
+									{viewPatient?.status}
 								</Badge>
 							</div>
 						</div>
 						<div className="grid grid-cols-2 gap-3">
 							{[
-								[t("patients.view.age"), `${viewPatient.age} years`],
-								[t("patients.view.gender"), viewPatient.gender],
-								[t("patients.view.bloodGroup"), viewPatient.bloodGroup],
-								[t("patients.view.phone"), viewPatient.phone],
-								[t("patients.view.email"), viewPatient.email],
-								[t("patients.view.registered"), viewPatient.registeredDate],
-								[t("patients.view.lastVisit"), viewPatient.lastVisit || "N/A"],
-								[t("patients.view.address"), viewPatient.address],
+								[t("patients.view.age"), `${viewPatient?.user?.age} years`],
+								[t("patients.view.gender"), viewPatient?.user?.gender],
+								[t("patients.view.bloodGroup"), viewPatient?.bloodGroup],
+								[t("patients.view.phone"), viewPatient?.user?.mobile],
+								[t("patients.view.email"), viewPatient?.user?.email],
+								[
+									t("patients.view.registered"),
+									viewPatient?.createdAt ? new Date(viewPatient.createdAt).toLocaleDateString() : "N/A",
+								],
+								[t("patients.view.address"), viewPatient?.address],
 							].map(([k, v]) => (
 								<div key={k} className="bg-surface-secondary rounded-xl p-3">
 									<p className="text-xs text-gray-500">{k}</p>
@@ -438,6 +491,7 @@ export default function PatientsPage() {
 							<Button
 								variant="danger"
 								onClick={() => handleDelete(deleteConfirm)}
+								loading={loading}
 							>
 								{t("patients.modal.deleteBtn")}
 							</Button>
@@ -446,7 +500,8 @@ export default function PatientsPage() {
 				>
 					<p className="text-sm text-gray-600">
 						{t("patients.modal.deleteConfirm")}{" "}
-						<strong>{deleteConfirm.name}</strong>{t("patients.modal.deleteUndone")}
+						<strong>{deleteConfirm?.user?.name}</strong>
+						{t("patients.modal.deleteUndone")}
 					</p>
 				</Modal>
 			)}

@@ -1,4 +1,4 @@
-const BASE_PATIENT_ENDPOINT = "/patients";
+const BASE_PATIENT_ENDPOINT = "/patient";
 
 const PatientEndpoints = {
   getPatients: `${BASE_PATIENT_ENDPOINT}`,
