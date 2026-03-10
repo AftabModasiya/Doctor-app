@@ -1,4 +1,5 @@
 import { BaseEntity } from "src/common/entities/base.entity";
+import { TokenType } from "src/shared/constants/enums.constants";
 import {
 	Column,
 	Entity,
@@ -9,13 +10,6 @@ import {
 } from "typeorm";
 import type { User } from "../../user/entities/user.entity";
 import type { UserDevice } from "../../user-device/entities/user-device.entity";
-
-export enum TokenType {
-	ACCESS = "access",
-	REFRESH = "refresh",
-	RESET_PASSWORD = "reset_password",
-	VERIFY_EMAIL = "verify_email",
-}
 
 @Entity("tokens")
 export class Token extends BaseEntity {

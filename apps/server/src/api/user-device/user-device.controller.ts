@@ -7,8 +7,8 @@ import {
 	Patch,
 	Post,
 } from "@nestjs/common";
-import type { CreateUserDeviceDto } from "./dto/create-user-device.dto";
-import type { UpdateUserDeviceDto } from "./dto/update-user-device.dto";
+import { CreateUserDeviceDto } from "./dto/create-user-device.dto";
+import { UpdateUserDeviceDto } from "./dto/update-user-device.dto";
 import { UserDeviceService } from "./user-device.service";
 
 @Controller("user-device")

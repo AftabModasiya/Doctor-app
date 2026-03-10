@@ -1,13 +1,13 @@
 import path from "node:path";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { APP_FILTER, APP_PIPE } from "@nestjs/core";
+import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from "@nestjs/core";
 import { ServeStaticModule } from "@nestjs/serve-static";
-import { SwaggerModule } from "@nestjs/swagger";
 import { GracefulShutdownModule } from "nestjs-graceful-shutdown";
 import { HeaderResolver, I18nModule } from "nestjs-i18n";
-import { cleanupOpenApiDoc, ZodValidationPipe } from "nestjs-zod";
+import { ZodSerializerInterceptor, ZodValidationPipe } from "nestjs-zod";
 import { DatabaseModule } from "src/database/database.module";
+import { ResponseInterceptor } from "src/shared/intereptors/response.interceptor";
 import { ZodValidationExceptionFilter } from "../shared/filters/zod-validation-exception.filter";
 import { AppController } from "./app.controller";
 import { CompanyModule } from "./company/company.module";
@@ -23,17 +23,6 @@ import { SpecializationModule } from "./specialization/specialization.module";
 import { TokenModule } from "./token/token.module";
 import { UserModule } from "./user/user.module";
 import { UserDeviceModule } from "./user-device/user-device.module";
-
-const patchNestJsSwagger = () => {
-	const createDocument = SwaggerModule.createDocument.bind(SwaggerModule);
-
-	SwaggerModule.createDocument = ((...args) => {
-		const openApiDoc = createDocument(...args);
-		return cleanupOpenApiDoc(openApiDoc);
-	}) as typeof SwaggerModule.createDocument;
-};
-
-patchNestJsSwagger();
 
 @Module({
 	imports: [
@@ -85,6 +74,14 @@ patchNestJsSwagger();
 		{
 			provide: APP_FILTER,
 			useClass: ZodValidationExceptionFilter,
+		},
+		{
+			provide: APP_INTERCEPTOR,
+			useClass: ZodSerializerInterceptor,
+		},
+		{
+			provide: APP_INTERCEPTOR,
+			useClass: ResponseInterceptor,
 		},
 	],
 })

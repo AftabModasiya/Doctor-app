@@ -1,5 +1,9 @@
 import { BaseEntity } from "src/common/entities/base.entity";
 import {
+	BloodGroup,
+	PatientStatus,
+} from "src/shared/constants/enums.constants";
+import {
 	Column,
 	Entity,
 	Index,
@@ -24,6 +28,21 @@ export class Patient extends BaseEntity {
 
 	@Column({ type: "text", nullable: true })
 	address!: string | null;
+
+	@Column({
+		type: "enum",
+		enum: BloodGroup,
+		name: "blood_group",
+		nullable: true,
+	})
+	bloodGroup!: BloodGroup | null;
+
+	@Column({
+		type: "enum",
+		enum: PatientStatus,
+		default: PatientStatus.ACTIVE,
+	})
+	status!: PatientStatus;
 
 	// ---- Relations ----
 	@OneToOne("User", (user: User) => user.patient)

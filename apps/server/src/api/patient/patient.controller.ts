@@ -7,8 +7,8 @@ import {
 	Patch,
 	Post,
 } from "@nestjs/common";
-import type { CreatePatientDto } from "./dto/create-patient.dto";
-import type { UpdatePatientDto } from "./dto/update-patient.dto";
+import { CreatePatientDto } from "./dto/create-patient.dto";
+import { UpdatePatientDto } from "./dto/update-patient.dto";
 import { PatientService } from "./patient.service";
 
 @Controller("patient")

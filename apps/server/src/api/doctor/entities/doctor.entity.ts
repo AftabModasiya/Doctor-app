@@ -1,4 +1,5 @@
 import { BaseEntity } from "src/common/entities/base.entity";
+import type { Relation } from "typeorm";
 import {
 	Column,
 	Entity,
@@ -29,14 +30,17 @@ export class Doctor extends BaseEntity {
 	@Column({ name: "graduation_date", type: "date", nullable: true })
 	graduationDate!: Date | null;
 
+	@Column({ type: "int", nullable: true })
+	experience!: number | null;
+
 	// ---- Relations ----
 	@OneToOne("User", (user: User) => user.doctor)
 	@JoinColumn({ name: "user_id" })
-	user!: User;
+	user!: Relation<User>;
 
 	@ManyToOne("Company", (company: Company) => company.doctors)
 	@JoinColumn({ name: "company_id" })
-	company!: Company;
+	company!: Relation<Company>;
 
 	@ManyToMany("Specialization", (spec: Specialization) => spec.doctors)
 	@JoinTable({
@@ -47,7 +51,7 @@ export class Doctor extends BaseEntity {
 			referencedColumnName: "id",
 		},
 	})
-	specializations!: Specialization[];
+	specializations!: Relation<Specialization[]>;
 
 	@ManyToMany("Degree", (degree: Degree) => degree.doctors)
 	@JoinTable({
@@ -55,11 +59,11 @@ export class Doctor extends BaseEntity {
 		joinColumn: { name: "doctor_id", referencedColumnName: "id" },
 		inverseJoinColumn: { name: "degree_id", referencedColumnName: "id" },
 	})
-	degrees!: Degree[];
+	degrees!: Relation<Degree[]>;
 
 	@OneToMany(
 		"Prescription",
 		(prescription: Prescription) => prescription.doctor,
 	)
-	prescriptions!: Prescription[];
+	prescriptions!: Relation<Prescription[]>;
 }

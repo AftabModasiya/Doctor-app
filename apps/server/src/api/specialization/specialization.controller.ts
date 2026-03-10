@@ -7,8 +7,8 @@ import {
 	Patch,
 	Post,
 } from "@nestjs/common";
-import type { CreateSpecializationDto } from "./dto/create-specialization.dto";
-import type { UpdateSpecializationDto } from "./dto/update-specialization.dto";
+import { CreateSpecializationDto } from "./dto/create-specialization.dto";
+import { UpdateSpecializationDto } from "./dto/update-specialization.dto";
 import { SpecializationService } from "./specialization.service";
 
 @Controller("specialization")
