@@ -9,4 +9,4 @@ export const CreateCompanySchema = z.object({
 	logo: z.url().optional(),
 });
 
-export class CreateCompanyDto extends createZodDto(CreateCompanySchema) {}
+export class CreateCompanyDto extends createZodDto(CreateCompanySchema) { }

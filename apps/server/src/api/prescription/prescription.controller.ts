@@ -7,13 +7,13 @@ import {
 	Patch,
 	Post,
 } from "@nestjs/common";
-import type { CreatePrescriptionDto } from "./dto/create-prescription.dto";
-import type { UpdatePrescriptionDto } from "./dto/update-prescription.dto";
+import { CreatePrescriptionDto } from "./dto/create-prescription.dto";
+import { UpdatePrescriptionDto } from "./dto/update-prescription.dto";
 import { PrescriptionService } from "./prescription.service";
 
 @Controller("prescription")
 export class PrescriptionController {
-	constructor(private readonly prescriptionService: PrescriptionService) {}
+	constructor(private readonly prescriptionService: PrescriptionService) { }
 
 	@Post()
 	create(@Body() createPrescriptionDto: CreatePrescriptionDto) {
