@@ -20,8 +20,12 @@ export class DegreeService {
 		return this.degreeRepository.save(degree);
 	}
 
-	findAll(): Promise<Degree[]> {
-		return this.degreeRepository.find();
+	async findAll() {
+		return {
+			count: await this.degreeRepository.count(),
+			list: await this.degreeRepository.find(),
+			message: this.i18nService.t("success.DEGREE.LIST"),
+		};
 	}
 
 	findByCompany(companyId: number): Promise<Degree[]> {

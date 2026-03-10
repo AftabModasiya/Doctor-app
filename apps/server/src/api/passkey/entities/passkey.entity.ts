@@ -1,5 +1,6 @@
 import { User } from "src/api/user/entities/user.entity";
 import { BaseEntity } from "src/common/entities/base.entity";
+import type { Relation } from "typeorm";
 import { Column, Entity, JoinColumn, ManyToOne, RelationId } from "typeorm";
 
 @Entity("passkeys")
@@ -33,7 +34,7 @@ export class Passkey extends BaseEntity {
 		(user) => user.passkey,
 	)
 	@JoinColumn()
-	user!: User;
+	user!: Relation<User>;
 
 	@RelationId((passkey: Passkey) => passkey.user)
 	userId!: number;

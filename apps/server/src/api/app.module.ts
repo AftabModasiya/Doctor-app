@@ -12,6 +12,7 @@ import { HttpExceptionFilter } from "src/shared/filters/http-exception.filter";
 import { ResponseInterceptor } from "src/shared/interceptors/response.interceptor";
 import { ZodValidationExceptionFilter } from "../shared/filters/zod-validation-exception.filter";
 import { AppController } from "./app.controller";
+import { CategoryModule } from "./category/category.module";
 import { CompanyModule } from "./company/company.module";
 import { CompanySettingModule } from "./company-setting/company-setting.module";
 import { DashboardModule } from "./dashboard/dashboard.module";
@@ -67,6 +68,7 @@ import { WebAuthnChallengeModule } from "./web-authn-challenge/web-authn-challen
 		MedicinePrescriptionModule,
 		CompanyModule,
 		CompanySettingModule,
+		CategoryModule,
 		DashboardModule,
 		PasskeyModule,
 		WebAuthnChallengeModule,

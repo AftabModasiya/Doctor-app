@@ -1,4 +1,5 @@
 import { BaseEntity } from "src/common/entities/base.entity";
+import type { Relation } from "typeorm";
 import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
 import { Medicine } from "../../medicine/entities/medicine.entity";
 import { Prescription } from "../../prescription/entities/prescription.entity";
@@ -13,18 +14,21 @@ export class MedicinePrescription extends BaseEntity {
 	@Column({ name: "prescription_id" })
 	prescriptionId!: number;
 
+	@Column({ type: "int", default: 1 })
+	quantity!: number;
+
 	// ---- Relations ----
 	@ManyToOne(
 		() => Medicine,
 		(medicine: Medicine) => medicine.medicinePrescriptions,
 	)
 	@JoinColumn({ name: "medicine_id" })
-	medicine!: Medicine;
+	medicine!: Relation<Medicine>;
 
 	@ManyToOne(
 		() => Prescription,
 		(prescription: Prescription) => prescription.medicinePrescriptions,
 	)
 	@JoinColumn({ name: "prescription_id" })
-	prescription!: Prescription;
+	prescription!: Relation<Prescription>;
 }

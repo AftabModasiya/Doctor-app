@@ -45,6 +45,9 @@ export type I18nTranslations = {
         "MEDICINE_PRESCRIPTION": {
             "NOT_FOUND": string;
         };
+        "VALIDATION": {
+            "EMAIL_EXISTS": string;
+        };
     };
     "success": {
         "DASHBOARD": {
@@ -129,6 +132,13 @@ export type I18nTranslations = {
             "DELETE": string;
         };
         "MEDICINE_PRESCRIPTION": {
+            "LIST": string;
+            "CREATE": string;
+            "VIEW": string;
+            "UPDATE": string;
+            "DELETE": string;
+        };
+        "CATEGORY": {
             "LIST": string;
             "CREATE": string;
             "VIEW": string;

@@ -1,4 +1,5 @@
 import { BaseEntity } from "src/common/entities/base.entity";
+import type { Relation } from "typeorm";
 import {
 	Column,
 	Entity,
@@ -25,11 +26,11 @@ export class Specialization extends BaseEntity {
 		(company: Company) => company.doctors,
 	)
 	@JoinColumn({ name: "company_id" })
-	company!: Company;
+	company!: Relation<Company>;
 
 	@ManyToMany(
 		() => Doctor,
 		(doctor: Doctor) => doctor.specializations,
 	)
-	doctors!: Doctor[];
+	doctors!: Relation<Doctor[]>;
 }

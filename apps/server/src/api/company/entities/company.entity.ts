@@ -1,4 +1,5 @@
 import { BaseEntity } from "src/common/entities/base.entity";
+import type { Relation } from "typeorm";
 import { Column, Entity, OneToMany } from "typeorm";
 import { CompanySetting } from "../../company-setting/entities/company-setting.entity";
 import { Doctor } from "../../doctor/entities/doctor.entity";
@@ -40,23 +41,23 @@ export class Company extends BaseEntity {
 		() => Patient,
 		(patient: Patient) => patient.company,
 	)
-	patients!: Patient[];
+	patients!: Relation<Patient[]>;
 
 	@OneToMany(
 		() => Doctor,
 		(doctor: Doctor) => doctor.company,
 	)
-	doctors!: Doctor[];
+	doctors!: Relation<Doctor[]>;
 
 	@OneToMany(
 		() => CompanySetting,
 		(setting: CompanySetting) => setting.company,
 	)
-	settings!: CompanySetting[];
+	settings!: Relation<CompanySetting[]>;
 
 	@OneToMany(
 		() => Doctor,
 		(doctor: Doctor) => doctor.company,
 	)
-	prescriptions!: Doctor[];
+	prescriptions!: Relation<Doctor[]>;
 }

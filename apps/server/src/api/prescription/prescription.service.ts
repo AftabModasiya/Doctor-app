@@ -2,7 +2,8 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
-import { Repository } from "typeorm";
+import { DataSource, Repository } from "typeorm";
+import { MedicinePrescription } from "../medicine-prescription/entities/medicine-prescription.entity";
 import type { CreatePrescriptionDto } from "./dto/create-prescription.dto";
 import type { UpdatePrescriptionDto } from "./dto/update-prescription.dto";
 import { Prescription } from "./entities/prescription.entity";
@@ -13,21 +14,62 @@ export class PrescriptionService {
 		@InjectRepository(Prescription)
 		private readonly prescriptionRepository: Repository<Prescription>,
 		private readonly i18nService: I18nService<I18nTranslations>,
+		private readonly dataSource: DataSource,
 	) {}
 
-	create(dto: CreatePrescriptionDto): Promise<Prescription> {
-		const prescription = this.prescriptionRepository.create(dto);
-		return this.prescriptionRepository.save(prescription);
+	async create(dto: CreatePrescriptionDto) {
+		return this.dataSource.transaction(async (manager) => {
+			const prescription = manager.create(Prescription, {
+				patientId: dto.patientId,
+				doctorId: dto.doctorId,
+				companyId: dto.companyId,
+				diagnosis: dto.diagnosis,
+				notes: dto.notes,
+			});
+			const savedPrescription = await manager.save(prescription);
+
+			const medPrescriptions = dto.medicinePrescriptions.map((mp) =>
+				manager.create(MedicinePrescription, {
+					prescriptionId: savedPrescription.id,
+					medicineId: mp.medicineId,
+					quantity: mp.quantity, // note: we will need to ensure quantity exists on the entity
+				}),
+			);
+
+			await manager.save(medPrescriptions);
+
+			const newPrescription = await manager.findOne(Prescription, {
+				where: { id: savedPrescription.id },
+				relations: [
+					"patient",
+					"doctor",
+					"medicinePrescriptions",
+					"medicinePrescriptions.medicine",
+				],
+			});
+
+			return {
+				message: "Prescription created successfully",
+				data: {
+					prescriptionId: newPrescription?.id,
+				},
+			};
+		});
 	}
 
-	findAll(): Promise<Prescription[]> {
-		return this.prescriptionRepository.find({
-			relations: {
-				patient: true,
-				doctor: true,
-				medicinePrescriptions: { medicine: true },
-			},
-		});
+	async findAll() {
+		return {
+			count: await this.prescriptionRepository.count(),
+			list: await this.prescriptionRepository.find({
+				relations: [
+					"patient",
+					"doctor",
+					"medicinePrescriptions",
+					"medicinePrescriptions.medicine",
+				],
+			}),
+			message: this.i18nService.t("success.PRESCRIPTION.LIST"),
+		};
 	}
 
 	async findOne(id: number): Promise<Prescription> {
@@ -46,18 +88,23 @@ export class PrescriptionService {
 		return prescription;
 	}
 
-	findByPatient(patientId: number): Promise<Prescription[]> {
-		return this.prescriptionRepository.find({
+	async findByPatient(patientId: number) {
+		const list = await this.prescriptionRepository.find({
 			where: { patientId },
 			relations: {
 				doctor: true,
 				medicinePrescriptions: { medicine: true },
 			},
 		});
+		return {
+			count: list.length,
+			list,
+			message: this.i18nService.t("success.PRESCRIPTION.LIST"),
+		};
 	}
 
-	findByDoctor(doctorId: number): Promise<Prescription[]> {
-		return this.prescriptionRepository.find({
+	async findByDoctor(doctorId: number) {
+		const list = await this.prescriptionRepository.find({
 			where: { doctorId },
 			relations: {
 				patient: true,
@@ -65,6 +112,11 @@ export class PrescriptionService {
 				doctor: true,
 			},
 		});
+		return {
+			count: list.length,
+			list,
+			message: this.i18nService.t("success.PRESCRIPTION.LIST"),
+		};
 	}
 
 	async update(id: number, dto: UpdatePrescriptionDto): Promise<Prescription> {

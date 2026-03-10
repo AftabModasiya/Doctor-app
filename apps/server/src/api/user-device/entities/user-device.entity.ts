@@ -1,4 +1,5 @@
 import { BaseEntity } from "src/common/entities/base.entity";
+import type { Relation } from "typeorm";
 import {
 	Column,
 	Entity,
@@ -28,7 +29,7 @@ export class UserDevice extends BaseEntity {
 		(user: User) => user.devices,
 	)
 	@JoinColumn({ name: "user_id" })
-	user!: User;
+	user!: Relation<User>;
 
 	@OneToOne(
 		() => Token,
@@ -37,5 +38,5 @@ export class UserDevice extends BaseEntity {
 			cascade: ["insert", "soft-remove"],
 		},
 	)
-	token!: Token;
+	token!: Relation<Token>;
 }

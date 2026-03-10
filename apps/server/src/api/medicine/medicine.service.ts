@@ -20,8 +20,12 @@ export class MedicineService {
 		return this.medicineRepository.save(medicine);
 	}
 
-	findAll(): Promise<Medicine[]> {
-		return this.medicineRepository.find();
+	async findAll() {
+		return {
+			count: await this.medicineRepository.count(),
+			list: await this.medicineRepository.find({ relations: ["category"] }),
+			message: this.i18nService.t("success.MEDICINE.LIST"),
+		};
 	}
 
 	findByCompany(companyId: number): Promise<Medicine[]> {

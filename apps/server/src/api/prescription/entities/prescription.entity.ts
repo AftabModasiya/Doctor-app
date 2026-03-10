@@ -1,4 +1,5 @@
 import { BaseEntity } from "src/common/entities/base.entity";
+import type { Relation } from "typeorm";
 import {
 	Column,
 	Entity,
@@ -26,32 +27,38 @@ export class Prescription extends BaseEntity {
 	@Column({ name: "company_id" })
 	companyId!: number;
 
+	@Column({ type: "text", nullable: true })
+	diagnosis?: string;
+
+	@Column({ type: "text", nullable: true })
+	notes?: string;
+
 	// ---- Relations ----
 	@ManyToOne(
 		() => Patient,
 		(patient: Patient) => patient.prescriptions,
 	)
 	@JoinColumn({ name: "patient_id" })
-	patient!: Patient;
+	patient!: Relation<Patient>;
 
 	@ManyToOne(
 		() => Doctor,
 		(doctor: Doctor) => doctor.prescriptions,
 	)
 	@JoinColumn({ name: "doctor_id" })
-	doctor!: Doctor;
+	doctor!: Relation<Doctor>;
 
 	@ManyToOne(
 		() => Company,
 		(company: Company) => company.prescriptions,
 	)
 	@JoinColumn({ name: "company_id" })
-	company!: Company;
+	company!: Relation<Company>;
 
 	@OneToMany(
 		() => MedicinePrescription,
 		(mp: MedicinePrescription) => mp.prescription,
 		{ cascade: ["insert"] },
 	)
-	medicinePrescriptions!: MedicinePrescription[];
+	medicinePrescriptions!: Relation<MedicinePrescription[]>;
 }

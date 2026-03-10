@@ -1,6 +1,7 @@
 import { Passkey } from "src/api/passkey/entities/passkey.entity";
 import { BaseEntity } from "src/common/entities/base.entity";
 import { Gender } from "src/shared/constants/enums.constants";
+import type { Relation } from "typeorm";
 import { Column, Entity, Index, OneToMany, OneToOne } from "typeorm";
 import { Doctor } from "../../doctor/entities/doctor.entity";
 import { Patient } from "../../patient/entities/patient.entity";
@@ -36,23 +37,23 @@ export class User extends BaseEntity {
 		() => Patient,
 		(patient: Patient) => patient.user,
 	)
-	patient!: Patient;
+	patient!: Relation<Patient>;
 
 	@OneToOne(
 		() => Doctor,
 		(doctor: Doctor) => doctor.user,
 	)
-	doctor!: Doctor;
+	doctor!: Relation<Doctor>;
 
 	@OneToMany(
 		() => UserDevice,
 		(device: UserDevice) => device.user,
 	)
-	devices!: UserDevice[];
+	devices!: Relation<UserDevice[]>;
 
 	@OneToOne(
 		() => Passkey,
 		(passkey: Passkey) => passkey.user,
 	)
-	passkey!: Passkey;
+	passkey!: Relation<Passkey>;
 }
