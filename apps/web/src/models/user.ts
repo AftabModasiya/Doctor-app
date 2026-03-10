@@ -1,10 +1,15 @@
-export interface TUserDetailsModal {
+type TUserDetailsModal = {
   id: number;
   name: string;
   email: string;
 }
 
-export interface TUserProfileEditPayload {
+type TUserProfileEditPayload = {
   name?: string;
   email?: string;
+}
+
+export type {
+  TUserDetailsModal,
+  TUserProfileEditPayload
 }

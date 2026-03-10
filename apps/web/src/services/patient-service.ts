@@ -3,38 +3,46 @@ import type {
   ICreatePatientRequest,
   IPatientResponse,
   ISinglePatientResponse,
-  IUpdatePatientRequest,
 } from "@models/patient";
-import { DELETE, GET, POST, PUT } from "@shared/services/api-service";
+import { DELETE, GET, PATCH, POST } from "@shared/services/api-service";
 
-export const getPatientsApi = () => {
+const getPatientsApi = () => {
   return GET<IPatientResponse>({
     URL: PatientEndpoints.getPatients,
   });
 };
 
-export const getPatientByIdApi = (id: string) => {
+const getPatientByIdApi = (id: string) => {
   return GET<ISinglePatientResponse>({
     URL: PatientEndpoints.getPatientById(id),
   });
 };
 
-export const createPatientApi = (body: ICreatePatientRequest) => {
+const createPatientApi = (body: ICreatePatientRequest) => {
   return POST<ICreatePatientRequest>({
     URL: PatientEndpoints.createPatient,
     body,
   });
 };
 
-export const updatePatientApi = (id: string, body: IUpdatePatientRequest) => {
-  return PUT<IUpdatePatientRequest>({
+const updatePatientApi = (id: string, body: Partial<ICreatePatientRequest>) => {
+  return PATCH<Partial<ICreatePatientRequest>>({
     URL: PatientEndpoints.updatePatient(id),
     body,
   });
 };
 
-export const deletePatientApi = (id: string) => {
-  return DELETE<any>({
+const deletePatientApi = (id: string) => {
+  return DELETE<undefined>({
     URL: PatientEndpoints.deletePatient(id),
   });
 };
+
+export {
+  getPatientsApi,
+  getPatientByIdApi,
+  createPatientApi,
+  updatePatientApi,
+  deletePatientApi,
+};
+

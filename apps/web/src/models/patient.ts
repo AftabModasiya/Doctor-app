@@ -1,29 +1,63 @@
-export interface IPatient {
-  id: string;
+type IPatient = {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  createdBy: string | null;
+  updatedBy: string | null;
+  userId: number;
+  companyId: number;
+  address: string;
+  bloodGroup: string;
+  status: "active" | "inactive";
+  user: {
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    createdBy: string | null;
+    updatedBy: string | null;
+    name: string;
+    gender: "male" | "female" | "other";
+    age: number;
+    email: string;
+    mobile: string;
+  };
+  company: {
+    id: number;
+    name: string;
+    address: string;
+    logo: string;
+  };
+}
+
+type IPatientResponse = {
+  success: boolean;
+  data: IPatient[];
+  statusCode: number;
+}
+
+type ISinglePatientResponse = {
+  success: boolean;
+  data: IPatient;
+  statusCode: number;
+}
+
+type ICreatePatientRequest = {
   name: string;
   email: string;
-  phone: string;
+  mobile: string;
   age: number;
-  gender: "Male" | "Female" | "Other";
+  gender: "male" | "female" | "other";
   address: string;
-  createdAt?: string;
-  updatedAt?: string;
+  bloodGroup: string;
+  status: "active" | "inactive";
+  companyId: number;
 }
 
-export interface IPatientResponse {
-  data: IPatient[];
-  message: string;
-  status: number;
-}
-
-export interface ISinglePatientResponse {
-  data: IPatient;
-  message: string;
-  status: number;
-}
-
-export interface ICreatePatientRequest extends Omit<
-  IPatient,
-  "id" | "createdAt" | "updatedAt"
-> {}
-export interface IUpdatePatientRequest extends Partial<ICreatePatientRequest> {}
+export type {
+  IPatientResponse,
+  ISinglePatientResponse,
+  ICreatePatientRequest,
+  IPatient
+};

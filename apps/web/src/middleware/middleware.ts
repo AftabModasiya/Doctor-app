@@ -3,7 +3,6 @@ import type { TRootState } from "@models/redux.store";
 import { authRefreshTokenApi } from "@services/auth-service";
 import { Header_Keys, Token_Types } from "@shared/constants";
 import { BackendResponse } from "@shared/enum/enum";
-import { enqueueErrorToast } from "@shared/services/toast-service";
 import { loginAction, logOutAction } from "@store/auth/auth-slice";
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
 import type { Dispatch, Middleware, MiddlewareAPI } from "redux";
@@ -14,7 +13,7 @@ interface ErrorResponse {
   [key: string]: unknown;
 }
 
-const backendBaseUrl = import.meta.env.VITE_BACKEND_URL || "";
+const backendBaseUrl = `http://192.168.1.146:3000/api`;
 
 const axiosInstance = axios.create({
   baseURL: backendBaseUrl,
@@ -85,9 +84,6 @@ const setupInterceptors = (storeApi: MiddlewareAPI<Dispatch, TRootState>) => {
         !requestUrl.includes(AuthEndpoints.signIn) &&
         !requestUrl.includes(AuthEndpoints.refreshToken) &&
         !requestUrl.includes(AuthEndpoints.forgotPassword) &&
-        !requestUrl.includes(AuthEndpoints.verifyToken) &&
-        !requestUrl.includes(AuthEndpoints.verifyEmail) &&
-        !requestUrl.includes(AuthEndpoints.verifySubAdminEmail) &&
         !originalRequest._retry
       ) {
         if (isRefreshing) {
@@ -148,22 +144,6 @@ const setupInterceptors = (storeApi: MiddlewareAPI<Dispatch, TRootState>) => {
         }
       }
 
-      // Handle specific endpoints that should not show error toasts
-      const isSubAdminVerification = error.config?.url?.includes(
-        AuthEndpoints.verifySubAdminEmail,
-      );
-      const isEmailVerification = error.config?.url?.includes(
-        AuthEndpoints.verifyEmail,
-      );
-
-      // Show error toast for most endpoints
-      if (!isSubAdminVerification && !isEmailVerification) {
-        enqueueErrorToast(
-          error?.response?.data?.message || "An error occurred.",
-        );
-      }
-
-      return Promise.reject(error);
     },
   );
 };

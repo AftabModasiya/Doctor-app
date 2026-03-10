@@ -6,7 +6,6 @@ import type {
   TSendOtpViaEmailApiPayload,
   TSsoExchangePayload,
 } from "@models/auth";
-import type { TUserProfileEditPayload } from "@models/user";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AxiosError } from "axios";
 import {
