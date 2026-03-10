@@ -1,9 +1,10 @@
+import { Passkey } from "src/api/passkey/entities/passkey.entity";
 import { BaseEntity } from "src/common/entities/base.entity";
 import { Gender } from "src/shared/constants/enums.constants";
 import { Column, Entity, Index, OneToMany, OneToOne } from "typeorm";
-import type { Doctor } from "../../doctor/entities/doctor.entity";
-import type { Patient } from "../../patient/entities/patient.entity";
-import type { UserDevice } from "../../user-device/entities/user-device.entity";
+import { Doctor } from "../../doctor/entities/doctor.entity";
+import { Patient } from "../../patient/entities/patient.entity";
+import { UserDevice } from "../../user-device/entities/user-device.entity";
 
 @Entity("user")
 export class User extends BaseEntity {
@@ -31,12 +32,27 @@ export class User extends BaseEntity {
 	mobile!: string | null;
 
 	// ---- Relations ----
-	@OneToOne("Patient", (patient: Patient) => patient.user)
+	@OneToOne(
+		() => Patient,
+		(patient: Patient) => patient.user,
+	)
 	patient!: Patient;
 
-	@OneToOne("Doctor", (doctor: Doctor) => doctor.user)
+	@OneToOne(
+		() => Doctor,
+		(doctor: Doctor) => doctor.user,
+	)
 	doctor!: Doctor;
 
-	@OneToMany("UserDevice", (device: UserDevice) => device.user)
+	@OneToMany(
+		() => UserDevice,
+		(device: UserDevice) => device.user,
+	)
 	devices!: UserDevice[];
+
+	@OneToOne(
+		() => Passkey,
+		(passkey: Passkey) => passkey.user,
+	)
+	passkey!: Passkey;
 }

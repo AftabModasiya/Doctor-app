@@ -39,6 +39,16 @@ export class DoctorController {
 		};
 	}
 
+	@Get("/metadata")
+	async getDoctorList() {
+		const { list, count } = await this.doctorService.findAllDoctorMetadata();
+		return {
+			list,
+			count,
+			message: this.i18nService.t("success.DOCTOR.LIST"),
+		};
+	}
+
 	@Get(":id")
 	async findOne(@Param("id") id: string) {
 		const doctor = await this.doctorService.findOne(+id);

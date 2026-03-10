@@ -7,8 +7,8 @@ import {
 	ManyToMany,
 	ManyToOne,
 } from "typeorm";
-import type { Company } from "../../company/entities/company.entity";
-import type { Doctor } from "../../doctor/entities/doctor.entity";
+import { Company } from "../../company/entities/company.entity";
+import { Doctor } from "../../doctor/entities/doctor.entity";
 
 @Entity("degrees")
 export class Degree extends BaseEntity {
@@ -20,10 +20,16 @@ export class Degree extends BaseEntity {
 	companyId!: number;
 
 	// ---- Relations ----
-	@ManyToOne("Company", (company: Company) => company.doctors)
+	@ManyToOne(
+		() => Company,
+		(company: Company) => company.doctors,
+	)
 	@JoinColumn({ name: "company_id" })
 	company!: Company;
 
-	@ManyToMany("Doctor", (doctor: Doctor) => doctor.degrees)
+	@ManyToMany(
+		() => Doctor,
+		(doctor: Doctor) => doctor.degrees,
+	)
 	doctors!: Doctor[];
 }

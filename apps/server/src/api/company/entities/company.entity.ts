@@ -1,8 +1,8 @@
 import { BaseEntity } from "src/common/entities/base.entity";
 import { Column, Entity, OneToMany } from "typeorm";
-import type { CompanySetting } from "../../company-setting/entities/company-setting.entity";
-import type { Doctor } from "../../doctor/entities/doctor.entity";
-import type { Patient } from "../../patient/entities/patient.entity";
+import { CompanySetting } from "../../company-setting/entities/company-setting.entity";
+import { Doctor } from "../../doctor/entities/doctor.entity";
+import { Patient } from "../../patient/entities/patient.entity";
 
 @Entity("companies")
 export class Company extends BaseEntity {
@@ -36,12 +36,27 @@ export class Company extends BaseEntity {
 	logo?: string;
 
 	// ---- Relations ----
-	@OneToMany("Patient", (patient: Patient) => patient.company)
+	@OneToMany(
+		() => Patient,
+		(patient: Patient) => patient.company,
+	)
 	patients!: Patient[];
 
-	@OneToMany("Doctor", (doctor: Doctor) => doctor.company)
+	@OneToMany(
+		() => Doctor,
+		(doctor: Doctor) => doctor.company,
+	)
 	doctors!: Doctor[];
 
-	@OneToMany("CompanySetting", (setting: CompanySetting) => setting.company)
+	@OneToMany(
+		() => CompanySetting,
+		(setting: CompanySetting) => setting.company,
+	)
 	settings!: CompanySetting[];
+
+	@OneToMany(
+		() => Doctor,
+		(doctor: Doctor) => doctor.company,
+	)
+	prescriptions!: Doctor[];
 }

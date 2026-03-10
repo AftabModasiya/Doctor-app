@@ -1,7 +1,7 @@
 import { BaseEntity } from "src/common/entities/base.entity";
 import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
-import type { Medicine } from "../../medicine/entities/medicine.entity";
-import type { Prescription } from "../../prescription/entities/prescription.entity";
+import { Medicine } from "../../medicine/entities/medicine.entity";
+import { Prescription } from "../../prescription/entities/prescription.entity";
 
 @Entity("medicine_prescriptions")
 export class MedicinePrescription extends BaseEntity {
@@ -14,12 +14,15 @@ export class MedicinePrescription extends BaseEntity {
 	prescriptionId!: number;
 
 	// ---- Relations ----
-	@ManyToOne("Medicine", (medicine: Medicine) => medicine.medicinePrescriptions)
+	@ManyToOne(
+		() => Medicine,
+		(medicine: Medicine) => medicine.medicinePrescriptions,
+	)
 	@JoinColumn({ name: "medicine_id" })
 	medicine!: Medicine;
 
 	@ManyToOne(
-		"Prescription",
+		() => Prescription,
 		(prescription: Prescription) => prescription.medicinePrescriptions,
 	)
 	@JoinColumn({ name: "prescription_id" })

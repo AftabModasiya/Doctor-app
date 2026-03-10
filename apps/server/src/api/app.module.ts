@@ -19,12 +19,14 @@ import { DegreeModule } from "./degree/degree.module";
 import { DoctorModule } from "./doctor/doctor.module";
 import { MedicineModule } from "./medicine/medicine.module";
 import { MedicinePrescriptionModule } from "./medicine-prescription/medicine-prescription.module";
+import { PasskeyModule } from "./passkey/passkey.module";
 import { PatientModule } from "./patient/patient.module";
 import { PrescriptionModule } from "./prescription/prescription.module";
 import { SpecializationModule } from "./specialization/specialization.module";
 import { TokenModule } from "./token/token.module";
 import { UserModule } from "./user/user.module";
 import { UserDeviceModule } from "./user-device/user-device.module";
+import { WebAuthnChallengeModule } from "./web-authn-challenge/web-authn-challenge.module";
 
 @Module({
 	imports: [
@@ -66,6 +68,8 @@ import { UserDeviceModule } from "./user-device/user-device.module";
 		CompanyModule,
 		CompanySettingModule,
 		DashboardModule,
+		PasskeyModule,
+		WebAuthnChallengeModule,
 	],
 	controllers: [AppController],
 	providers: [

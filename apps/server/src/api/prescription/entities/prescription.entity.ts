@@ -7,10 +7,10 @@ import {
 	ManyToOne,
 	OneToMany,
 } from "typeorm";
-import type { Company } from "../../company/entities/company.entity";
-import type { Doctor } from "../../doctor/entities/doctor.entity";
-import type { MedicinePrescription } from "../../medicine-prescription/entities/medicine-prescription.entity";
-import type { Patient } from "../../patient/entities/patient.entity";
+import { Company } from "../../company/entities/company.entity";
+import { Doctor } from "../../doctor/entities/doctor.entity";
+import { MedicinePrescription } from "../../medicine-prescription/entities/medicine-prescription.entity";
+import { Patient } from "../../patient/entities/patient.entity";
 
 @Entity("prescriptions")
 export class Prescription extends BaseEntity {
@@ -27,20 +27,29 @@ export class Prescription extends BaseEntity {
 	companyId!: number;
 
 	// ---- Relations ----
-	@ManyToOne("Patient", (patient: Patient) => patient.prescriptions)
+	@ManyToOne(
+		() => Patient,
+		(patient: Patient) => patient.prescriptions,
+	)
 	@JoinColumn({ name: "patient_id" })
 	patient!: Patient;
 
-	@ManyToOne("Doctor", (doctor: Doctor) => doctor.prescriptions)
+	@ManyToOne(
+		() => Doctor,
+		(doctor: Doctor) => doctor.prescriptions,
+	)
 	@JoinColumn({ name: "doctor_id" })
 	doctor!: Doctor;
 
-	@ManyToOne("Company", (company: Company) => company.patients)
+	@ManyToOne(
+		() => Company,
+		(company: Company) => company.prescriptions,
+	)
 	@JoinColumn({ name: "company_id" })
 	company!: Company;
 
 	@OneToMany(
-		"MedicinePrescription",
+		() => MedicinePrescription,
 		(mp: MedicinePrescription) => mp.prescription,
 		{ cascade: ["insert"] },
 	)
