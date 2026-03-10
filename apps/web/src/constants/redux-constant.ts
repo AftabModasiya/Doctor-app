@@ -6,6 +6,7 @@ const SliceNames = {
   DEGREE: "degree",
   DASHBOARD: "dashboard",
   CATEGORY: "category",
+  MEDICINE: "medicine",
 };
 
 const REDUX_PERSISTENT_STORE_ENCRYPT_KEY = "redux$persistentStore$key";

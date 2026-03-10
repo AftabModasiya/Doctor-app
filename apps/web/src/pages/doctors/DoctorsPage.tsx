@@ -27,7 +27,6 @@ import {
 } from "@store/doctor/doctor-async-thunk";
 import { getSpecializationsAsyncThunk } from "@store/specialization/specialization-async-thunk";
 import { getDegreesAsyncThunk } from "@store/degree/degree-async-thunk";
-import Loader from "@shared/components/Loader";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -219,10 +218,6 @@ export default function DoctorsPage() {
     },
   ];
 
-  if (isFetching) {
-    return <Loader inline />;
-  }
-
   return (
     <div className="space-y-5">
       {/* Header */}
@@ -283,6 +278,7 @@ export default function DoctorsPage() {
           data={paged}
           emptyMessage={t("doctors.noDoctor")}
           emptyIcon={<FaUserMd />}
+          loading={isFetching}
         />
         <div className="px-4 border-t border-gray-50">
           <Pagination
