@@ -27,7 +27,7 @@ import {
 } from "@store/doctor/doctor-async-thunk";
 import { getSpecializationsAsyncThunk } from "@store/specialization/specialization-async-thunk";
 import { getDegreesAsyncThunk } from "@store/degree/degree-async-thunk";
-import Loader from "../../components/common/Loader";
+import Loader from "@shared/components/Loader";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -35,7 +35,9 @@ export default function DoctorsPage() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  const { doctors, loading } = useAppSelector((state) => state.doctor);
+  const { doctors, loading, isFetching } = useAppSelector(
+    (state) => state.doctor,
+  );
   const { specializations } = useAppSelector((state) => state.specialization);
   const { degrees } = useAppSelector((state) => state.degree);
 
@@ -217,11 +219,8 @@ export default function DoctorsPage() {
     },
   ];
 
-  if (
-    loading &&
-    (!doctors || (Array.isArray(doctors) && doctors.length === 0))
-  ) {
-    return <Loader />;
+  if (isFetching) {
+    return <Loader inline />;
   }
 
   return (

@@ -1,8 +1,23 @@
 import React from "react";
 
-const Loader: React.FC = () => {
+interface LoaderProps {
+  /**
+   * When true the loader fills its parent container (content area only),
+   * leaving the header and sidebar visible.
+   * When false (default) it covers the full viewport.
+   */
+  inline?: boolean;
+}
+
+const Loader: React.FC<LoaderProps> = ({ inline = false }) => {
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-surface-secondary">
+    <div
+      className={
+        inline
+          ? "flex items-center justify-center w-full h-full min-h-[60vh] bg-surface-secondary"
+          : "fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-surface-secondary"
+      }
+    >
       {/* Background glow */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(14,165,233,0.18),transparent_45%),radial-gradient(circle_at_70%_65%,rgba(2,132,199,0.16),transparent_45%)]" />
 

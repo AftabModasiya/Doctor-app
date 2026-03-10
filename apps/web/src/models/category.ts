@@ -1,9 +1,4 @@
-type ICreateSpecializationRequest = {
-  name: string;
-  companyId: number;
-};
-
-type ISpecialization = {
+type ICategory = {
   id: number;
   createdAt: string;
   updatedAt: string;
@@ -14,26 +9,31 @@ type ISpecialization = {
   companyId: number;
 };
 
-type ISpecializationListResponse = {
+type ICategoryListResponse = {
   success: boolean;
   data: {
     count: number;
-    list: ISpecialization[];
+    list: ICategory[];
   };
   statusCode: number;
   message: string;
 };
 
-type ISingleSpecializationResponse = {
+type ISingleCategoryResponse = {
   success: boolean;
-  data: ISpecialization;
+  data: ICategory;
   statusCode: number;
   message: string;
 };
 
+type ICreateCategoryRequest = {
+  name: string;
+  companyId: number;
+};
+
 export type {
-  ISpecialization,
-  ISpecializationListResponse,
-  ISingleSpecializationResponse,
-  ICreateSpecializationRequest,
+  ICategory,
+  ICategoryListResponse,
+  ISingleCategoryResponse,
+  ICreateCategoryRequest,
 };

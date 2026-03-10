@@ -1,11 +1,43 @@
 import { SpecializationEndpoints } from "@endpoints/specialization-endpoint";
-import type { ISpecializationListResponse } from "@models/specialization";
-import { GET } from "@shared/services/api-service";
+import type {
+  ICreateSpecializationRequest,
+  ISpecializationListResponse,
+  ISingleSpecializationResponse,
+} from "@models/specialization";
+import { DELETE, GET, PATCH, POST } from "@shared/services/api-service";
 
-const getSpecializationsApi = () => {
-  return GET<ISpecializationListResponse>({
+const getSpecializationsApi = () =>
+  GET<ISpecializationListResponse>({
     URL: SpecializationEndpoints.getSpecializations,
   });
-};
 
-export { getSpecializationsApi };
+const getSpecializationByIdApi = (id: string) =>
+  GET<ISingleSpecializationResponse>({
+    URL: SpecializationEndpoints.getSpecializationById(id),
+  });
+
+const createSpecializationApi = (body: ICreateSpecializationRequest) =>
+  POST<ICreateSpecializationRequest>({
+    URL: SpecializationEndpoints.createSpecialization,
+    body,
+  });
+
+const updateSpecializationApi = (
+  id: string,
+  body: Partial<ICreateSpecializationRequest>,
+) =>
+  PATCH<Partial<ICreateSpecializationRequest>>({
+    URL: SpecializationEndpoints.updateSpecialization(id),
+    body,
+  });
+
+const deleteSpecializationApi = (id: string) =>
+  DELETE<undefined>({ URL: SpecializationEndpoints.deleteSpecialization(id) });
+
+export {
+  getSpecializationsApi,
+  getSpecializationByIdApi,
+  createSpecializationApi,
+  updateSpecializationApi,
+  deleteSpecializationApi,
+};
