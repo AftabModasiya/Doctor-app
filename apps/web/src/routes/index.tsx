@@ -7,6 +7,7 @@ import {
 import ErrorBoundary from "@shared/components/ErrorBoundary";
 import ProtectedRoute from "@routes/ProtectedRoute";
 import Layout from "@components/layout/Layout";
+import Loader from "@shared/components/Loader";
 const LandingPage = lazy(() => import("@pages/landing/LandingPage"));
 const LoginPage = lazy(() => import("@pages/auth/LoginPage"));
 const SignupPage = lazy(() => import("@pages/auth/SignupPage"));
@@ -97,7 +98,7 @@ const router = createBrowserRouter([
 
 const AppRoutesProvider = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<Loader />}>
       <RouterProvider router={router} />
     </Suspense>
   );

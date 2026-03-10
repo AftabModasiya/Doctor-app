@@ -6,6 +6,7 @@ import {
 	FaCog,
 	FaSearch,
 	FaSignOutAlt,
+	FaTimes,
 	FaUserCircle,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -14,9 +15,15 @@ import { useAuth } from "../../context/AuthContext";
 
 interface NavbarProps {
 	onMenuClick: () => void;
+	mobileOpen: boolean;
+	collapsed: boolean;
 }
 
-export default function Navbar({ onMenuClick }: NavbarProps) {
+export default function Navbar({
+	onMenuClick,
+	mobileOpen,
+	collapsed,
+}: NavbarProps) {
 	const { t } = useTranslation();
 	const { user, logout } = useAuth();
 	const navigate = useNavigate();
@@ -47,9 +54,14 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
 			<div className="flex items-center gap-3">
 				<button
 					onClick={onMenuClick}
+					aria-label={mobileOpen || !collapsed ? "Close sidebar" : "Open sidebar"}
 					className="p-2 rounded-xl text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors lg:hidden"
 				>
-					<FaBars className="h-5 w-5" />
+					{mobileOpen ? (
+						<FaTimes className="h-5 w-5" />
+					) : (
+						<FaBars className="h-5 w-5" />
+					)}
 				</button>
 				<div className="relative hidden sm:block">
 					<FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
