@@ -13,7 +13,7 @@ interface ErrorResponse {
   [key: string]: unknown;
 }
 
-const backendBaseUrl = `http://192.168.1.146:3000/api`;
+const backendBaseUrl = `http://192.168.1.194:3000/api`;
 
 const axiosInstance = axios.create({
   baseURL: backendBaseUrl,

@@ -2,7 +2,6 @@ import type React from "react";
 import {
 	FaArrowUp,
 	FaCalendarAlt,
-	FaCalendarCheck,
 	FaExclamationTriangle,
 	FaNotesMedical,
 	FaUserInjured,
@@ -29,6 +28,10 @@ import {
 	mockActivity,
 	mockAppointments,
 } from "../../utils/mockData";
+
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@store/store";
+import { getDashboardCountsAsyncThunk } from "@store/dashboard/dashboard-async-thunk";
 
 const activityIcons: Record<string, React.ReactNode> = {
 	calendar: <FaCalendarAlt className="h-3.5 w-3.5" />,
@@ -58,40 +61,36 @@ const appointmentStatusVariant: Record<
 
 export default function DashboardPage() {
 	const { t } = useTranslation();
+	const dispatch = useAppDispatch();
+	const { counts, loading } = useAppSelector((state) => state.dashboard);
+	
+	useEffect(() => {
+		dispatch(getDashboardCountsAsyncThunk());
+	}, [dispatch]);
+
 	const todayAppts = mockAppointments.filter((a) => a.date === "2025-03-05");
 
 	const stats = [
 		{
 			label: t("dashboard.totalPatients"),
-			value: "267",
-			change: t("dashboard.thisMonth"),
+			value: loading ? "..." : String(counts?.totalPatientCount ?? 0),
 			icon: FaUserInjured,
 			color: "bg-sky-50 text-sky-600",
 			trend: "up",
 		},
 		{
 			label: t("dashboard.totalDoctors"),
-			value: "6",
-			change: t("dashboard.onLeave"),
+			value: loading ? "..." : String(counts?.totalDoctorCount ?? 0),
 			icon: FaUserMd,
 			color: "bg-violet-50 text-violet-600",
 			trend: "neutral",
 		},
 		{
 			label: t("dashboard.prescriptions"),
-			value: "48",
-			change: t("dashboard.thisWeek"),
+			value: loading ? "..." : String(counts?.prescriptionDoctorCount ?? 0),
 			icon: FaNotesMedical,
 			color: "bg-emerald-50 text-emerald-600",
 			trend: "up",
-		},
-		{
-			label: t("dashboard.appointmentsToday"),
-			value: "4",
-			change: t("dashboard.confirmed"),
-			icon: FaCalendarCheck,
-			color: "bg-amber-50 text-amber-600",
-			trend: "neutral",
 		},
 	];
 
@@ -106,8 +105,8 @@ export default function DashboardPage() {
 			</div>
 
 			{/* Stat Cards */}
-			<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 stagger-children">
-				{stats.map(({ label, value, change, icon: Icon, color, trend }) => (
+			<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 stagger-children">
+				{stats.map(({ label, value, icon: Icon, color, trend }) => (
 					<div
 						key={label}
 						className="bg-white rounded-2xl border border-gray-100 shadow-card p-5 card-hover animate-fade-in"
@@ -126,7 +125,6 @@ export default function DashboardPage() {
 						</div>
 						<p className="text-3xl font-bold text-gray-900 mb-1">{value}</p>
 						<p className="text-sm font-medium text-gray-600">{label}</p>
-						<p className="text-xs text-gray-400 mt-0.5">{change}</p>
 					</div>
 				))}
 			</div>
