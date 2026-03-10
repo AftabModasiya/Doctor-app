@@ -1,3 +1,4 @@
+import { BaseEntity } from "src/common/entities/base.entity";
 import {
 	Column,
 	Entity,
@@ -9,7 +10,6 @@ import {
 	OneToMany,
 	OneToOne,
 } from "typeorm";
-import { BaseEntity } from "../../common/entities/base.entity";
 import type { Company } from "../../company/entities/company.entity";
 import type { Degree } from "../../degree/entities/degree.entity";
 import type { Prescription } from "../../prescription/entities/prescription.entity";

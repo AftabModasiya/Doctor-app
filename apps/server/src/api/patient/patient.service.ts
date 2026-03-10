@@ -40,4 +40,8 @@ export class PatientService {
 		const patient = await this.findOne(id);
 		await this.patientRepository.softRemove(patient);
 	}
+
+	countPatentByCompanyId(companyId: number) {
+		return this.patientRepository.count({ where: { companyId } });
+	}
 }

@@ -1,5 +1,5 @@
+import { BaseEntity } from "src/common/entities/base.entity";
 import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
-import { BaseEntity } from "../../common/entities/base.entity";
 import type { Company } from "../../company/entities/company.entity";
 
 @Index("idx_company_setting_company_key", ["companyId", "key"])

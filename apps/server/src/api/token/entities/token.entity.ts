@@ -1,3 +1,4 @@
+import { BaseEntity } from "src/common/entities/base.entity";
 import {
 	Column,
 	Entity,
@@ -6,7 +7,6 @@ import {
 	ManyToOne,
 	OneToOne,
 } from "typeorm";
-import { BaseEntity } from "../../common/entities/base.entity";
 import type { User } from "../../user/entities/user.entity";
 import type { UserDevice } from "../../user-device/entities/user-device.entity";
 

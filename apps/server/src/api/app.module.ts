@@ -12,6 +12,7 @@ import { ZodValidationExceptionFilter } from "../shared/filters/zod-validation-e
 import { AppController } from "./app.controller";
 import { CompanyModule } from "./company/company.module";
 import { CompanySettingModule } from "./company-setting/company-setting.module";
+import { DashboardModule } from "./dashboard/dashboard.module";
 import { DegreeModule } from "./degree/degree.module";
 import { DoctorModule } from "./doctor/doctor.module";
 import { MedicineModule } from "./medicine/medicine.module";
@@ -73,6 +74,7 @@ patchNestJsSwagger();
 		MedicinePrescriptionModule,
 		CompanyModule,
 		CompanySettingModule,
+		DashboardModule,
 	],
 	controllers: [AppController],
 	providers: [

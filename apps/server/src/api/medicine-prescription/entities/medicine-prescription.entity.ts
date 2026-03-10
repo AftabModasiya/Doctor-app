@@ -1,5 +1,5 @@
+import { BaseEntity } from "src/common/entities/base.entity";
 import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
-import { BaseEntity } from "../../common/entities/base.entity";
 import type { Medicine } from "../../medicine/entities/medicine.entity";
 import type { Prescription } from "../../prescription/entities/prescription.entity";
 

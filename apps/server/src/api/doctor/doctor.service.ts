@@ -42,4 +42,8 @@ export class DoctorService {
 		const doctor = await this.findOne(id);
 		await this.doctorRepository.softRemove(doctor);
 	}
+
+	countDoctorByCompanyId(companyId: number) {
+		return this.doctorRepository.count({ where: { companyId } });
+	}
 }

@@ -1,1 +1,5 @@
-{}
+{
+	"DASHBOARD": {
+		"COUNT": "Dashboard counts fetched successfully"
+	}
+}
