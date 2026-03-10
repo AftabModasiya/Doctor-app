@@ -46,11 +46,14 @@ const patientSlice = createSlice({
       .addCase(getPatientsAsyncThunk.fulfilled, (state, action) => {
         state.isFetching = false;
         const data = action.payload?.data;
-        state.patients = Array.isArray(data?.patients)
-          ? data.patients
-          : Array.isArray(data)
-            ? data
-            : [];
+        // Handle both patients and list for robustness, fallback to data if it's an array
+        state.patients = Array.isArray(data?.list)
+          ? data.list
+          : Array.isArray(data?.patients)
+            ? data.patients
+            : Array.isArray(data)
+              ? data
+              : [];
       })
       .addCase(getPatientsAsyncThunk.rejected, (state, action) => {
         state.isFetching = false;
