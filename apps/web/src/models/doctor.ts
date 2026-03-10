@@ -40,7 +40,7 @@ type IDoctor = {
 type IDoctorResponse = {
   success: boolean;
   data: {
-    doctors: IDoctor[];
+    list: IDoctor[];
     count: number;
   };
   statusCode: number;

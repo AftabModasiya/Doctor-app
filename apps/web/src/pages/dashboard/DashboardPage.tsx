@@ -87,6 +87,14 @@ export default function DashboardPage() {
 
 	const todayAppts = mockAppointments.filter((a) => a.date === "2025-03-05");
 
+	const distributionData = useMemo(() => {
+		return [
+			{ name: t("dashboard.totalPatients"), value: counts?.totalPatientCount ?? 0, color: "#0ea5e9" },
+			{ name: t("dashboard.totalDoctors"), value: counts?.totalDoctorCount ?? 0, color: "#8b5cf6" },
+			{ name: t("dashboard.prescriptions"), value: counts?.prescriptionDoctorCount ?? 0, color: "#10b981" },
+		];
+	}, [counts, t]);
+
 	const stats = [
 		{
 			label: t("dashboard.totalPatients"),
@@ -209,16 +217,16 @@ export default function DashboardPage() {
 					</div>
 				</div>
 
-				{/* Appointment Distribution */}
+				{/* Distribution Overview */}
 				<div className="bg-white rounded-2xl border border-gray-100 shadow-card p-6">
 					<h2 className="text-base font-semibold text-gray-900 mb-1">
-						{t("dashboard.appointments")}
+						{t("dashboard.overview")}
 					</h2>
-					<p className="text-xs text-gray-500 mb-5">{t("dashboard.statusBreakdown")}</p>
+					<p className="text-xs text-gray-500 mb-5">{t("dashboard.distribution")}</p>
 					<ResponsiveContainer width="100%" height={160}>
 						<PieChart>
 							<Pie
-								data={chartDataMock.appointmentsByStatus}
+								data={distributionData}
 								cx="50%"
 								cy="50%"
 								innerRadius={50}
@@ -226,7 +234,7 @@ export default function DashboardPage() {
 								paddingAngle={3}
 								dataKey="value"
 							>
-								{chartDataMock.appointmentsByStatus.map((entry, i) => (
+								{distributionData.map((entry, i) => (
 									<Cell key={i} fill={entry.color} />
 								))}
 							</Pie>
@@ -234,7 +242,7 @@ export default function DashboardPage() {
 						</PieChart>
 					</ResponsiveContainer>
 					<div className="space-y-2 mt-2">
-						{chartDataMock.appointmentsByStatus.map((item) => (
+						{distributionData.map((item) => (
 							<div
 								key={item.name}
 								className="flex items-center justify-between text-xs"
@@ -247,7 +255,7 @@ export default function DashboardPage() {
 									<span className="text-gray-600">{item.name}</span>
 								</div>
 								<span className="font-semibold text-gray-800">
-									{item.value}
+									{loading ? "..." : item.value}
 								</span>
 							</div>
 						))}
@@ -258,7 +266,7 @@ export default function DashboardPage() {
 			{/* Weekly Appointments & Activity */}
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 				{/* Weekly Bar Chart */}
-				<div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-card p-6">
+				{/* <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-card p-6">
 					<h2 className="text-base font-semibold text-gray-900 mb-1">
 						{t("dashboard.weeklyAppointments")}
 					</h2>
@@ -298,10 +306,10 @@ export default function DashboardPage() {
 							/>
 						</BarChart>
 					</ResponsiveContainer>
-				</div>
+				</div> */}
 
 				{/* Today's Appointments */}
-				<div className="bg-white rounded-2xl border border-gray-100 shadow-card p-6">
+				{/* <div className="bg-white rounded-2xl border border-gray-100 shadow-card p-6">
 					<h2 className="text-base font-semibold text-gray-900 mb-1">
 						{t("dashboard.todaySchedule")}
 					</h2>
@@ -332,11 +340,11 @@ export default function DashboardPage() {
 							</div>
 						))}
 					</div>
-				</div>
+				</div> */}
 			</div>
 
 			{/* Recent Activity */}
-			<div className="bg-white rounded-2xl border border-gray-100 shadow-card p-6">
+			{/* <div className="bg-white rounded-2xl border border-gray-100 shadow-card p-6">
 				<div className="mb-5">
 					<h2 className="text-base font-semibold text-gray-900">
 						{t("dashboard.recentActivity")}
@@ -363,7 +371,7 @@ export default function DashboardPage() {
 						</div>
 					))}
 				</div>
-			</div>
+			</div> */}
 		</div>
 	);
 }

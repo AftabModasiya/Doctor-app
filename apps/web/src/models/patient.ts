@@ -33,7 +33,9 @@ type IPatient = {
 
 type IPatientResponse = {
   success: boolean;
-  data: IPatient[];
+  data: {
+    list: IPatient[];
+  };
   statusCode: number;
 }
 

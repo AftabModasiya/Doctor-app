@@ -111,6 +111,8 @@
         "vsLastPeriod": "+18% vs last period",
         "appointments": "Appointments",
         "statusBreakdown": "Status breakdown",
+        "overview": "Overview",
+        "distribution": "Total Distribution",
         "weeklyAppointments": "Weekly Appointments",
         "weeklyVolume": "This week's appointment volume",
         "todaySchedule": "Today's Schedule",
@@ -334,7 +336,53 @@
     },
     "prescriptions": {
         "title": "Prescriptions",
-        "subtitle": "Manage and track patient prescriptions"
+        "subtitle": "Manage and track patient prescriptions",
+        "totalPrescriptions": "total prescriptions",
+        "newPrescription": "New Prescription",
+        "searchPlaceholder": "Search by ID, patient or diagnosis...",
+        "noPrescriptions": "No prescriptions found",
+        "item": "item",
+        "items": "items",
+        "columns": {
+            "rxId": "Rx ID",
+            "patient": "Patient",
+            "doctor": "Doctor",
+            "diagnosis": "Diagnosis",
+            "date": "Date",
+            "medicines": "Medicines",
+            "status": "Status"
+        },
+        "modal": {
+            "viewTitle": "Prescription",
+            "addTitle": "Create Prescription",
+            "addBtn": "Create Prescription",
+            "patient": "Patient",
+            "doctor": "Doctor",
+            "date": "Date",
+            "diagnosis": "Diagnosis",
+            "diagnosisPlaceholder": "e.g. Seasonal Allergy",
+            "prescribedMedicines": "Prescribed Medicines",
+            "medicines": "Medicines",
+            "addMed": "Add Medicine",
+            "selectPatient": "Select patient...",
+            "selectDoctor": "Select doctor...",
+            "selectMed": "Select medicine...",
+            "dosagePlaceholder": "Dosage (e.g. 500mg)",
+            "frequencyPlaceholder": "Frequency (e.g. 2x Daily)",
+            "durationPlaceholder": "Duration (e.g. 5 Days)",
+            "notes": "Notes",
+            "notesPlaceholder": "Additional instructions...",
+            "doctorNotes": "Doctor's Notes"
+        },
+        "status": {
+            "active": "Active",
+            "completed": "Completed",
+            "cancelled": "Cancelled"
+        },
+        "toast": {
+            "fillRequired": "Please fill all required fields",
+            "created": "Prescription created successfully"
+        }
     },
     "reports": {
         "title": "Reports",
