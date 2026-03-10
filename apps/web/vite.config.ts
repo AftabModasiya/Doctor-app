@@ -41,6 +41,7 @@ export default defineConfig({
       "@enum": path.resolve(__dirname, "src/enum"),
       "@store": path.resolve(__dirname, "src/store"),
       "@constants": path.resolve(__dirname, "src/constants"),
+      "@schema": path.resolve(__dirname, "src/schema"),
     },
   },
   optimizeDeps: {
