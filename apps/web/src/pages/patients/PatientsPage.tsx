@@ -24,7 +24,6 @@ import {
   getPatientsAsyncThunk,
   updatePatientAsyncThunk,
 } from "@store/patient/patient-async-thunk";
-import Loader from "@shared/components/Loader";
 
 const ITEMS_PER_PAGE = 8;
 type FilterStatus = "All" | "Active" | "Inactive";
@@ -218,10 +217,6 @@ export default function PatientsPage() {
     },
   ];
 
-  if (isFetching) {
-    return <Loader inline />;
-  }
-
   return (
     <div className="space-y-5">
       {/* Header */}
@@ -288,6 +283,7 @@ export default function PatientsPage() {
           emptyMessage={t("patients.noPatients")}
           emptyIcon={<FaUserInjured />}
           onRowClick={(row) => setViewPatient(row)}
+          loading={isFetching}
         />
         <div className="px-4 border-t border-gray-50">
           <Pagination
