@@ -81,14 +81,7 @@ import { WebAuthnChallengeModule } from "./web-authn-challenge/web-authn-challen
 			provide: APP_PIPE,
 			useClass: ZodValidationPipe,
 		},
-		{
-			provide: APP_FILTER,
-			useClass: ZodValidationExceptionFilter,
-		},
-		{
-			provide: APP_INTERCEPTOR,
-			useClass: ZodSerializerInterceptor,
-		},
+
 		{
 			provide: APP_FILTER,
 			useClass: GlobalExceptionsFilter,
@@ -96,6 +89,14 @@ import { WebAuthnChallengeModule } from "./web-authn-challenge/web-authn-challen
 		{
 			provide: APP_FILTER,
 			useClass: HttpExceptionFilter,
+		},
+		{
+			provide: APP_FILTER,
+			useClass: ZodValidationExceptionFilter,
+		},
+		{
+			provide: APP_INTERCEPTOR,
+			useClass: ZodSerializerInterceptor,
 		},
 		{
 			provide: APP_INTERCEPTOR,

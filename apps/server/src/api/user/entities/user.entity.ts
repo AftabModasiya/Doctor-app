@@ -25,7 +25,7 @@ export class User extends BaseEntity {
 	@Column()
 	password!: string;
 
-	@Column({ name: "country_code", type: "varchar", length: 10, nullable: true })
+	@Column({ type: "varchar", length: 10, nullable: true })
 	countryCode!: string | null;
 
 	@Index("idx_user_mobile")

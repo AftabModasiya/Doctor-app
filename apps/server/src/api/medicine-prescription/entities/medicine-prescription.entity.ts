@@ -7,11 +7,11 @@ import { Prescription } from "../../prescription/entities/prescription.entity";
 @Entity("medicine_prescriptions")
 export class MedicinePrescription extends BaseEntity {
 	@Index("idx_medicine_prescriptions_medicine_id")
-	@Column({ name: "medicine_id" })
+	@Column()
 	medicineId!: number;
 
 	@Index("idx_medicine_prescriptions_prescription_id")
-	@Column({ name: "prescription_id" })
+	@Column()
 	prescriptionId!: number;
 
 	@Column({ type: "int", default: 1 })
@@ -22,13 +22,13 @@ export class MedicinePrescription extends BaseEntity {
 		() => Medicine,
 		(medicine: Medicine) => medicine.medicinePrescriptions,
 	)
-	@JoinColumn({ name: "medicine_id" })
+	@JoinColumn()
 	medicine!: Relation<Medicine>;
 
 	@ManyToOne(
 		() => Prescription,
 		(prescription: Prescription) => prescription.medicinePrescriptions,
 	)
-	@JoinColumn({ name: "prescription_id" })
+	@JoinColumn()
 	prescription!: Relation<Prescription>;
 }

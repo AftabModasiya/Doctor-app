@@ -31,9 +31,10 @@ export class MedicineController {
 
 	@Get()
 	async findAll() {
-		const result = await this.medicineService.findAll();
+		const [list, count] = await this.medicineService.findAll();
 		return {
-			list: result,
+			list,
+			count,
 			message: this.i18nService.t("success.MEDICINE.LIST"),
 		};
 	}

@@ -33,9 +33,10 @@ export class SpecializationController {
 
 	@Get()
 	async findAll() {
-		const result = await this.specializationService.findAll();
+		const [list, count] = await this.specializationService.findAll();
 		return {
-			list: result,
+			list,
+			count,
 			message: this.i18nService.t("success.SPECIALIZATION.LIST"),
 		};
 	}

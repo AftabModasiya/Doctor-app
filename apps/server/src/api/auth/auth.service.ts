@@ -5,6 +5,7 @@ import {
 } from "@nestjs/common";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
+import { TokenType } from "src/shared/constants/enums.constants";
 import { ICurrentUser } from "src/shared/interfaces/current-user.interface";
 import { ITokenPayload } from "src/shared/interfaces/token.interface";
 import { JWTService } from "src/shared/services/jwt.service";
@@ -97,14 +98,12 @@ export class AuthService {
 			this.JWTService.generateRefreshToken(tokenPayload),
 		];
 
-		const accessTokenPayload: DeepPartial<Token> = {
-			token: accessToken,
-			userId,
-		};
-		const refreshTokenPayload: DeepPartial<Token> = {
-			token: refreshToken,
-			userId,
-		};
+		const decodedAccessToken = this.JWTService.verifyAccessToken(accessToken);
+
+		const expiresAt =
+			decodedAccessToken && typeof decodedAccessToken.exp === "number"
+				? new Date(decodedAccessToken.exp * 1000)
+				: null;
 
 		const createDeviceMasterPayload: DeepPartial<UserDevice> = {
 			deviceToken,
@@ -113,10 +112,28 @@ export class AuthService {
 			createdBy: userId,
 		};
 
+		const newUserDevice = await this.userDeviceService.create(
+			createDeviceMasterPayload,
+		);
+
+		const accessTokenPayload: DeepPartial<Token> = {
+			token: accessToken,
+			tokenType: TokenType.ACCESS,
+			expiresAt,
+			userId,
+			userDeviceId: newUserDevice.id,
+		};
+		const refreshTokenPayload: DeepPartial<Token> = {
+			token: refreshToken,
+			tokenType: TokenType.REFRESH,
+			expiresAt,
+			userId,
+			userDeviceId: newUserDevice.id,
+		};
+
 		await Promise.all([
 			this.tokenService.create(accessTokenPayload),
 			this.tokenService.create(refreshTokenPayload),
-			this.userDeviceService.create(createDeviceMasterPayload),
 		]);
 
 		return {

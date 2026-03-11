@@ -16,15 +16,15 @@ import { Patient } from "../../patient/entities/patient.entity";
 @Entity("prescriptions")
 export class Prescription extends BaseEntity {
 	@Index("idx_prescriptions_patient_id")
-	@Column({ name: "patient_id" })
+	@Column()
 	patientId!: number;
 
 	@Index("idx_prescriptions_doctor_id")
-	@Column({ name: "doctor_id" })
+	@Column()
 	doctorId!: number;
 
 	@Index("idx_prescriptions_company_id")
-	@Column({ name: "company_id" })
+	@Column()
 	companyId!: number;
 
 	@Column({ type: "text", nullable: true })
@@ -38,21 +38,21 @@ export class Prescription extends BaseEntity {
 		() => Patient,
 		(patient: Patient) => patient.prescriptions,
 	)
-	@JoinColumn({ name: "patient_id" })
+	@JoinColumn()
 	patient!: Relation<Patient>;
 
 	@ManyToOne(
 		() => Doctor,
 		(doctor: Doctor) => doctor.prescriptions,
 	)
-	@JoinColumn({ name: "doctor_id" })
+	@JoinColumn()
 	doctor!: Relation<Doctor>;
 
 	@ManyToOne(
 		() => Company,
 		(company: Company) => company.prescriptions,
 	)
-	@JoinColumn({ name: "company_id" })
+	@JoinColumn()
 	company!: Relation<Company>;
 
 	@OneToMany(

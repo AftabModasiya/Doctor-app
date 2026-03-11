@@ -6,21 +6,21 @@ import {
 	Index,
 	JoinColumn,
 	ManyToOne,
-	OneToOne,
+	OneToMany,
 } from "typeorm";
 import { Token } from "../../token/entities/token.entity";
 import { User } from "../../user/entities/user.entity";
 
 @Entity("user_devices")
 export class UserDevice extends BaseEntity {
-	@Column({ name: "device_token", type: "text" })
-	deviceToken!: string;
+	@Column({ type: "text", nullable: true })
+	deviceToken!: string | null;
 
-	@Column({ name: "device_ip", type: "varchar", nullable: true })
+	@Column({ type: "varchar", nullable: true })
 	deviceIp!: string | null;
 
 	@Index("idx_user_devices_user_id")
-	@Column({ name: "user_id" })
+	@Column()
 	userId!: number;
 
 	// ---- Relations ----
@@ -28,15 +28,12 @@ export class UserDevice extends BaseEntity {
 		() => User,
 		(user: User) => user.devices,
 	)
-	@JoinColumn({ name: "user_id" })
+	@JoinColumn()
 	user!: Relation<User>;
 
-	@OneToOne(
+	@OneToMany(
 		() => Token,
-		(token: Token) => token.userDevice,
-		{
-			cascade: ["insert", "soft-remove"],
-		},
+		(tokens: Token) => tokens.userDevice,
 	)
-	token!: Relation<Token>;
+	token!: Relation<Token[]>;
 }
