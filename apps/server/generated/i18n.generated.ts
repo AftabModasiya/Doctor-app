@@ -9,6 +9,11 @@ export type I18nTranslations = {
         "UNKNOWN": {
             "INTERNAL_SERVER_ERROR": string;
         };
+        "AUTH": {
+            "SESSION_EXPIRED": string;
+            "INVALID_CREDENTIAL": string;
+            "PASSWORD_NOT_CONFIGURED": string;
+        };
         "PATIENT": {
             "NOT_FOUND": string;
         };

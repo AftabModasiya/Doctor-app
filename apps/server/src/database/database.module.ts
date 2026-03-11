@@ -21,7 +21,7 @@ import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 				// 	join(__dirname, '..', 'shared', 'entities', '**', '*.entity.{ts,js}'),
 				// ],
 				namingStrategy: new SnakeNamingStrategy(),
-				synchronize: false,
+				synchronize: true,
 				logging: configService.get("NODE_ENV") === "development",
 				extra: {
 					max: configService.get<number>("PG_POOL_MAX") || 10,

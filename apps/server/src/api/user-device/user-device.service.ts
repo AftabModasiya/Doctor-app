@@ -2,8 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
-import { Repository } from "typeorm";
-import type { CreateUserDeviceDto } from "./dto/create-user-device.dto";
+import { DeepPartial, FindOptionsWhere, Repository } from "typeorm";
 import type { UpdateUserDeviceDto } from "./dto/update-user-device.dto";
 import { UserDevice } from "./entities/user-device.entity";
 
@@ -15,7 +14,7 @@ export class UserDeviceService {
 		private readonly i18nService: I18nService<I18nTranslations>,
 	) {}
 
-	create(dto: CreateUserDeviceDto): Promise<UserDevice> {
+	create(dto: DeepPartial<UserDevice>): Promise<UserDevice> {
 		const device = this.deviceRepository.create(dto);
 		return this.deviceRepository.save(device);
 	}
@@ -36,6 +35,15 @@ export class UserDeviceService {
 			where: { id },
 			relations: { user: true, token: true },
 		});
+		if (!device)
+			throw new NotFoundException(
+				this.i18nService.t(`error.USER_DEVICE.NOT_FOUND`),
+			);
+		return device;
+	}
+
+	async findOneByWhere(where: FindOptionsWhere<UserDevice>) {
+		const device = await this.deviceRepository.findOneBy(where);
 		if (!device)
 			throw new NotFoundException(
 				this.i18nService.t(`error.USER_DEVICE.NOT_FOUND`),

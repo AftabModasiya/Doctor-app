@@ -51,9 +51,9 @@ export class User extends BaseEntity {
 	)
 	devices!: Relation<UserDevice[]>;
 
-	@OneToOne(
+	@OneToMany(
 		() => Passkey,
-		(passkey: Passkey) => passkey.user,
+		(passkey) => passkey.user,
 	)
-	passkey!: Relation<Passkey>;
+	passkeys!: Relation<Passkey[]>;
 }

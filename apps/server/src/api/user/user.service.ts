@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
-import { Repository } from "typeorm";
+import { FindOneOptions, Repository } from "typeorm";
 import type { CreateUserDto } from "./dto/create-user.dto";
 import type { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./entities/user.entity";
@@ -39,6 +39,13 @@ export class UserService {
 
 	async findOne(id: number): Promise<User> {
 		const user = await this.userRepository.findOne({ where: { id } });
+		if (!user)
+			throw new NotFoundException(this.i18nService.t(`error.USER.NOT_FOUND`));
+		return user;
+	}
+
+	async findOneByQuery(query: FindOneOptions<User>): Promise<User> {
+		const user = await this.userRepository.findOne(query);
 		if (!user)
 			throw new NotFoundException(this.i18nService.t(`error.USER.NOT_FOUND`));
 		return user;
