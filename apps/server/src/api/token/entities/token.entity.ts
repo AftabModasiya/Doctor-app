@@ -1,14 +1,7 @@
 import { BaseEntity } from "src/common/entities/base.entity";
 import { TokenType } from "src/shared/constants/enums.constants";
 import type { Relation } from "typeorm";
-import {
-	Column,
-	Entity,
-	Index,
-	JoinColumn,
-	ManyToOne,
-	OneToOne,
-} from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
 import { User } from "../../user/entities/user.entity";
 import { UserDevice } from "../../user-device/entities/user-device.entity";
 
@@ -26,29 +19,29 @@ export class Token extends BaseEntity {
 	})
 	tokenType!: TokenType;
 
-	@Column({ name: "expires_at", type: "timestamptz" })
-	expiresAt!: Date;
+	@Column({ type: "timestamptz", nullable: true })
+	expiresAt!: Date | null;
 
 	@Index("idx_tokens_user_device_id")
-	@Column({ name: "user_device_id" })
+	@Column()
 	userDeviceId!: number;
 
 	@Index("idx_tokens_user_id")
-	@Column({ name: "user_id" })
+	@Column()
 	userId!: number;
 
 	// ---- Relations ----
-	@OneToOne(
+	@ManyToOne(
 		() => UserDevice,
 		(device: UserDevice) => device.token,
 	)
-	@JoinColumn({ name: "user_device_id" })
+	@JoinColumn()
 	userDevice!: Relation<UserDevice>;
 
 	@ManyToOne(
 		() => User,
 		(user: User) => user.devices,
 	)
-	@JoinColumn({ name: "user_id" })
+	@JoinColumn()
 	user!: Relation<User>;
 }

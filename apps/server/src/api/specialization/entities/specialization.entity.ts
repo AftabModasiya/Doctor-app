@@ -17,7 +17,7 @@ export class Specialization extends BaseEntity {
 	name!: string;
 
 	@Index("idx_specializations_company_id")
-	@Column({ name: "company_id" })
+	@Column()
 	companyId!: number;
 
 	// ---- Relations ----
@@ -25,7 +25,7 @@ export class Specialization extends BaseEntity {
 		() => Company,
 		(company: Company) => company.doctors,
 	)
-	@JoinColumn({ name: "company_id" })
+	@JoinColumn()
 	company!: Relation<Company>;
 
 	@ManyToMany(

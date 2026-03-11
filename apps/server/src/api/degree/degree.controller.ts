@@ -31,9 +31,10 @@ export class DegreeController {
 
 	@Get()
 	async findAll() {
-		const result = await this.degreeService.findAll();
+		const [list, count] = await this.degreeService.findAll();
 		return {
-			list: result,
+			list,
+			count,
 			message: this.i18nService.t("success.DEGREE.LIST"),
 		};
 	}

@@ -20,14 +20,14 @@ import type { User } from "../../user/entities/user.entity";
 @Entity("doctors")
 export class Doctor extends BaseEntity {
 	@Index("idx_doctors_user_id")
-	@Column({ name: "user_id" })
+	@Column()
 	userId!: number;
 
 	@Index("idx_doctors_company_id")
-	@Column({ name: "company_id" })
+	@Column()
 	companyId!: number;
 
-	@Column({ name: "graduation_date", type: "date", nullable: true })
+	@Column({ type: "date", nullable: true })
 	graduationDate!: Date | null;
 
 	@Column({ type: "int", nullable: true })
@@ -35,11 +35,11 @@ export class Doctor extends BaseEntity {
 
 	// ---- Relations ----
 	@OneToOne("User", (user: User) => user.doctor)
-	@JoinColumn({ name: "user_id" })
+	@JoinColumn()
 	user!: Relation<User>;
 
 	@ManyToOne("Company", (company: Company) => company.doctors)
-	@JoinColumn({ name: "company_id" })
+	@JoinColumn()
 	company!: Relation<Company>;
 
 	@ManyToMany("Specialization", (spec: Specialization) => spec.doctors)

@@ -17,12 +17,12 @@ export class Category extends BaseEntity {
 	name!: string;
 
 	@Index("idx_categories_company_id")
-	@Column({ name: "company_id" })
+	@Column()
 	companyId!: number;
 
 	// ---- Relations ----
 	@ManyToOne("Company", (company: Company) => company.patients)
-	@JoinColumn({ name: "company_id" })
+	@JoinColumn()
 	company!: Relation<Company>;
 
 	@OneToMany("Medicine", (medicine: Medicine) => medicine.category)

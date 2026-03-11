@@ -20,12 +20,8 @@ export class SpecializationService {
 		return this.specializationRepository.save(specialization);
 	}
 
-	async findAll() {
-		return {
-			count: await this.specializationRepository.count(),
-			list: await this.specializationRepository.find(),
-			message: this.i18nService.t("success.SPECIALIZATION.LIST"),
-		};
+	findAll() {
+		return this.specializationRepository.findAndCount();
 	}
 
 	findByCompany(companyId: number): Promise<Specialization[]> {

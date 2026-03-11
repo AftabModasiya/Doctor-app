@@ -2,8 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
-import { Repository } from "typeorm";
-import type { CreateTokenDto } from "./dto/create-token.dto";
+import { DeepPartial, FindOptionsWhere, Repository } from "typeorm";
 import type { UpdateTokenDto } from "./dto/update-token.dto";
 import { Token } from "./entities/token.entity";
 
@@ -15,8 +14,8 @@ export class TokenService {
 		private readonly i18nService: I18nService<I18nTranslations>,
 	) {}
 
-	create(dto: CreateTokenDto): Promise<Token> {
-		const token = this.tokenRepository.create(dto as unknown as Partial<Token>);
+	create(dto: DeepPartial<Token>): Promise<Token> {
+		const token = this.tokenRepository.create(dto);
 		return this.tokenRepository.save(token);
 	}
 
@@ -36,6 +35,10 @@ export class TokenService {
 		if (!token)
 			throw new NotFoundException(this.i18nService.t(`error.TOKEN.NOT_FOUND`));
 		return token;
+	}
+
+	findOneWhere(where: FindOptionsWhere<Token>) {
+		return this.tokenRepository.findOneBy(where);
 	}
 
 	async findByToken(token: string): Promise<Token | null> {

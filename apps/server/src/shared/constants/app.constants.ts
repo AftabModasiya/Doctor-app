@@ -18,3 +18,18 @@ export const getHttpStatusCodes = () => {
 		INTERNAL_SERVER_ERROR: 500,
 	};
 };
+
+export const getTokenAudience = () => {
+	return {
+		ACCESS_TOKEN: "accessToken",
+		REFRESH_TOKEN: "refreshToken",
+		FORGOT_PASSWORD_TOKEN: "forgotPasswordToken",
+	};
+};
+
+export const getPasswordLength = () => {
+	return {
+		MIN: 8,
+		MAX: 16,
+	};
+};

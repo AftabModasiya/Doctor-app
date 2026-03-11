@@ -2,6 +2,11 @@
 	"UNKNOWN": {
 		"INTERNAL_SERVER_ERROR": "Something went wrong! Please try again later"
 	},
+	"AUTH": {
+		"SESSION_EXPIRED": "Your session has expired. Please log in again to continue.",
+		"INVALID_CREDENTIAL": "Invalid credentials",
+		"PASSWORD_NOT_CONFIGURED": "Password not configured"
+	},
 	"PATIENT": {
 		"NOT_FOUND": "Patient not found"
 	},

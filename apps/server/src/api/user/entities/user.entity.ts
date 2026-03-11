@@ -25,7 +25,7 @@ export class User extends BaseEntity {
 	@Column()
 	password!: string;
 
-	@Column({ name: "country_code", type: "varchar", length: 10, nullable: true })
+	@Column({ type: "varchar", length: 10, nullable: true })
 	countryCode!: string | null;
 
 	@Index("idx_user_mobile")
@@ -51,9 +51,9 @@ export class User extends BaseEntity {
 	)
 	devices!: Relation<UserDevice[]>;
 
-	@OneToOne(
+	@OneToMany(
 		() => Passkey,
-		(passkey: Passkey) => passkey.user,
+		(passkey) => passkey.user,
 	)
-	passkey!: Relation<Passkey>;
+	passkeys!: Relation<Passkey[]>;
 }

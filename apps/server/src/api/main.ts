@@ -26,7 +26,12 @@ async function bootstrap() {
 		.build();
 	const rawDocument = SwaggerModule.createDocument(app, config);
 	const document = cleanupOpenApiDoc(rawDocument);
-	SwaggerModule.setup("api/docs", app, document);
+	SwaggerModule.setup("api/docs", app, document, {
+		swaggerOptions: {
+			tagsSorter: "alpha",
+			persistAuthorization: true,
+		},
+	});
 
 	await app.listen(process.env.PORT ?? 3000);
 

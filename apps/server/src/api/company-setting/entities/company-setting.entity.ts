@@ -6,7 +6,7 @@ import { Company } from "../../company/entities/company.entity";
 @Index("idx_company_setting_company_key", ["companyId", "key"])
 @Entity("company_settings")
 export class CompanySetting extends BaseEntity {
-	@Column({ name: "company_id" })
+	@Column()
 	companyId!: number;
 
 	@Column()
@@ -23,6 +23,6 @@ export class CompanySetting extends BaseEntity {
 		() => Company,
 		(company: Company) => company.settings,
 	)
-	@JoinColumn({ name: "company_id" })
+	@JoinColumn()
 	company!: Relation<Company>;
 }

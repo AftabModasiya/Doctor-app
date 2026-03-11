@@ -20,11 +20,11 @@ import type { User } from "../../user/entities/user.entity";
 @Entity("patients")
 export class Patient extends BaseEntity {
 	@Index("idx_patients_user_id")
-	@Column({ name: "user_id" })
+	@Column()
 	userId!: number;
 
 	@Index("idx_patients_company_id")
-	@Column({ name: "company_id" })
+	@Column()
 	companyId!: number;
 
 	@Column({ type: "text", nullable: true })
@@ -33,7 +33,6 @@ export class Patient extends BaseEntity {
 	@Column({
 		type: "enum",
 		enum: BloodGroup,
-		name: "blood_group",
 		nullable: true,
 	})
 	bloodGroup!: BloodGroup | null;
@@ -47,11 +46,11 @@ export class Patient extends BaseEntity {
 
 	// ---- Relations ----
 	@OneToOne("User", (user: User) => user.patient)
-	@JoinColumn({ name: "user_id" })
+	@JoinColumn()
 	user!: Relation<User>;
 
 	@ManyToOne("Company", (company: Company) => company.patients)
-	@JoinColumn({ name: "company_id" })
+	@JoinColumn()
 	company!: Relation<Company>;
 
 	@OneToMany(

@@ -12,6 +12,7 @@ import { HttpExceptionFilter } from "src/shared/filters/http-exception.filter";
 import { ResponseInterceptor } from "src/shared/interceptors/response.interceptor";
 import { ZodValidationExceptionFilter } from "../shared/filters/zod-validation-exception.filter";
 import { AppController } from "./app.controller";
+import { AuthModule } from "./auth/auth.module";
 import { CategoryModule } from "./category/category.module";
 import { CompanyModule } from "./company/company.module";
 import { CompanySettingModule } from "./company-setting/company-setting.module";
@@ -72,12 +73,22 @@ import { WebAuthnChallengeModule } from "./web-authn-challenge/web-authn-challen
 		DashboardModule,
 		PasskeyModule,
 		WebAuthnChallengeModule,
+		AuthModule,
 	],
 	controllers: [AppController],
 	providers: [
 		{
 			provide: APP_PIPE,
 			useClass: ZodValidationPipe,
+		},
+
+		{
+			provide: APP_FILTER,
+			useClass: GlobalExceptionsFilter,
+		},
+		{
+			provide: APP_FILTER,
+			useClass: HttpExceptionFilter,
 		},
 		{
 			provide: APP_FILTER,
@@ -86,14 +97,6 @@ import { WebAuthnChallengeModule } from "./web-authn-challenge/web-authn-challen
 		{
 			provide: APP_INTERCEPTOR,
 			useClass: ZodSerializerInterceptor,
-		},
-		{
-			provide: APP_FILTER,
-			useClass: GlobalExceptionsFilter,
-		},
-		{
-			provide: APP_FILTER,
-			useClass: HttpExceptionFilter,
 		},
 		{
 			provide: APP_INTERCEPTOR,

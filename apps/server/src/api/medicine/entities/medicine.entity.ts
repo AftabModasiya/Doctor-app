@@ -18,11 +18,11 @@ export class Medicine extends BaseEntity {
 	name!: string;
 
 	@Index("idx_medicines_company_id")
-	@Column({ name: "company_id" })
+	@Column()
 	companyId!: number;
 
 	@Index("idx_medicines_category_id")
-	@Column({ name: "category_id" })
+	@Column()
 	categoryId!: number;
 
 	// ---- Relations ----
@@ -30,14 +30,14 @@ export class Medicine extends BaseEntity {
 		() => Company,
 		(company: Company) => company.patients,
 	)
-	@JoinColumn({ name: "company_id" })
+	@JoinColumn()
 	company!: Relation<Company>;
 
 	@ManyToOne(
 		() => Category,
 		(category: Category) => category.medicines,
 	)
-	@JoinColumn({ name: "category_id" })
+	@JoinColumn()
 	category!: Relation<Category>;
 
 	@OneToMany(

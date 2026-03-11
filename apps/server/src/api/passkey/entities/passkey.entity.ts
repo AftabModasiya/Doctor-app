@@ -12,7 +12,7 @@ export class Passkey extends BaseEntity {
 	publicKey!: Buffer;
 
 	@Column({ type: "text" })
-	webauthnUserId!: string;
+	webAuthnUserId!: string;
 
 	@Column({ type: "bigint", default: 0 })
 	counter!: number;
@@ -31,7 +31,7 @@ export class Passkey extends BaseEntity {
 
 	@ManyToOne(
 		() => User,
-		(user) => user.passkey,
+		(user) => user.passkeys,
 	)
 	@JoinColumn()
 	user!: Relation<User>;
