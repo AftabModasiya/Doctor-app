@@ -1,4 +1,5 @@
 import { Passkey } from "src/api/passkey/entities/passkey.entity";
+import { WebAuthnChallenge } from "src/api/web-authn-challenge/entities/web-authn-challenge.entity";
 import { BaseEntity } from "src/common/entities/base.entity";
 import { Gender } from "src/shared/constants/enums.constants";
 import type { Relation } from "typeorm";
@@ -56,4 +57,10 @@ export class User extends BaseEntity {
 		(passkey) => passkey.user,
 	)
 	passkeys!: Relation<Passkey[]>;
+
+	@OneToMany(
+		() => WebAuthnChallenge,
+		(challenge: WebAuthnChallenge) => challenge.user,
+	)
+	webAuthnChallenges!: Relation<WebAuthnChallenge[]>;
 }

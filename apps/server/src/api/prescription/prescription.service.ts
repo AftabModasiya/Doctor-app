@@ -61,12 +61,11 @@ export class PrescriptionService {
 		return {
 			count: await this.prescriptionRepository.count(),
 			list: await this.prescriptionRepository.find({
-				relations: [
-					"patient",
-					"doctor",
-					"medicinePrescriptions",
-					"medicinePrescriptions.medicine",
-				],
+				relations: {
+					patient: { user: true },
+					doctor: { user: true },
+					medicinePrescriptions: { medicine: true },
+				},
 			}),
 			message: this.i18nService.t("success.PRESCRIPTION.LIST"),
 		};

@@ -8,5 +8,6 @@ import { WebAuthnChallengeService } from "./web-authn-challenge.service";
 	imports: [TypeOrmModule.forFeature([WebAuthnChallenge])],
 	controllers: [WebAuthnChallengeController],
 	providers: [WebAuthnChallengeService],
+	exports: [WebAuthnChallengeService],
 })
 export class WebAuthnChallengeModule {}
