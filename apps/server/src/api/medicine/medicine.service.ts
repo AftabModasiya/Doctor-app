@@ -26,6 +26,15 @@ export class MedicineService {
 		});
 	}
 
+	metadata() {
+		return this.medicineRepository.findAndCount({
+			select: {
+				id: true,
+				name: true,
+			},
+		});
+	}
+
 	findByCompany(companyId: number): Promise<Medicine[]> {
 		return this.medicineRepository.find({ where: { companyId } });
 	}

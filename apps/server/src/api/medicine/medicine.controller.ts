@@ -39,6 +39,16 @@ export class MedicineController {
 		};
 	}
 
+	@Get("metadata")
+	async metadata() {
+		const [list, count] = await this.medicineService.metadata();
+		return {
+			list,
+			count,
+			message: this.i18nService.t("success.MEDICINE.LIST"),
+		};
+	}
+
 	@Get(":id")
 	async findOne(@Param("id") id: string) {
 		const medicine = await this.medicineService.findOne(+id);
