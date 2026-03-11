@@ -5,8 +5,6 @@ import FeaturesSection from "./sections/FeaturesSection";
 import HeroSection from "./sections/HeroSection";
 import HowItWorks from "./sections/HowItWorks";
 import ModulesSection from "./sections/ModulesSection";
-import PricingSection from "./sections/PricingSection";
-import TestimonialsSection from "./sections/TestimonialsSection";
 
 export default function LandingPage() {
 	return (

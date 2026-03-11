@@ -1,5 +1,5 @@
 import { MetadataEndpoints } from "@endpoints/metadata-endpoint";
-import type { IMetadataResponse } from "@models/metadata";
+import type { IMetadataResponse, IMetadtaMedicineResponse } from "@models/metadata";
 import { GET } from "@shared/services/api-service";
 
 const getPatientMetadataApi = () => {
@@ -14,4 +14,10 @@ const getDoctorMetadataApi = () => {
     });
 };
 
-export { getPatientMetadataApi, getDoctorMetadataApi };
+const getMedicineMetadataApi = () => {
+    return GET<IMetadtaMedicineResponse>({
+        URL: MetadataEndpoints.getMedicineMetadata,
+    });
+};
+
+export { getPatientMetadataApi, getDoctorMetadataApi, getMedicineMetadataApi };

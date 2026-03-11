@@ -1,12 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { SliceNames } from "@constants/redux-constant";
-import type { IMetadataItem } from "@models/metadata";
-import { getDoctorMetadataAsyncThunk, getPatientMetadataAsyncThunk } from "./metadata-async-thunk";
-
+import type { IMetadataItem, IMEtadataMedicine } from "@models/metadata";
+import {
+    getPatientMetadataAsyncThunk,
+    getDoctorMetadataAsyncThunk,
+    getMedicineMetadataAsyncThunk,
+} from "./metadata-async-thunk";
 
 interface MetadataState {
     patients: IMetadataItem[];
     doctors: IMetadataItem[];
+    medicines: IMEtadataMedicine[];
     loading: boolean;
     error: string | null;
 }
@@ -14,6 +18,7 @@ interface MetadataState {
 const initialState: MetadataState = {
     patients: [],
     doctors: [],
+    medicines: [],
     loading: false,
     error: null,
 };
@@ -45,6 +50,18 @@ const metadataSlice = createSlice({
                 state.doctors = action.payload?.data?.list || [];
             })
             .addCase(getDoctorMetadataAsyncThunk.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
+            // Medicine Metadata
+            .addCase(getMedicineMetadataAsyncThunk.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getMedicineMetadataAsyncThunk.fulfilled, (state, action) => {
+                state.loading = false;
+                state.medicines = action.payload?.data?.list || [];
+            })
+            .addCase(getMedicineMetadataAsyncThunk.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
             });

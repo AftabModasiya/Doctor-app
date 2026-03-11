@@ -1,5 +1,4 @@
 import {
-	FaCalendarCheck,
 	FaChartBar,
 	FaCog,
 	FaNotesMedical,
