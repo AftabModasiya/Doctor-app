@@ -21,13 +21,13 @@ export class PasskeyController {
 		return this.passkeyService.verifyRegistration(user, body);
 	}
 
-	// @Post("login/options")
-	// generateLoginOptions(@Body("email") email: string) {
-	// 	return this.authService.generatePasskeyLoginOptions(email);
-	// }
+	@Post("login/options")
+	generateLoginOptions(@CurrentUser() user: ICurrentUser) {
+		return this.passkeyService.generateAuthenticationOptions(user);
+	}
 
-	// @Post("login/verify")
-	// verifyLogin(@Body() body: any) {
-	// 	return this.authService.verifyPasskeyLogin(body);
-	// }
+	@Post("login/verify")
+	verifyLogin(@CurrentUser() user: ICurrentUser, @Body() body: any) {
+		return this.passkeyService.verifyAuthentication(user, body);
+	}
 }

@@ -1,11 +1,15 @@
-import { Controller, Get, Query } from "@nestjs/common";
+import { Controller, Get, Query, UseGuards } from "@nestjs/common";
+import { ApiBearerAuth } from "@nestjs/swagger";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
+import { JWTAuthGuard } from "src/shared/guards/jwt-auth.guard";
 import { DoctorService } from "../doctor/doctor.service";
 import { PatientService } from "../patient/patient.service";
 import { PrescriptionService } from "../prescription/prescription.service";
 import { PatientChartQueryDto } from "./dto/patient-chart-query.dto";
 
+@UseGuards(JWTAuthGuard)
+@ApiBearerAuth()
 @Controller("dashboard")
 export class DashboardController {
 	constructor(

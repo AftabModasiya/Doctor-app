@@ -6,13 +6,18 @@ import {
 	Param,
 	Patch,
 	Post,
+	UseGuards,
 } from "@nestjs/common";
+import { ApiBearerAuth } from "@nestjs/swagger";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
+import { JWTAuthGuard } from "src/shared/guards/jwt-auth.guard";
 import { CreateMedicinePrescriptionDto } from "./dto/create-medicine-prescription.dto";
 import { UpdateMedicinePrescriptionDto } from "./dto/update-medicine-prescription.dto";
 import { MedicinePrescriptionService } from "./medicine-prescription.service";
 
+@UseGuards(JWTAuthGuard)
+@ApiBearerAuth()
 @Controller("medicine-prescription")
 export class MedicinePrescriptionController {
 	constructor(

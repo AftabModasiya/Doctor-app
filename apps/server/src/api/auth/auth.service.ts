@@ -1,6 +1,7 @@
 import {
 	BadRequestException,
 	Injectable,
+	NotFoundException,
 	UnauthorizedException,
 } from "@nestjs/common";
 import { I18nTranslations } from "generated/i18n.generated";
@@ -9,7 +10,10 @@ import { TokenType } from "src/shared/constants/enums.constants";
 import { ICurrentUser } from "src/shared/interfaces/current-user.interface";
 import { ITokenPayload } from "src/shared/interfaces/token.interface";
 import { JWTService } from "src/shared/services/jwt.service";
-import { comparePassword } from "src/shared/utils/helperMethods.utils";
+import {
+	comparePassword,
+	hashPassword,
+} from "src/shared/utils/helperMethods.utils";
 import { DeepPartial, FindOptionsWhere } from "typeorm";
 import { Token } from "../token/entities/token.entity";
 import { TokenService } from "../token/token.service";
@@ -85,7 +89,7 @@ export class AuthService {
 	async loginAdmin(
 		userId: number,
 		email: string,
-		deviceInfoPayload: { deviceToken?: string; deviceIp: string },
+		deviceInfoPayload: { deviceToken?: string; deviceIp?: string },
 	) {
 		const { deviceToken, deviceIp } = deviceInfoPayload;
 
@@ -141,5 +145,48 @@ export class AuthService {
 			accessToken,
 			refreshToken,
 		};
+	}
+
+	async processPasswordChangeRequest(
+		new_password: string,
+		old_password: string,
+		userId: number,
+	) {
+		const existingUser = await this.userService.findOneByQuery({
+			where: { id: userId },
+		});
+
+		if (!existingUser)
+			throw new NotFoundException(this.i18nService.t("error.USER.NOT_FOUND"));
+
+		const passwordMatch = await comparePassword(
+			old_password,
+			existingUser.password,
+		);
+
+		if (!passwordMatch)
+			throw new BadRequestException(
+				this.i18nService.t("error.USER.OLD_PASSWORD_INCORRECT"),
+			);
+
+		// Prevent setting the same password again
+		if (new_password === old_password)
+			throw new BadRequestException(
+				this.i18nService.t("error.USER.SAME_PASSWORD"),
+			);
+
+		const hashedPassword = await hashPassword(new_password);
+
+		return this.userService.update(userId, {
+			password: hashedPassword,
+			updatedBy: userId,
+		});
+	}
+
+	logout(user: ICurrentUser) {
+		return Promise.all([
+			this.tokenService.hardDeleteByQuery({ userId: user.id }),
+			this.userDeviceService.hardDeleteByQuery({ userId: user.id }),
+		]);
 	}
 }

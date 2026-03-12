@@ -61,4 +61,8 @@ export class UserDeviceService {
 		const device = await this.findOne(id);
 		await this.deviceRepository.softRemove(device);
 	}
+
+	hardDeleteByQuery(query: FindOptionsWhere<UserDevice>) {
+		return this.deviceRepository.delete(query);
+	}
 }

@@ -6,13 +6,18 @@ import {
 	Param,
 	Patch,
 	Post,
+	UseGuards,
 } from "@nestjs/common";
+import { ApiBearerAuth } from "@nestjs/swagger";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
+import { JWTAuthGuard } from "src/shared/guards/jwt-auth.guard";
 import { CreateTokenDto } from "./dto/create-token.dto";
 import { UpdateTokenDto } from "./dto/update-token.dto";
 import { TokenService } from "./token.service";
 
+@UseGuards(JWTAuthGuard)
+@ApiBearerAuth()
 @Controller("token")
 export class TokenController {
 	constructor(

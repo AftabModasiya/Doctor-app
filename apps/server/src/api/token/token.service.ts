@@ -55,4 +55,8 @@ export class TokenService {
 		const token = await this.findOne(id);
 		await this.tokenRepository.softRemove(token);
 	}
+
+	hardDeleteByQuery(query: FindOptionsWhere<Token>) {
+		return this.tokenRepository.delete(query);
+	}
 }

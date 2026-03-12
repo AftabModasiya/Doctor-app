@@ -32,7 +32,9 @@
 		"NOT_FOUND": "Specialization not found"
 	},
 	"USER": {
-		"NOT_FOUND": "User not found"
+		"NOT_FOUND": "User not found",
+		"OLD_PASSWORD_INCORRECT": "Old password is incorrect",
+		"SAME_PASSWORD": "New password cannot be the same as the old password"
 	},
 	"TOKEN": {
 		"NOT_FOUND": "Token not found"
@@ -45,5 +47,13 @@
 	},
 	"VALIDATION": {
 		"EMAIL_EXISTS": "Email already exists."
+	},
+	"PASS_KEY": {
+		"REGISTRATION_FAILED": "Passkey registration failed",
+		"NOT_FOUND": "No registered passkey found",
+		"AUTHENTICATION_FAILED": "Authentication failed"
+	},
+	"WEBAUTHNCHALLANGE": {
+		"NOT_FOUND": "No registration challenge found"
 	}
 }

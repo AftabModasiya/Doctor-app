@@ -1,15 +1,21 @@
-import { Injectable } from "@nestjs/common";
+import {
+	BadRequestException,
+	Injectable,
+	NotFoundException,
+} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { InjectRepository } from "@nestjs/typeorm";
 import {
+	generateAuthenticationOptions,
 	generateRegistrationOptions,
+	verifyAuthenticationResponse,
 	verifyRegistrationResponse,
-	// generateAuthenticationOptions,
-	// verifyAuthenticationResponse,
 } from "@simplewebauthn/server";
+import { I18nTranslations } from "generated/i18n.generated";
+import { I18nService } from "nestjs-i18n";
+import { getQuerySortOrder } from "src/shared/constants/app.constants";
 import { WebAuthnChallengeType } from "src/shared/constants/enums.constants";
 import { FIVE_MINUTES } from "src/shared/constants/variable.constants";
-// import { UserService } from "../user/user.service";
 import { ICurrentUser } from "src/shared/interfaces/current-user.interface";
 import { IEnvironmentVariables } from "src/shared/interfaces/env.interface";
 import { Repository } from "typeorm";
@@ -23,7 +29,7 @@ export class PasskeyService {
 		private readonly passkeyRepo: Repository<Passkey>,
 		private readonly webAuthnChallengeService: WebAuthnChallengeService,
 		private readonly configService: ConfigService<IEnvironmentVariables>,
-		// private readonly userService: UserService,
+		private readonly i18nService: I18nService<I18nTranslations>,
 	) {}
 
 	async generateRegistrationOptions(user: ICurrentUser) {
@@ -52,12 +58,13 @@ export class PasskeyService {
 	async verifyRegistration(user: ICurrentUser, body: any) {
 		const challenge = await this.webAuthnChallengeService.findOneByQuery({
 			where: { userId: user.id, type: WebAuthnChallengeType.REGISTER },
-			order: { createdAt: "DESC" },
+			order: { createdAt: getQuerySortOrder().DESC },
 		});
 
-		if (!challenge) {
-			throw new Error("No registration challenge found");
-		}
+		if (!challenge)
+			throw new NotFoundException(
+				this.i18nService.t("error.WEBAUTHNCHALLANGE.NOT_FOUND"),
+			);
 
 		const verification = await verifyRegistrationResponse({
 			response: body,
@@ -66,9 +73,10 @@ export class PasskeyService {
 			expectedRPID: this.configService.getOrThrow<string>("RP_ID"),
 		});
 
-		if (!verification.verified) {
-			throw new Error("Passkey registration failed");
-		}
+		if (!verification.verified)
+			throw new BadRequestException(
+				this.i18nService.t("error.PASS_KEY.REGISTRATION_FAILED"),
+			);
 
 		const { credential, credentialDeviceType, credentialBackedUp } =
 			verification.registrationInfo;
@@ -81,67 +89,77 @@ export class PasskeyService {
 			deviceType: credentialDeviceType,
 			backedUp: credentialBackedUp,
 			transports: credential.transports,
-			webAuthnUserId: String(user.id),
 		});
+
+		return { verificationSuccess: true };
+	}
+
+	async generateAuthenticationOptions(user: ICurrentUser) {
+		const passkeys = await this.passkeyRepo.find({
+			where: { userId: user.id },
+		});
+
+		const options = await generateAuthenticationOptions({
+			rpID: this.configService.getOrThrow<string>("RP_ID"),
+			allowCredentials: passkeys.map((p) => ({
+				id: p.credentialId,
+				transports: p.transports ?? undefined,
+			})),
+			userVerification: "preferred",
+		});
+
+		await this.webAuthnChallengeService.create({
+			userId: user.id,
+			challenge: options.challenge,
+			type: WebAuthnChallengeType.AUTHENTICATE,
+			expiresAt: new Date(Date.now() + FIVE_MINUTES),
+		});
+
+		return options;
+	}
+
+	async verifyAuthentication(user: ICurrentUser, body: any) {
+		const challenge = await this.webAuthnChallengeService.findOneByQuery({
+			where: { userId: user.id, type: WebAuthnChallengeType.AUTHENTICATE },
+			order: { createdAt: getQuerySortOrder().DESC },
+		});
+
+		if (!challenge)
+			throw new NotFoundException(
+				this.i18nService.t("error.WEBAUTHNCHALLANGE.NOT_FOUND"),
+			);
+
+		const passkey = await this.passkeyRepo.findOne({
+			where: { credentialId: body.id },
+		});
+
+		if (!passkey)
+			throw new NotFoundException(
+				this.i18nService.t("error.PASS_KEY.NOT_FOUND"),
+			);
+
+		const verification = await verifyAuthenticationResponse({
+			response: body,
+			expectedChallenge: challenge.challenge,
+			expectedOrigin: this.configService.getOrThrow<string>("BASE_URL"),
+			expectedRPID: this.configService.getOrThrow<string>("RP_ID"),
+			credential: {
+				id: passkey.credentialId,
+				publicKey: new Uint8Array(passkey.publicKey),
+				counter: passkey.counter,
+			},
+		});
+
+		if (!verification.verified)
+			throw new BadRequestException(
+				this.i18nService.t("error.PASS_KEY.AUTHENTICATION_FAILED"),
+			);
+
+		passkey.counter = verification.authenticationInfo.newCounter;
+		passkey.lastUsedAt = new Date();
+
+		await this.passkeyRepo.save(passkey);
 
 		return { success: true };
 	}
-
-	// async generateAuthenticationOptions(user: User) {
-	// 	const passkeys = await this.passkeyRepo.find({
-	// 		where: { userId: user.id },
-	// 	});
-
-	// 	const options = await generateAuthenticationOptions({
-	// 		rpID,
-	// 		allowCredentials: passkeys.map((p) => ({
-	// 			id: p.credentialId,
-	// 			transports: p.transports ?? undefined,
-	// 		})),
-	// 		userVerification: "preferred",
-	// 	});
-
-	// 	await this.challengeRepo.save({
-	// 		userId: user.id,
-	// 		challenge: options.challenge,
-	// 		type: "authentication",
-	// 		expiresAt: new Date(Date.now() + 5 * 60 * 1000),
-	// 	});
-
-	// 	return options;
-	// }
-
-	// async verifyAuthentication(user: User, body: any) {
-	// 	const challenge = await this.challengeRepo.findOne({
-	// 		where: { userId: user.id, type: "authentication" },
-	// 		order: { createdAt: "DESC" },
-	// 	});
-
-	// 	const passkey = await this.passkeyRepo.findOne({
-	// 		where: { credentialId: body.id },
-	// 	});
-
-	// 	const verification = await verifyAuthenticationResponse({
-	// 		response: body,
-	// 		expectedChallenge: challenge!.challenge,
-	// 		expectedOrigin: origin,
-	// 		expectedRPID: rpID,
-	// 		authenticator: {
-	// 			credentialID: passkey!.credentialId,
-	// 			credentialPublicKey: passkey!.publicKey,
-	// 			counter: passkey!.counter,
-	// 		},
-	// 	});
-
-	// 	if (!verification.verified) {
-	// 		throw new Error("Authentication failed");
-	// 	}
-
-	// 	passkey!.counter = verification.authenticationInfo.newCounter;
-	// 	passkey!.lastUsedAt = new Date();
-
-	// 	await this.passkeyRepo.save(passkey!);
-
-	// 	return { success: true };
-	// }
 }

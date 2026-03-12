@@ -33,3 +33,10 @@ export const getPasswordLength = () => {
 		MAX: 16,
 	};
 };
+
+export const getQuerySortOrder = () => {
+	return {
+		ASC: "ASC",
+		DESC: "DESC",
+	} as const;
+};
