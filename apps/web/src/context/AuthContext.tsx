@@ -2,70 +2,41 @@ import {
 	createContext,
 	type ReactNode,
 	useContext,
-	useEffect,
-	useState,
 } from "react";
-import type { AdminUser } from "../types";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { signInAsyncThunk, logOutAsyncThunk } from "../store/auth/auth-async-thunk";
 
 interface AuthContextType {
-	user: AdminUser | null;
+	user: any | null;
 	token: string | null;
 	isAuthenticated: boolean;
 	isLoading: boolean;
-	login: (email: string, password: string) => Promise<void>;
+	login: (email: string, password: string, deviceIp: string) => Promise<void>;
 	logout: () => void;
-	updateUser: (user: AdminUser) => void;
+	updateUser: (user: any) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Mock admin user for demo
-const MOCK_ADMIN: AdminUser = {
-	id: "ADM001",
-	name: "Dr. Admin Clarke",
-	email: "admin@mediadmin.com",
-	role: "Super Admin",
-};
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-	const [user, setUser] = useState<AdminUser | null>(null);
-	const [token, setToken] = useState<string | null>(null);
-	const [isLoading, setIsLoading] = useState(true);
+	const dispatch = useAppDispatch();
+	const { user, accessToken: token, isLoading } = useAppSelector((state) => state.auth);
 
-	useEffect(() => {
-		const storedToken = localStorage.getItem("token");
-		const storedUser = localStorage.getItem("user");
-		if (storedToken && storedUser) {
-			setToken(storedToken);
-			setUser(JSON.parse(storedUser));
+	const login = async (email: string, password: string, deviceIp: string) => {
+		const resultAction = await dispatch(signInAsyncThunk({ email, password, deviceIp }));
+		if (signInAsyncThunk.rejected.match(resultAction)) {
+			throw new Error("Invalid credentials");
 		}
-		setIsLoading(false);
-	}, []);
-
-	const login = async (email: string, password: string) => {
-		// Mock authentication - accepts any credentials with valid format
-		await new Promise((resolve) => setTimeout(resolve, 1000));
-		if (!email || !password) throw new Error("Invalid credentials");
-
-		const mockToken = `mock-jwt-token-${Date.now()}`;
-		const loggedUser = { ...MOCK_ADMIN, email };
-
-		localStorage.setItem("token", mockToken);
-		localStorage.setItem("user", JSON.stringify(loggedUser));
-		setToken(mockToken);
-		setUser(loggedUser);
 	};
 
 	const logout = () => {
-		localStorage.removeItem("token");
-		localStorage.removeItem("user");
-		setToken(null);
-		setUser(null);
+		dispatch(logOutAsyncThunk());
 	};
 
-	const updateUser = (updatedUser: AdminUser) => {
-		setUser(updatedUser);
-		localStorage.setItem("user", JSON.stringify(updatedUser));
+	const updateUser = (_updatedUser: any) => {
+		// This can be kept as a placeholder or connected to a Redux action if needed
+		console.warn("updateUser called but not fully implemented with Redux yet");
 	};
 
 	return (

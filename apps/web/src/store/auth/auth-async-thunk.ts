@@ -3,19 +3,17 @@ import type {
   TChangePasswordPayload,
   TErrorResponse,
   TLoginApiPayload,
-  TSendOtpViaEmailApiPayload,
   TSsoExchangePayload,
 } from "@models/auth";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AxiosError } from "axios";
 import {
+  adminLoginApi,
   authRefreshTokenApi,
-  authSignInApi,
   changePasswordApi,
   forgotPasswordApi,
   logOutApi,
   resetPasswordApi,
-  sendOtpViaEmailApi,
   verifyEmailApi,
   verifySubAdminEmailApi,
   verifyTokenApi,
@@ -37,7 +35,7 @@ const refreshTokenAsyncThunk = createAsyncThunk(
 const signInAsyncThunk = createAsyncThunk(
   AuthActionTypes.AUTH_LOGIN,
   async (payload: TLoginApiPayload) => {
-    const response = await authSignInApi(payload);
+    const response = await adminLoginApi(payload);
     return response?.data;
   },
 );
@@ -146,10 +144,10 @@ const changePasswordAsyncThunk = createAsyncThunk(
   },
 );
 
-const sendOtpViaEmailAsyncThunk = createAsyncThunk(
-  "auth/send-otp-via-email",
-  async (payload: TSendOtpViaEmailApiPayload) => {
-    const response = await sendOtpViaEmailApi(payload);
+const adminLoginAsyncThunk = createAsyncThunk(
+  "auth/admin-login",
+  async (payload: TLoginApiPayload) => {
+    const response = await adminLoginApi(payload);
     successToast(response?.data?.message);
     return response?.data;
   },
@@ -165,7 +163,7 @@ const ssoExchangeAsyncThunk = createAsyncThunk(
 
 export {
   refreshTokenAsyncThunk,
-  sendOtpViaEmailAsyncThunk,
+  adminLoginAsyncThunk,
   changePasswordAsyncThunk,
   editUserDetailsAsyncThunk,
   forgotPasswordAsyncThunk,

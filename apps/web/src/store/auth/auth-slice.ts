@@ -1,5 +1,9 @@
 import { SliceNames } from "@constants/redux-constant";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import {
+  logOutAsyncThunk,
+  signInAsyncThunk,
+} from "./auth-async-thunk";
 
 interface AuthState {
   user: any | null;
@@ -48,6 +52,38 @@ const authSlice = createSlice({
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(signInAsyncThunk.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(signInAsyncThunk.fulfilled, (state, action) => {
+        const authData = action.payload.data;
+        state.isLoading = false;
+        state.isAuthenticated = true;
+        state.user = authData.user;
+        state.accessToken = authData.accessToken;
+        state.refreshToken = authData.refreshToken;
+      })
+      .addCase(signInAsyncThunk.rejected, (state) => {
+        state.isLoading = false;
+        state.isAuthenticated = false;
+      })
+      .addCase(logOutAsyncThunk.fulfilled, (state) => {
+        state.user = null;
+        state.accessToken = null;
+        state.refreshToken = null;
+        state.companyId = null;
+        state.isAuthenticated = false;
+      })
+      .addCase(logOutAsyncThunk.rejected, (state) => {
+        state.user = null;
+        state.accessToken = null;
+        state.refreshToken = null;
+        state.companyId = null;
+        state.isAuthenticated = false;
+      });
   },
 });
 

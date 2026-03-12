@@ -13,7 +13,7 @@ interface ErrorResponse {
   [key: string]: unknown;
 }
 
-const backendBaseUrl = `http://localhost:5173/api`;
+const backendBaseUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5173/api";
 
 const axiosInstance = axios.create({
   baseURL: backendBaseUrl,
@@ -80,7 +80,7 @@ const setupInterceptors = (storeApi: MiddlewareAPI<Dispatch, TRootState>) => {
       if (
         error.response &&
         error.response.status === BackendResponse.UNAUTHORIZED &&
-        !requestUrl.includes(AuthEndpoints.sendOtpViaEamil) &&
+        !requestUrl.includes(AuthEndpoints.adminLogin) &&
         !requestUrl.includes(AuthEndpoints.signIn) &&
         !requestUrl.includes(AuthEndpoints.refreshToken) &&
         !requestUrl.includes(AuthEndpoints.forgotPassword) &&

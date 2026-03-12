@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import {
@@ -20,9 +20,23 @@ type FormData = { email: string; password: string };
 
 export default function LoginPage() {
 	const { t } = useTranslation();
-	const { login } = useAuth();
+	const { login, isLoading: authLoading } = useAuth();
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
+	const [deviceIp, setDeviceIp] = useState<string>("0.0.0.0");
+
+	useEffect(() => {
+		const fetchIp = async () => {
+			try {
+				const response = await fetch("https://api.ipify.org?format=json");
+				const data = await response.json();
+				setDeviceIp(data.ip);
+			} catch (error) {
+				console.error("Failed to fetch IP", error);
+			}
+		};
+		fetchIp();
+	}, []);
 
 	const schema = yup.object({
 		email: yup.string().email(t("validation.emailInvalid")).required(t("validation.emailRequired")),
@@ -47,11 +61,11 @@ export default function LoginPage() {
 	const onSubmit = async (data: FormData) => {
 		setLoading(true);
 		try {
-			await login(data.email, data.password);
+			await login(data.email, data.password, deviceIp);
 			toast.success(t("auth.toast.welcomeBack"));
 			navigate("/dashboard");
-		} catch {
-			toast.error(t("auth.toast.invalidCredentials"));
+		} catch (error: any) {
+			toast.error(error.message || t("auth.toast.invalidCredentials"));
 		} finally {
 			setLoading(false);
 		}
@@ -203,10 +217,10 @@ export default function LoginPage() {
 
 							<button
 								type="submit"
-								disabled={loading}
+								disabled={loading || authLoading}
 								className="w-full flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-xl transition-all duration-200 disabled:opacity-60 shadow-sm hover:shadow-md active:scale-[0.98]"
 							>
-								{loading ? (
+								{loading || authLoading ? (
 									<span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
 								) : (
 									<>
