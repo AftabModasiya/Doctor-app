@@ -23,4 +23,5 @@ export interface IEnvironmentVariables {
 	JWT_FORGOT_PASSWORD_EXPIRY: string;
 
 	RP_ID: string;
+	RP_ORIGINS: Array<string>;
 }

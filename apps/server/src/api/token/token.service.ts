@@ -51,6 +51,13 @@ export class TokenService {
 		return this.tokenRepository.save(token);
 	}
 
+	updateByQuery(
+		query: FindOptionsWhere<Token>,
+		updateTokenDto: DeepPartial<Token>,
+	) {
+		return this.tokenRepository.update(query, updateTokenDto);
+	}
+
 	async remove(id: number): Promise<void> {
 		const token = await this.findOne(id);
 		await this.tokenRepository.softRemove(token);

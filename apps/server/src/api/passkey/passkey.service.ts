@@ -46,7 +46,7 @@ export class PasskeyService {
 		});
 
 		await this.webAuthnChallengeService.create({
-			userId: user.id,
+			user: { id: user.id },
 			challenge: options.challenge,
 			type: WebAuthnChallengeType.REGISTER,
 			expiresAt: new Date(Date.now() + FIVE_MINUTES),
@@ -66,10 +66,14 @@ export class PasskeyService {
 				this.i18nService.t("error.WEBAUTHNCHALLANGE.NOT_FOUND"),
 			);
 
+		const expectedOrigins = JSON.parse(
+			this.configService.getOrThrow<string>("RP_ORIGINS") || "[]",
+		) as string[];
+
 		const verification = await verifyRegistrationResponse({
 			response: body,
 			expectedChallenge: challenge.challenge,
-			expectedOrigin: this.configService.getOrThrow<string>("BASE_URL"),
+			expectedOrigin: expectedOrigins,
 			expectedRPID: this.configService.getOrThrow<string>("RP_ID"),
 		});
 
@@ -82,7 +86,7 @@ export class PasskeyService {
 			verification.registrationInfo;
 
 		await this.passkeyRepo.save({
-			userId: user.id,
+			user: { id: user.id },
 			credentialId: credential.id,
 			publicKey: credential.publicKey,
 			counter: credential.counter,
@@ -109,7 +113,7 @@ export class PasskeyService {
 		});
 
 		await this.webAuthnChallengeService.create({
-			userId: user.id,
+			user: { id: user.id },
 			challenge: options.challenge,
 			type: WebAuthnChallengeType.AUTHENTICATE,
 			expiresAt: new Date(Date.now() + FIVE_MINUTES),
@@ -138,10 +142,14 @@ export class PasskeyService {
 				this.i18nService.t("error.PASS_KEY.NOT_FOUND"),
 			);
 
+		const expectedOrigins = JSON.parse(
+			this.configService.getOrThrow<string>("RP_ORIGINS") || "[]",
+		) as string[];
+
 		const verification = await verifyAuthenticationResponse({
 			response: body,
 			expectedChallenge: challenge.challenge,
-			expectedOrigin: this.configService.getOrThrow<string>("BASE_URL"),
+			expectedOrigin: expectedOrigins,
 			expectedRPID: this.configService.getOrThrow<string>("RP_ID"),
 			credential: {
 				id: passkey.credentialId,

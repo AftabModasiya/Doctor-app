@@ -161,6 +161,7 @@ export type I18nTranslations = {
             "DELETE": string;
         };
         "AUTH": {
+            "LOGIN_SUCCESSFUL": string;
             "PASSWORD_RESET": string;
             "LOGGED_OUT": string;
         };

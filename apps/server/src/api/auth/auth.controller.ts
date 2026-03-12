@@ -4,8 +4,10 @@ import { I18nTranslations } from "generated/i18n.generated";
 import { I18n, I18nContext } from "nestjs-i18n";
 import { CurrentUser } from "src/shared/decorators/current-user.decorator";
 import { JWTAuthGuard } from "src/shared/guards/jwt-auth.guard";
+import { JWTRefreshAuthGuard } from "src/shared/guards/jwt-refresh-auth.guard";
 import { LocalAdminAuthGuard } from "src/shared/guards/local-admin-auth.guard";
 import type { ICurrentUser } from "src/shared/interfaces/current-user.interface";
+import { ITokenPayload } from "src/shared/interfaces/token.interface";
 import { AuthService } from "./auth.service";
 import { ChangePasswordDto } from "./dto/change-passwod.dto";
 import { LoginAdminDto } from "./dto/login.dto";
@@ -25,6 +27,30 @@ export class AuthController {
 			deviceToken: payload.deviceToken,
 			deviceIp: payload.deviceIp,
 		});
+	}
+
+	@ApiOperation({ summary: "Get a new access token using refresh token" })
+	@UseGuards(JWTRefreshAuthGuard)
+	@ApiBearerAuth()
+	@Patch("refresh")
+	async refreshToken(
+		@I18n() i18n: I18nContext<I18nTranslations>,
+		@CurrentUser() user: ICurrentUser,
+	) {
+		const tokenPayload: ITokenPayload = {
+			email: user.email,
+			id: user.id,
+		};
+
+		const accessToken = await this.authService.refreshUser(
+			tokenPayload,
+			user.id,
+		);
+
+		return {
+			message: i18n.t("success.AUTH.LOGIN_SUCCESSFUL"),
+			accessToken,
+		};
 	}
 
 	@ApiOperation({ summary: "Change password for authenticated user" })

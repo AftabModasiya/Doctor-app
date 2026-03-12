@@ -142,9 +142,28 @@ export class AuthService {
 		]);
 
 		return {
+			message: this.i18nService.t("success.AUTH.LOGIN_SUCCESSFUL"),
 			accessToken,
 			refreshToken,
 		};
+	}
+
+	async refreshUser(tokenPayload: ITokenPayload, userId: number) {
+		const accessToken = this.JWTService.generateAccessToken(tokenPayload);
+
+		// Decode access token to get its expiry time
+		const decodedAccessToken = this.JWTService.verifyAccessToken(accessToken);
+		const expiry =
+			decodedAccessToken && typeof decodedAccessToken.exp === "number"
+				? new Date(decodedAccessToken.exp * 1000)
+				: null;
+
+		await this.tokenService.updateByQuery(
+			{ user: { id: userId }, tokenType: TokenType.ACCESS },
+			{ token: accessToken, expiresAt: expiry, updatedBy: userId },
+		);
+
+		return accessToken;
 	}
 
 	async processPasswordChangeRequest(

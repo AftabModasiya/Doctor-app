@@ -95,6 +95,7 @@
 		"DELETE": "Category deleted successfully"
 	},
 	"AUTH": {
+		"LOGIN_SUCCESSFUL": "Login successful",
 		"PASSWORD_RESET": "Password has been changes successfully",
 		"LOGGED_OUT": "Logged out successfully"
 	}
