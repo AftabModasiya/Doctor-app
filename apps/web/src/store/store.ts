@@ -3,7 +3,7 @@ import {
   REDUX_PERSISTENT_STORE_ENCRYPT_KEY,
   SliceNames,
 } from "@constants/redux-constant";
-import type { TRootState } from "@models/redux.store";
+
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import { persistReducer, persistStore } from "redux-persist";

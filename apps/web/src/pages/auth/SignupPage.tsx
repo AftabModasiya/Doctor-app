@@ -7,6 +7,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import { useAuth } from "../../context/AuthContext";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { registerPasskeyThunk } from "../../store/passkey/passkey-async-thunk";
 
 type FormData = {
 	name: string;
@@ -20,6 +22,8 @@ export default function SignupPage() {
 	const { login } = useAuth();
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
+	const dispatch = useAppDispatch();
+	const passkeyState = useAppSelector((state) => state.passkey);
 
 	const schema = yup.object({
 		name: yup.string().min(2, t("validation.nameMin")).required(t("validation.nameRequired")),
@@ -51,6 +55,14 @@ export default function SignupPage() {
 			toast.error(t("auth.toast.signupFailed"));
 		} finally {
 			setLoading(false);
+		}
+	};
+
+	const handlePasskeyRegister = async () => {
+		try {
+			await dispatch(registerPasskeyThunk()).unwrap();
+		} catch {
+			// Errors are handled in the thunk + slice (and surfaced in UI below)
 		}
 	};
 
@@ -163,6 +175,24 @@ export default function SignupPage() {
 								t("auth.createAccountBtn")
 							)}
 						</button>
+						<button
+							type="button"
+							onClick={handlePasskeyRegister}
+							disabled={passkeyState.isRegistering || loading}
+							className="w-full flex items-center justify-center gap-2 border border-primary-200 text-primary-700 font-semibold py-3 rounded-xl transition-all duration-200 disabled:opacity-60 hover:bg-primary-50"
+						>
+							{passkeyState.isRegistering ? (
+								<span className="h-5 w-5 animate-spin rounded-full border-2 border-primary-600 border-t-transparent" />
+							) : (
+								t("auth.registerWithPasskey")
+							)}
+						</button>
+						{passkeyState.successMessage && (
+							<p className="text-sm text-emerald-600">{passkeyState.successMessage}</p>
+						)}
+						{passkeyState.error && (
+							<p className="text-sm text-rose-600">{passkeyState.error}</p>
+						)}
 					</form>
 					<p className="mt-6 text-center text-sm text-gray-500">
 						{t("auth.alreadyHaveAccount")}{" "}

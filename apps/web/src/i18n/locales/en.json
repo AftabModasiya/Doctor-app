@@ -52,6 +52,7 @@
         "passwordPlaceholder": "Min 6 characters",
         "confirmPassword": "Confirm Password",
         "confirmPasswordPlaceholder": "Repeat your password",
+        "registerWithPasskey": "Register with Passkey",
         "alreadyHaveAccount": "Already have an account?",
         "resetPassword": {
             "title": "Reset Password",
