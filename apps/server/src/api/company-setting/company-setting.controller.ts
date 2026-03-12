@@ -6,13 +6,18 @@ import {
 	Param,
 	Patch,
 	Post,
+	UseGuards,
 } from "@nestjs/common";
+import { ApiBearerAuth } from "@nestjs/swagger";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
+import { JWTAuthGuard } from "src/shared/guards/jwt-auth.guard";
 import { CompanySettingService } from "./company-setting.service";
 import { CreateCompanySettingDto } from "./dto/create-company-setting.dto";
 import { UpdateCompanySettingDto } from "./dto/update-company-setting.dto";
 
+@UseGuards(JWTAuthGuard)
+@ApiBearerAuth()
 @Controller("company-setting")
 export class CompanySettingController {
 	constructor(

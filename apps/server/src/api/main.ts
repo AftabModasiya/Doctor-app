@@ -23,6 +23,7 @@ async function bootstrap() {
 		.setTitle("Doctor App API")
 		.setDescription("Doctor App REST API")
 		.setVersion("1.0")
+		.addBearerAuth()
 		.build();
 	const rawDocument = SwaggerModule.createDocument(app, config);
 	const document = cleanupOpenApiDoc(rawDocument);

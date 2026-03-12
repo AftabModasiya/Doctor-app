@@ -26,3 +26,8 @@ export enum TokenType {
 	RESET_PASSWORD = "reset_password",
 	VERIFY_EMAIL = "verify_email",
 }
+
+export enum WebAuthnChallengeType {
+	REGISTER = "register",
+	AUTHENTICATE = "authenticate",
+}

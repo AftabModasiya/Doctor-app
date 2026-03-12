@@ -14,5 +14,8 @@
 	"workspaces": [
 		"apps/*"
 	],
-	"packageManager": "npm@11.11.0"
+	"packageManager": "npm@11.11.0",
+	"dependencies": {
+		"@simplewebauthn/server": "^13.3.0"
+	}
 }

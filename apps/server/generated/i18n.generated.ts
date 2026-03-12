@@ -40,6 +40,8 @@ export type I18nTranslations = {
         };
         "USER": {
             "NOT_FOUND": string;
+            "OLD_PASSWORD_INCORRECT": string;
+            "SAME_PASSWORD": string;
         };
         "TOKEN": {
             "NOT_FOUND": string;
@@ -52,6 +54,14 @@ export type I18nTranslations = {
         };
         "VALIDATION": {
             "EMAIL_EXISTS": string;
+        };
+        "PASS_KEY": {
+            "REGISTRATION_FAILED": string;
+            "NOT_FOUND": string;
+            "AUTHENTICATION_FAILED": string;
+        };
+        "WEBAUTHNCHALLANGE": {
+            "NOT_FOUND": string;
         };
     };
     "success": {
@@ -149,6 +159,11 @@ export type I18nTranslations = {
             "VIEW": string;
             "UPDATE": string;
             "DELETE": string;
+        };
+        "AUTH": {
+            "LOGIN_SUCCESSFUL": string;
+            "PASSWORD_RESET": string;
+            "LOGGED_OUT": string;
         };
     };
 };

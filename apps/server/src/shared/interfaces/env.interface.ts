@@ -1,4 +1,5 @@
 export interface IEnvironmentVariables {
+	APP_NAME: string;
 	NODE_ENV: string;
 	PORT: number;
 	BASE_URL: string;
@@ -20,4 +21,7 @@ export interface IEnvironmentVariables {
 	JWT_ACCESS_EXPIRY: string;
 	JWT_REFRESH_EXPIRY: string;
 	JWT_FORGOT_PASSWORD_EXPIRY: string;
+
+	RP_ID: string;
+	RP_ORIGINS: Array<string>;
 }

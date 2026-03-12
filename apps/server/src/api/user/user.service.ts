@@ -6,9 +6,8 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
-import { FindOneOptions, Repository } from "typeorm";
+import { DeepPartial, FindOneOptions, Repository } from "typeorm";
 import type { CreateUserDto } from "./dto/create-user.dto";
-import type { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./entities/user.entity";
 
 @Injectable()
@@ -51,7 +50,7 @@ export class UserService {
 		return user;
 	}
 
-	async update(id: number, dto: UpdateUserDto): Promise<User> {
+	async update(id: number, dto: DeepPartial<User>): Promise<User> {
 		const user = await this.findOne(id);
 
 		if (dto.email && dto.email !== user.email) {

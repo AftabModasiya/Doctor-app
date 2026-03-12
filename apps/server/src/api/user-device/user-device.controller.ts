@@ -6,13 +6,18 @@ import {
 	Param,
 	Patch,
 	Post,
+	UseGuards,
 } from "@nestjs/common";
+import { ApiBearerAuth } from "@nestjs/swagger";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
+import { JWTAuthGuard } from "src/shared/guards/jwt-auth.guard";
 import { CreateUserDeviceDto } from "./dto/create-user-device.dto";
 import { UpdateUserDeviceDto } from "./dto/update-user-device.dto";
 import { UserDeviceService } from "./user-device.service";
 
+@UseGuards(JWTAuthGuard)
+@ApiBearerAuth()
 @Controller("user-device")
 export class UserDeviceController {
 	constructor(

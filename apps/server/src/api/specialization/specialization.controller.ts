@@ -6,13 +6,18 @@ import {
 	Param,
 	Patch,
 	Post,
+	UseGuards,
 } from "@nestjs/common";
+import { ApiBearerAuth } from "@nestjs/swagger";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
+import { JWTAuthGuard } from "src/shared/guards/jwt-auth.guard";
 import { CreateSpecializationDto } from "./dto/create-specialization.dto";
 import { UpdateSpecializationDto } from "./dto/update-specialization.dto";
 import { SpecializationService } from "./specialization.service";
 
+@UseGuards(JWTAuthGuard)
+@ApiBearerAuth()
 @Controller("specialization")
 export class SpecializationController {
 	constructor(
