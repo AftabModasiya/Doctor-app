@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
+
 import {
 	FaArrowRight,
 	FaEnvelope,
@@ -13,6 +13,7 @@ import {
 } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useAppSelector } from "../../store/store";
 import * as yup from "yup";
 import { useAuth } from "../../context/AuthContext";
 
@@ -20,9 +21,9 @@ type FormData = { email: string; password: string };
 
 export default function LoginPage() {
 	const { t } = useTranslation();
-	const { login, isLoading: authLoading } = useAuth();
+	const { login } = useAuth();
+	const { loading: authLoading } = useAppSelector((state) => state.auth);
 	const navigate = useNavigate();
-	const [loading, setLoading] = useState(false);
 	const [deviceIp, setDeviceIp] = useState<string>("0.0.0.0");
 
 	useEffect(() => {
@@ -59,15 +60,11 @@ export default function LoginPage() {
 	} = useForm<FormData>({ resolver: yupResolver(schema) });
 
 	const onSubmit = async (data: FormData) => {
-		setLoading(true);
 		try {
 			await login(data.email, data.password, deviceIp);
-			toast.success(t("auth.toast.welcomeBack"));
 			navigate("/dashboard");
 		} catch (error: any) {
-			toast.error(error.message || t("auth.toast.invalidCredentials"));
-		} finally {
-			setLoading(false);
+			// Thunk and context handles toasts and errors now
 		}
 	};
 
@@ -217,10 +214,10 @@ export default function LoginPage() {
 
 							<button
 								type="submit"
-								disabled={loading || authLoading}
+								disabled={authLoading}
 								className="w-full flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-xl transition-all duration-200 disabled:opacity-60 shadow-sm hover:shadow-md active:scale-[0.98]"
 							>
-								{loading || authLoading ? (
+								{authLoading ? (
 									<span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
 								) : (
 									<>

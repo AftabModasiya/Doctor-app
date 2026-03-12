@@ -32,11 +32,25 @@ const refreshTokenAsyncThunk = createAsyncThunk(
   },
 );
 
+const getErrorMessage = (
+  error: unknown,
+  fallback = "Something went wrong",
+): string => {
+  const axiosError = error as AxiosError<{ message?: string }>;
+  return axiosError?.response?.data?.message || axiosError?.message || fallback;
+};
+
 const signInAsyncThunk = createAsyncThunk(
   AuthActionTypes.AUTH_LOGIN,
-  async (payload: TLoginApiPayload) => {
-    const response = await adminLoginApi(payload);
-    return response?.data;
+  async (payload: TLoginApiPayload, { rejectWithValue }) => {
+    try {
+      const response = await adminLoginApi(payload);
+      return response?.data;
+    } catch (error: unknown) {
+      const message = getErrorMessage(error, "Login failed");
+      enqueueErrorToast(message);
+      return rejectWithValue(message);
+    }
   },
 );
 
@@ -146,10 +160,17 @@ const changePasswordAsyncThunk = createAsyncThunk(
 
 const adminLoginAsyncThunk = createAsyncThunk(
   "auth/admin-login",
-  async (payload: TLoginApiPayload) => {
-    const response = await adminLoginApi(payload);
-    successToast(response?.data?.message);
-    return response?.data;
+  async (payload: TLoginApiPayload, { rejectWithValue }) => {
+    try {
+      const response = await adminLoginApi(payload);
+      successToast(response?.data?.message);
+      return response?.data;
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError<TErrorResponse>;
+      const message =
+        axiosError?.response?.data?.message || axiosError?.message || "Login failed";
+      return rejectWithValue({ message });
+    }
   },
 );
 

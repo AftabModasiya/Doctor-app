@@ -144,6 +144,8 @@ const setupInterceptors = (storeApi: MiddlewareAPI<Dispatch, TRootState>) => {
         }
       }
 
+      // For all other errors (e.g., 400/404/500), propagate so thunks reject.
+      return Promise.reject(error);
     },
   );
 };

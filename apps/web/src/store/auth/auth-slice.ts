@@ -11,7 +11,7 @@ interface AuthState {
   refreshToken: string | null;
   companyId: string | number | null;
   isAuthenticated: boolean;
-  isLoading: boolean;
+  loading: boolean;
 }
 
 const initialState: AuthState = {
@@ -20,7 +20,7 @@ const initialState: AuthState = {
   refreshToken: null,
   companyId: null,
   isAuthenticated: false,
-  isLoading: false,
+  loading: false,
 };
 
 const authSlice = createSlice({
@@ -50,24 +50,28 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload;
+      state.loading = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(signInAsyncThunk.pending, (state) => {
-        state.isLoading = true;
+        state.loading = true;
       })
       .addCase(signInAsyncThunk.fulfilled, (state, action) => {
-        const authData = action.payload.data;
-        state.isLoading = false;
-        state.isAuthenticated = true;
-        state.user = authData.user;
-        state.accessToken = authData.accessToken;
-        state.refreshToken = authData.refreshToken;
+        state.loading = false;
+        const authData = action.payload?.data;
+        if (authData) {
+          state.isAuthenticated = true;
+          state.user = authData.user;
+          state.accessToken = authData.accessToken;
+          state.refreshToken = authData.refreshToken;
+        } else {
+          state.isAuthenticated = false;
+        }
       })
       .addCase(signInAsyncThunk.rejected, (state) => {
-        state.isLoading = false;
+        state.loading = false;
         state.isAuthenticated = false;
       })
       .addCase(logOutAsyncThunk.fulfilled, (state) => {

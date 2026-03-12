@@ -14,16 +14,6 @@ const authRefreshTokenApi = (): TApiResponse<TAuthGenerateTokenResponse> => {
   });
 };
 
-const authSignInApi = (
-  payload: TLoginApiPayload,
-): TApiResponse<TAuthGenerateTokenResponse> => {
-  return PATCH({
-    URL: AuthEndpoints.adminLogin,
-    body: {
-      ...payload,
-    },
-  });
-};
 
 const forgotPasswordApi = (payload: { email: string }) => {
   return PATCH({
@@ -197,7 +187,6 @@ const ssoExchangeApi = (
 export {
   adminLoginApi,
   authRefreshTokenApi,
-  authSignInApi,
   forgotPasswordApi,
   verifyTokenApi,
   resetPasswordApi,

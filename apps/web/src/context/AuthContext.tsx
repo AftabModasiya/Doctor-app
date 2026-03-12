@@ -10,7 +10,6 @@ interface AuthContextType {
 	user: any | null;
 	token: string | null;
 	isAuthenticated: boolean;
-	isLoading: boolean;
 	login: (email: string, password: string, deviceIp: string) => Promise<void>;
 	logout: () => void;
 	updateUser: (user: any) => void;
@@ -21,12 +20,12 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
 	const dispatch = useAppDispatch();
-	const { user, accessToken: token, isLoading } = useAppSelector((state) => state.auth);
+	const { user, accessToken: token } = useAppSelector((state) => state.auth);
 
 	const login = async (email: string, password: string, deviceIp: string) => {
 		const resultAction = await dispatch(signInAsyncThunk({ email, password, deviceIp }));
 		if (signInAsyncThunk.rejected.match(resultAction)) {
-			throw new Error("Invalid credentials");
+			throw new Error((resultAction.payload as any)?.message || "Invalid credentials");
 		}
 	};
 
@@ -45,7 +44,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 				user,
 				token,
 				isAuthenticated: !!token,
-				isLoading,
 				login,
 				logout,
 				updateUser,
