@@ -1,13 +1,13 @@
 import {
 	FaBell,
-	FaCalendarCheck,
+	// FaCalendarCheck,
 	FaChartBar,
 	FaMobile,
 	FaNotesMedical,
-	FaPills,
+	// FaPills,
 	FaShieldAlt,
 	FaUserInjured,
-	FaUserMd,
+	// FaUserMd,
 } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 
