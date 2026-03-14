@@ -2,6 +2,7 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { getNodeEnvironments } from "src/shared/constants/app.constants";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 
 @Module({
@@ -21,8 +22,8 @@ import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 				// 	join(__dirname, '..', 'shared', 'entities', '**', '*.entity.{ts,js}'),
 				// ],
 				namingStrategy: new SnakeNamingStrategy(),
-				synchronize: false,
-				logging: configService.get("NODE_ENV") === "development",
+				synchronize:
+					configService.get("NODE_ENV") === getNodeEnvironments().LOCAL,
 				extra: {
 					max: configService.get<number>("PG_POOL_MAX") || 10,
 					idleTimeoutMillis:

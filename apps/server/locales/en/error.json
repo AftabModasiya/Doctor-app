@@ -1,1 +1,59 @@
-{}
+{
+	"UNKNOWN": {
+		"INTERNAL_SERVER_ERROR": "Something went wrong! Please try again later"
+	},
+	"AUTH": {
+		"SESSION_EXPIRED": "Your session has expired. Please log in again to continue.",
+		"INVALID_CREDENTIAL": "Invalid credentials",
+		"PASSWORD_NOT_CONFIGURED": "Password not configured"
+	},
+	"PATIENT": {
+		"NOT_FOUND": "Patient not found"
+	},
+	"DOCTOR": {
+		"NOT_FOUND": "Doctor not found"
+	},
+	"PRESCRIPTION": {
+		"NOT_FOUND": "Prescription not found"
+	},
+	"MEDICINE": {
+		"NOT_FOUND": "Medicine not found"
+	},
+	"COMPANY": {
+		"NOT_FOUND": "Company not found"
+	},
+	"COMPANY_SETTING": {
+		"NOT_FOUND": "Company setting not found"
+	},
+	"DEGREE": {
+		"NOT_FOUND": "Degree not found"
+	},
+	"SPECIALIZATION": {
+		"NOT_FOUND": "Specialization not found"
+	},
+	"USER": {
+		"NOT_FOUND": "User not found",
+		"OLD_PASSWORD_INCORRECT": "Old password is incorrect",
+		"SAME_PASSWORD": "New password cannot be the same as the old password"
+	},
+	"TOKEN": {
+		"NOT_FOUND": "Token not found"
+	},
+	"USER_DEVICE": {
+		"NOT_FOUND": "User device not found"
+	},
+	"MEDICINE_PRESCRIPTION": {
+		"NOT_FOUND": "Medicine prescription not found"
+	},
+	"VALIDATION": {
+		"EMAIL_EXISTS": "Email already exists."
+	},
+	"PASS_KEY": {
+		"REGISTRATION_FAILED": "Passkey registration failed",
+		"NOT_FOUND": "No registered passkey found",
+		"AUTHENTICATION_FAILED": "Authentication failed"
+	},
+	"WEBAUTHNCHALLANGE": {
+		"NOT_FOUND": "No registration challenge found"
+	}
+}

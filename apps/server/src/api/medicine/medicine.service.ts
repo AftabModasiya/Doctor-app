@@ -1,15 +1,18 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { I18nTranslations } from "generated/i18n.generated";
+import { I18nService } from "nestjs-i18n";
 import { Repository } from "typeorm";
-import { Medicine } from "./entities/medicine.entity";
 import type { CreateMedicineDto } from "./dto/create-medicine.dto";
 import type { UpdateMedicineDto } from "./dto/update-medicine.dto";
+import { Medicine } from "./entities/medicine.entity";
 
 @Injectable()
 export class MedicineService {
 	constructor(
 		@InjectRepository(Medicine)
 		private readonly medicineRepository: Repository<Medicine>,
+		private readonly i18nService: I18nService<I18nTranslations>,
 	) {}
 
 	create(dto: CreateMedicineDto): Promise<Medicine> {
@@ -17,8 +20,19 @@ export class MedicineService {
 		return this.medicineRepository.save(medicine);
 	}
 
-	findAll(): Promise<Medicine[]> {
-		return this.medicineRepository.find();
+	findAll() {
+		return this.medicineRepository.findAndCount({
+			relations: { category: true },
+		});
+	}
+
+	metadata() {
+		return this.medicineRepository.findAndCount({
+			select: {
+				id: true,
+				name: true,
+			},
+		});
 	}
 
 	findByCompany(companyId: number): Promise<Medicine[]> {
@@ -27,7 +41,10 @@ export class MedicineService {
 
 	async findOne(id: number): Promise<Medicine> {
 		const medicine = await this.medicineRepository.findOne({ where: { id } });
-		if (!medicine) throw new NotFoundException(`Medicine #${id} not found`);
+		if (!medicine)
+			throw new NotFoundException(
+				this.i18nService.t(`error.MEDICINE.NOT_FOUND`),
+			);
 		return medicine;
 	}
 

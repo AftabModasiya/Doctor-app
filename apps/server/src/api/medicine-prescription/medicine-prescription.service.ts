@@ -1,15 +1,18 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { I18nTranslations } from "generated/i18n.generated";
+import { I18nService } from "nestjs-i18n";
 import { Repository } from "typeorm";
-import { MedicinePrescription } from "./entities/medicine-prescription.entity";
 import type { CreateMedicinePrescriptionDto } from "./dto/create-medicine-prescription.dto";
 import type { UpdateMedicinePrescriptionDto } from "./dto/update-medicine-prescription.dto";
+import { MedicinePrescription } from "./entities/medicine-prescription.entity";
 
 @Injectable()
 export class MedicinePrescriptionService {
 	constructor(
 		@InjectRepository(MedicinePrescription)
 		private readonly mpRepository: Repository<MedicinePrescription>,
+		private readonly i18nService: I18nService<I18nTranslations>,
 	) {}
 
 	create(dto: CreateMedicinePrescriptionDto): Promise<MedicinePrescription> {
@@ -18,23 +21,27 @@ export class MedicinePrescriptionService {
 	}
 
 	findAll(): Promise<MedicinePrescription[]> {
-		return this.mpRepository.find({ relations: ["medicine", "prescription"] });
+		return this.mpRepository.find({
+			relations: { medicine: true, prescription: true },
+		});
 	}
 
 	findByPrescription(prescriptionId: number): Promise<MedicinePrescription[]> {
 		return this.mpRepository.find({
 			where: { prescriptionId },
-			relations: ["medicine"],
+			relations: { medicine: true },
 		});
 	}
 
 	async findOne(id: number): Promise<MedicinePrescription> {
 		const mp = await this.mpRepository.findOne({
 			where: { id },
-			relations: ["medicine", "prescription"],
+			relations: { medicine: true, prescription: true },
 		});
 		if (!mp)
-			throw new NotFoundException(`MedicinePrescription #${id} not found`);
+			throw new NotFoundException(
+				this.i18nService.t(`error.MEDICINE_PRESCRIPTION.NOT_FOUND`),
+			);
 		return mp;
 	}
 
