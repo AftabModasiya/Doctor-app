@@ -22,22 +22,22 @@ export default function FeaturesSection() {
 			color: "bg-sky-100 text-sky-600 dark:bg-sky-900/40 dark:text-sky-400",
 			border: "hover:border-sky-200 dark:hover:border-sky-800",
 		},
-		{
-			icon: FaUserMd,
-			title: t("landing.features.items.doctors.title"),
-			description: t("landing.features.items.doctors.desc"),
-			color:
-				"bg-violet-100 text-violet-600 dark:bg-violet-900/40 dark:text-violet-400",
-			border: "hover:border-violet-200 dark:hover:border-violet-800",
-		},
-		{
-			icon: FaPills,
-			title: t("landing.features.items.medicines.title"),
-			description: t("landing.features.items.medicines.desc"),
-			color:
-				"bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400",
-			border: "hover:border-emerald-200 dark:hover:border-emerald-800",
-		},
+		// {
+		// 	icon: FaUserMd,
+		// 	title: t("landing.features.items.doctors.title"),
+		// 	description: t("landing.features.items.doctors.desc"),
+		// 	color:
+		// 		"bg-violet-100 text-violet-600 dark:bg-violet-900/40 dark:text-violet-400",
+		// 	border: "hover:border-violet-200 dark:hover:border-violet-800",
+		// },
+		// {
+		// 	icon: FaPills,
+		// 	title: t("landing.features.items.medicines.title"),
+		// 	description: t("landing.features.items.medicines.desc"),
+		// 	color:
+		// 		"bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400",
+		// 	border: "hover:border-emerald-200 dark:hover:border-emerald-800",
+		// },
 		{
 			icon: FaNotesMedical,
 			title: t("landing.features.items.prescriptions.title"),
@@ -45,14 +45,14 @@ export default function FeaturesSection() {
 			color: "bg-rose-100 text-rose-600 dark:bg-rose-900/40 dark:text-rose-400",
 			border: "hover:border-rose-200 dark:hover:border-rose-800",
 		},
-		{
-			icon: FaCalendarCheck,
-			title: t("landing.features.items.appointments.title"),
-			description: t("landing.features.items.appointments.desc"),
-			color:
-				"bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400",
-			border: "hover:border-amber-200 dark:hover:border-amber-800",
-		},
+		// {
+		// 	icon: FaCalendarCheck,
+		// 	title: t("landing.features.items.appointments.title"),
+		// 	description: t("landing.features.items.appointments.desc"),
+		// 	color:
+		// 		"bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400",
+		// 	border: "hover:border-amber-200 dark:hover:border-amber-800",
+		// },
 		{
 			icon: FaChartBar,
 			title: t("landing.features.items.reports.title"),

@@ -15,13 +15,13 @@ export default function LandingFooter() {
 	const { t } = useTranslation();
 
 	const footerLinks = {
-		[t("landing.footer.product")]: [
-			t("landing.nav.features"),
-			t("landing.nav.modules"),
-			t("landing.nav.pricing"),
-			t("landing.footer.changelog"),
-			t("landing.footer.roadmap")
-		],
+		// [t("landing.footer.product")]: [
+		// 	t("landing.nav.features"),
+		// 	t("landing.nav.modules"),
+		// 	t("landing.nav.pricing"),
+		// 	t("landing.footer.changelog"),
+		// 	t("landing.footer.roadmap")
+		// ],
 		[t("landing.footer.company")]: [
 			t("landing.footer.aboutUs"),
 			t("landing.footer.blog"),
@@ -63,11 +63,11 @@ export default function LandingFooter() {
 						</p>
 						<div className="space-y-2">
 							{[
-								{ icon: FaPhone, text: "+1 (800) 555-MEDI" },
+								{ icon: FaPhone, text: "+91 9106633917" },
 								{ icon: FaEnvelope, text: "hello@mediadmin.io" },
 								{
 									icon: FaMapMarkerAlt,
-									text: "123 Health St, San Francisco, CA",
+									text: "123 Health St, SG Highway, Ahmedabad, Gujarat",
 								},
 							].map(({ icon: Icon, text }) => (
 								<div
