@@ -1,8 +1,8 @@
-import type React from "react";
+// import type React from "react";
 import {
 	FaArrowUp,
-	FaCalendarAlt,
-	FaExclamationTriangle,
+	// FaCalendarAlt,
+	// FaExclamationTriangle,
 	FaNotesMedical,
 	FaUserInjured,
 	FaUserMd,
@@ -11,8 +11,8 @@ import { useTranslation } from "react-i18next";
 import {
 	Area,
 	AreaChart,
-	Bar,
-	BarChart,
+	// Bar,
+	// BarChart,
 	CartesianGrid,
 	Cell,
 	Pie,
@@ -22,11 +22,11 @@ import {
 	XAxis,
 	YAxis,
 } from "recharts";
-import Badge from "../../components/ui/Badge";
+// import Badge from "../../components/ui/Badge";
 import {
 	chartData as chartDataMock,
-	mockActivity,
-	mockAppointments,
+	// mockActivity,
+	// mockAppointments,
 } from "../../utils/mockData";
 
 import { useEffect, useMemo } from "react";
@@ -36,31 +36,31 @@ import {
     getPatientChartAsyncThunk 
 } from "@store/dashboard/dashboard-async-thunk";
 
-const activityIcons: Record<string, React.ReactNode> = {
-	calendar: <FaCalendarAlt className="h-3.5 w-3.5" />,
-	patient: <FaUserInjured className="h-3.5 w-3.5" />,
-	prescription: <FaNotesMedical className="h-3.5 w-3.5" />,
-	medicine: <FaExclamationTriangle className="h-3.5 w-3.5" />,
-	doctor: <FaUserMd className="h-3.5 w-3.5" />,
-};
+// const activityIcons: Record<string, React.ReactNode> = {
+// 	calendar: <FaCalendarAlt className="h-3.5 w-3.5" />,
+// 	patient: <FaUserInjured className="h-3.5 w-3.5" />,
+// 	prescription: <FaNotesMedical className="h-3.5 w-3.5" />,
+// 	medicine: <FaExclamationTriangle className="h-3.5 w-3.5" />,
+// 	doctor: <FaUserMd className="h-3.5 w-3.5" />,
+// };
 
-const activityColors: Record<string, string> = {
-	calendar: "bg-sky-100 text-sky-600",
-	patient: "bg-emerald-100 text-emerald-600",
-	prescription: "bg-violet-100 text-violet-600",
-	medicine: "bg-amber-100 text-amber-600",
-	doctor: "bg-rose-100 text-rose-600",
-};
+// const activityColors: Record<string, string> = {
+// 	calendar: "bg-sky-100 text-sky-600",
+// 	patient: "bg-emerald-100 text-emerald-600",
+// 	prescription: "bg-violet-100 text-violet-600",
+// 	medicine: "bg-amber-100 text-amber-600",
+// 	doctor: "bg-rose-100 text-rose-600",
+// };
 
-const appointmentStatusVariant: Record<
-	string,
-	"success" | "warning" | "info" | "danger" | "neutral"
-> = {
-	Confirmed: "success",
-	Pending: "warning",
-	Completed: "info",
-	Cancelled: "danger",
-};
+// const appointmentStatusVariant: Record<
+// 	string,
+// 	"success" | "warning" | "info" | "danger" | "neutral"
+// > = {
+// 	Confirmed: "success",
+// 	Pending: "warning",
+// 	Completed: "info",
+// 	Cancelled: "danger",
+// };
 
 export default function DashboardPage() {
 	const { t } = useTranslation();
@@ -85,7 +85,7 @@ export default function DashboardPage() {
 		}));
 	}, [chartData]);
 
-	const todayAppts = mockAppointments.filter((a) => a.date === "2025-03-05");
+	// const todayAppts = mockAppointments.filter((a) => a.date === "2025-03-05");
 
 	const distributionData = useMemo(() => {
 		return [
