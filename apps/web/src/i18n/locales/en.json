@@ -16,7 +16,8 @@
         "add": "Add",
         "saveChanges": "Save Changes",
         "loading": "Loading...",
-        "dashboard": "Dashboard"
+        "dashboard": "Dashboard",
+        "login": "Login"
     },
     "validation": {
         "nameMin": "Min 2 characters",
@@ -88,6 +89,7 @@
         "prescriptions": "Prescriptions",
         "appointments": "Appointments",
         "reports": "Reports",
+        "appSettings": "App Settings",
         "settings": "Settings"
     },
     "sidebar": {
@@ -105,10 +107,12 @@
         "prescriptions": "Prescriptions",
         "appointmentsToday": "Appointments Today",
         "patientGrowth": "Patient Growth",
-        "last7Months": "Last 7 months",
+        "last7Months": "Last 12 months",
         "vsLastPeriod": "+18% vs last period",
         "appointments": "Appointments",
         "statusBreakdown": "Status breakdown",
+        "overview": "Overview",
+        "distribution": "Total Distribution",
         "weeklyAppointments": "Weekly Appointments",
         "weeklyVolume": "This week's appointment volume",
         "todaySchedule": "Today's Schedule",
@@ -162,26 +166,43 @@
         "title": "Doctors",
         "onStaff": "doctors on staff",
         "addDoctor": "Add Doctor",
-        "searchPlaceholder": "Search by name or specialization…",
+        "searchPlaceholder": "Search by name, email or ID…",
+        "noDoctor": "No doctors found",
         "experience": "Experience",
         "fee": "Fee",
         "patients": "Patients",
         "rating": "Rating",
         "availableDays": "Available Days",
+        "columns": {
+            "doctorId": "Doctor ID",
+            "doctor": "Doctor",
+            "ageGender": "Age / Gender",
+            "experience": "Experience",
+            "specialization": "Specialization",
+            "phone": "Phone",
+            "actions": "Actions"
+        },
         "modal": {
             "addTitle": "Add Doctor",
             "editTitle": "Edit Doctor",
             "removeTitle": "Remove Doctor",
+            "viewTitle": "Doctor Profile",
+            "deleteTitle": "Confirm Delete",
             "fullName": "Full Name",
             "fullNamePlaceholder": "Dr. Jane Smith",
             "specialization": "Specialization",
+            "specializationId": "Specialization ID",
             "qualification": "Qualification",
             "qualificationPlaceholder": "MD, FACC",
+            "degree": "Degree",
             "email": "Email",
-            "emailPlaceholder": "doctor@mediadmin.com",
+            "emailPlaceholder": "doctor@hospital.com",
             "phone": "Phone",
             "phonePlaceholder": "+1 555-0200",
+            "age": "Age",
+            "gender": "Gender",
             "experience": "Experience (years)",
+            "graduationDate": "Graduation Date",
             "consultationFee": "Consultation Fee ($)",
             "status": "Status",
             "availability": "Availability",
@@ -190,7 +211,19 @@
             "inactive": "Inactive",
             "removeConfirm": "from the system?",
             "addBtn": "Add Doctor",
-            "saveBtn": "Save"
+            "saveBtn": "Save Changes",
+            "deleteBtn": "Delete"
+        },
+        "view": {
+            "age": "Age",
+            "gender": "Gender",
+            "experience": "Experience",
+            "phone": "Phone",
+            "email": "Email",
+            "specialization": "Specialization",
+            "degree": "Degree",
+            "graduationDate": "Graduation Date",
+            "registered": "Registered"
         },
         "toast": {
             "added": "Doctor added",
@@ -303,11 +336,77 @@
     },
     "prescriptions": {
         "title": "Prescriptions",
-        "subtitle": "Manage and track patient prescriptions"
+        "subtitle": "Manage and track patient prescriptions",
+        "totalPrescriptions": "total prescriptions",
+        "newPrescription": "New Prescription",
+        "searchPlaceholder": "Search by ID, patient or diagnosis...",
+        "noPrescriptions": "No prescriptions found",
+        "item": "item",
+        "items": "items",
+        "columns": {
+            "rxId": "Rx ID",
+            "patient": "Patient",
+            "doctor": "Doctor",
+            "diagnosis": "Diagnosis",
+            "date": "Date",
+            "medicines": "Medicines",
+            "status": "Status"
+        },
+        "modal": {
+            "viewTitle": "Prescription",
+            "addTitle": "Create Prescription",
+            "addBtn": "Create Prescription",
+            "patient": "Patient",
+            "doctor": "Doctor",
+            "date": "Date",
+            "diagnosis": "Diagnosis",
+            "diagnosisPlaceholder": "e.g. Seasonal Allergy",
+            "prescribedMedicines": "Prescribed Medicines",
+            "medicines": "Medicines",
+            "addMed": "Add Medicine",
+            "selectPatient": "Select patient...",
+            "selectDoctor": "Select doctor...",
+            "selectMed": "Select medicine...",
+            "dosagePlaceholder": "Dosage (e.g. 500mg)",
+            "frequencyPlaceholder": "Frequency (e.g. 2x Daily)",
+            "durationPlaceholder": "Duration (e.g. 5 Days)",
+            "notes": "Notes",
+            "notesPlaceholder": "Additional instructions...",
+            "doctorNotes": "Doctor's Notes"
+        },
+        "status": {
+            "active": "Active",
+            "completed": "Completed",
+            "cancelled": "Cancelled"
+        },
+        "toast": {
+            "fillRequired": "Please fill all required fields",
+            "created": "Prescription created successfully"
+        }
     },
     "reports": {
         "title": "Reports",
-        "subtitle": "View analytics and generate reports"
+        "subtitle": "View analytics and generate reports",
+        "stats": {
+            "totalPatients": "Total Patients",
+            "active": "Active",
+            "totalPrescriptions": "Total Prescriptions",
+            "totalAppointments": "Total Appointments"
+        },
+        "chart": {
+            "patientsByGender": "Patients by Gender",
+            "appointmentsByMonth": "Appointments by Month",
+            "prescriptionsByMonth": "Prescriptions by Month",
+            "title": "Charts",
+            "subtitle": "View analytics and generate reports",
+            "appointments": "Appointments",
+            "prescriptions": "Prescriptions",
+            "patients": "Patients"
+        },
+        "tabs": {
+            "patientReport": "Patient Report",
+            "prescriptionReport": "Prescription Report"
+        }
     },
     "settings": {
         "title": "Settings",
@@ -511,7 +610,7 @@
         },
         "modules": {
             "badge": "Modules",
-            "title1": "8 Powerful Modules,",
+            "title1": "7 Powerful Modules,",
             "titleHighlight": "One Platform",
             "subtitle": "Each module is purpose-built for hospital operations, designed to work seamlessly together.",
             "items": {
@@ -650,7 +749,7 @@
         "cta": {
             "title": "Start managing your hospital",
             "titleHighlight": "smarter today",
-            "subtitle": "Join over 500 hospitals and clinics already using MediAdmin to streamline operations, improve patient outcomes, and grow their practice.",
+            "subtitle": "Join hospitals and clinics already using MediAdmin to streamline operations, improve patient outcomes, and grow their practice.",
             "startTrial": "Start Your Free Trial",
             "signInDashboard": "Sign In to Dashboard",
             "perks": {
@@ -659,6 +758,48 @@
                 "trial": "14-day free trial",
                 "cancel": "Cancel anytime"
             }
+        }
+    },
+    "appSettings": {
+        "title": "App Settings",
+        "subtitle": "Configure global settings for Categories, Specializations, and Degrees",
+        "tabs": {
+            "category": "Category",
+            "specialization": "Specialization",
+            "degree": "Degree"
+        },
+        "columns": {
+            "id": "ID",
+            "name": "Name",
+            "actions": "Actions"
+        },
+        "category": {
+            "total": "categories managed",
+            "add": "Add Category",
+            "empty": "No categories found",
+            "addTitle": "Add Category",
+            "editTitle": "Edit Category",
+            "namePlaceholder": "Enter category name..."
+        },
+        "specialization": {
+            "total": "specializations managed",
+            "add": "Add Specialization",
+            "empty": "No specializations found",
+            "addTitle": "Add Specialization",
+            "editTitle": "Edit Specialization",
+            "namePlaceholder": "Enter specialization name..."
+        },
+        "degree": {
+            "total": "degrees managed",
+            "add": "Add Degree",
+            "empty": "No degrees found",
+            "addTitle": "Add Degree",
+            "editTitle": "Edit Degree",
+            "namePlaceholder": "Enter degree name..."
+        },
+        "modal": {
+            "deleteTitle": "Confirm Delete",
+            "deleteConfirm": "Are you sure you want to delete"
         }
     }
 }

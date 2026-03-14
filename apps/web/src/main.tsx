@@ -1,37 +1,17 @@
 import { Analytics } from "@vercel/analytics/react";
 import ReactDOM from "react-dom/client";
-import { Toaster } from "react-hot-toast";
-import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 import App from "./App";
-import { AuthProvider } from "./context/AuthContext";
-import { ThemeProvider } from "./context/ThemeContext";
 import "./i18n";
 import "./index.css";
+import store, { persistor } from "./store/store";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <BrowserRouter>
-    <ThemeProvider>
-      <AuthProvider>
-        <App />
-        <Analytics />
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 3000,
-            style: {
-              background: "#fff",
-              color: "#1a1a1a",
-              borderRadius: "12px",
-              border: "1px solid #f0f0f0",
-              boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1)",
-              fontSize: "14px",
-              fontFamily: "DM Sans, sans-serif",
-            },
-            success: { iconTheme: { primary: "#22c55e", secondary: "#fff" } },
-            error: { iconTheme: { primary: "#f43f5e", secondary: "#fff" } },
-          }}
-        />
-      </AuthProvider>
-    </ThemeProvider>
-  </BrowserRouter>,
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <App />
+      <Analytics />
+    </PersistGate>
+  </Provider>,
 );

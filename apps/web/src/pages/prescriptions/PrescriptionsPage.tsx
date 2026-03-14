@@ -8,11 +8,15 @@ import Modal from "../../components/ui/Modal";
 import Table from "../../components/ui/Table";
 import type { Prescription, PrescriptionMedicine } from "../../types";
 import {
-	mockDoctors,
 	mockMedicines,
-	mockPatients,
 	mockPrescriptions,
 } from "../../utils/mockData";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import {
+	getDoctorMetadataAsyncThunk,
+	getPatientMetadataAsyncThunk,
+} from "../../store/metadata/metadata-async-thunk";
+import { useEffect } from "react";
 
 const statusVariant: Record<string, "success" | "info" | "danger"> = {
 	Active: "success",
@@ -22,6 +26,18 @@ const statusVariant: Record<string, "success" | "info" | "danger"> = {
 
 export default function PrescriptionsPage() {
 	const { t } = useTranslation();
+	const dispatch = useAppDispatch();
+
+	// Get metadata from store
+	const { patients: patientMetadata, doctors: doctorMetadata } = useAppSelector(
+		(state) => state.metadata,
+	);
+
+	useEffect(() => {
+		dispatch(getPatientMetadataAsyncThunk());
+		dispatch(getDoctorMetadataAsyncThunk());
+	}, [dispatch]);
+
 	const [prescriptions, setPrescriptions] =
 		useState<Prescription[]>(mockPrescriptions);
 	const [search, setSearch] = useState("");
@@ -75,14 +91,14 @@ export default function PrescriptionsPage() {
 			toast.error(t("prescriptions.toast.fillRequired"));
 			return;
 		}
-		const patient = mockPatients.find((p) => p.id === form.patientId);
-		const doctor = mockDoctors.find((d) => d.id === form.doctorId);
+		const patient = patientMetadata.find((p) => p.id === Number(form.patientId));
+		const doctor = doctorMetadata.find((d) => d.id === Number(form.doctorId));
 		const newRx: Prescription = {
 			id: `RX${(prescriptions.length + 1).toString().padStart(3, "0")}`,
 			patientId: form.patientId,
-			patientName: patient?.name || "",
+			patientName: patient?.user.name || "",
 			doctorId: form.doctorId,
-			doctorName: doctor?.name || "",
+			doctorName: doctor?.user.name || "",
 			date: new Date().toISOString().split("T")[0],
 			diagnosis: form.diagnosis,
 			medicines: selectedMeds,
@@ -151,7 +167,7 @@ export default function PrescriptionsPage() {
 			header: t("prescriptions.columns.status"),
 			render: (p: Prescription) => (
 				<Badge variant={statusVariant[p.status]} dot>
-					{p.status}
+					{t(`prescriptions.status.${p.status.toLowerCase()}`)}
 				</Badge>
 			),
 		},
@@ -301,9 +317,9 @@ export default function PrescriptionsPage() {
 								className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
 							>
 								<option value="">{t("prescriptions.modal.selectPatient")}</option>
-								{mockPatients.map((p) => (
+								{patientMetadata.map((p) => (
 									<option key={p.id} value={p.id}>
-										{p.name}
+										{p.user.name}
 									</option>
 								))}
 							</select>
@@ -320,9 +336,9 @@ export default function PrescriptionsPage() {
 								className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
 							>
 								<option value="">{t("prescriptions.modal.selectDoctor")}</option>
-								{mockDoctors.map((d) => (
+								{doctorMetadata.map((d) => (
 									<option key={d.id} value={d.id}>
-										{d.name}
+										{d.user.name}
 									</option>
 								))}
 							</select>

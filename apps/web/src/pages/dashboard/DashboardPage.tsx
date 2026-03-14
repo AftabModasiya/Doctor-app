@@ -2,7 +2,6 @@ import type React from "react";
 import {
 	FaArrowUp,
 	FaCalendarAlt,
-	FaCalendarCheck,
 	FaExclamationTriangle,
 	FaNotesMedical,
 	FaUserInjured,
@@ -25,10 +24,17 @@ import {
 } from "recharts";
 import Badge from "../../components/ui/Badge";
 import {
-	chartData,
+	chartData as chartDataMock,
 	mockActivity,
 	mockAppointments,
 } from "../../utils/mockData";
+
+import { useEffect, useMemo } from "react";
+import { useAppDispatch, useAppSelector } from "@store/store";
+import { 
+    getDashboardCountsAsyncThunk, 
+    getPatientChartAsyncThunk 
+} from "@store/dashboard/dashboard-async-thunk";
 
 const activityIcons: Record<string, React.ReactNode> = {
 	calendar: <FaCalendarAlt className="h-3.5 w-3.5" />,
@@ -58,40 +64,58 @@ const appointmentStatusVariant: Record<
 
 export default function DashboardPage() {
 	const { t } = useTranslation();
+	const dispatch = useAppDispatch();
+	const { counts, chartData, loading, chartLoading } = useAppSelector((state) => state.dashboard);
+	
+	useEffect(() => {
+		dispatch(getDashboardCountsAsyncThunk());
+		
+		const currentYear = new Date().getFullYear();
+		dispatch(getPatientChartAsyncThunk({
+			startDate: `${currentYear}-01-01`,
+			endDate: `${currentYear}-12-31`
+		}));
+	}, [dispatch]);
+
+	const formattedChartData = useMemo(() => {
+		if (!chartData) return [];
+		return chartData.labels.map((label, index) => ({
+			month: label,
+			patients: chartData.data[index],
+		}));
+	}, [chartData]);
+
 	const todayAppts = mockAppointments.filter((a) => a.date === "2025-03-05");
+
+	const distributionData = useMemo(() => {
+		return [
+			{ name: t("dashboard.totalPatients"), value: counts?.totalPatientCount ?? 0, color: "#0ea5e9" },
+			{ name: t("dashboard.totalDoctors"), value: counts?.totalDoctorCount ?? 0, color: "#8b5cf6" },
+			{ name: t("dashboard.prescriptions"), value: counts?.prescriptionDoctorCount ?? 0, color: "#10b981" },
+		];
+	}, [counts, t]);
 
 	const stats = [
 		{
 			label: t("dashboard.totalPatients"),
-			value: "267",
-			change: t("dashboard.thisMonth"),
+			value: loading ? "..." : String(counts?.totalPatientCount ?? 0),
 			icon: FaUserInjured,
 			color: "bg-sky-50 text-sky-600",
 			trend: "up",
 		},
 		{
 			label: t("dashboard.totalDoctors"),
-			value: "6",
-			change: t("dashboard.onLeave"),
+			value: loading ? "..." : String(counts?.totalDoctorCount ?? 0),
 			icon: FaUserMd,
 			color: "bg-violet-50 text-violet-600",
 			trend: "neutral",
 		},
 		{
 			label: t("dashboard.prescriptions"),
-			value: "48",
-			change: t("dashboard.thisWeek"),
+			value: loading ? "..." : String(counts?.prescriptionDoctorCount ?? 0),
 			icon: FaNotesMedical,
 			color: "bg-emerald-50 text-emerald-600",
 			trend: "up",
-		},
-		{
-			label: t("dashboard.appointmentsToday"),
-			value: "4",
-			change: t("dashboard.confirmed"),
-			icon: FaCalendarCheck,
-			color: "bg-amber-50 text-amber-600",
-			trend: "neutral",
 		},
 	];
 
@@ -106,8 +130,8 @@ export default function DashboardPage() {
 			</div>
 
 			{/* Stat Cards */}
-			<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 stagger-children">
-				{stats.map(({ label, value, change, icon: Icon, color, trend }) => (
+			<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 stagger-children">
+				{stats.map(({ label, value, icon: Icon, color, trend }) => (
 					<div
 						key={label}
 						className="bg-white rounded-2xl border border-gray-100 shadow-card p-5 card-hover animate-fade-in"
@@ -126,7 +150,6 @@ export default function DashboardPage() {
 						</div>
 						<p className="text-3xl font-bold text-gray-900 mb-1">{value}</p>
 						<p className="text-sm font-medium text-gray-600">{label}</p>
-						<p className="text-xs text-gray-400 mt-0.5">{change}</p>
 					</div>
 				))}
 			</div>
@@ -142,63 +165,68 @@ export default function DashboardPage() {
 							</h2>
 							<p className="text-xs text-gray-500 mt-0.5">{t("dashboard.last7Months")}</p>
 						</div>
-						<span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-2.5 py-1 rounded-lg">
-							{t("dashboard.vsLastPeriod")}
-						</span>
+						
 					</div>
-					<ResponsiveContainer width="100%" height={220}>
-						<AreaChart
-							data={chartData.patientsGrowth}
-							margin={{ top: 5, right: 5, left: -20, bottom: 0 }}
-						>
-							<defs>
-								<linearGradient id="patientGrad" x1="0" y1="0" x2="0" y2="1">
-									<stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.15} />
-									<stop offset="95%" stopColor="#0ea5e9" stopOpacity={0} />
-								</linearGradient>
-							</defs>
-							<CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-							<XAxis
-								dataKey="month"
-								tick={{ fontSize: 11, fill: "#9ca3af" }}
-								axisLine={false}
-								tickLine={false}
-							/>
-							<YAxis
-								tick={{ fontSize: 11, fill: "#9ca3af" }}
-								axisLine={false}
-								tickLine={false}
-							/>
-							<Tooltip
-								contentStyle={{
-									borderRadius: "12px",
-									border: "1px solid #f0f0f0",
-									fontSize: 12,
-								}}
-							/>
-							<Area
-								type="monotone"
-								dataKey="patients"
-								stroke="#0ea5e9"
-								strokeWidth={2.5}
-								fill="url(#patientGrad)"
-								dot={{ fill: "#0ea5e9", r: 4 }}
-								activeDot={{ r: 6 }}
-							/>
-						</AreaChart>
-					</ResponsiveContainer>
+					<div className="relative">
+						{chartLoading && (
+							<div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10">
+								<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+							</div>
+						)}
+						<ResponsiveContainer width="100%" height={220}>
+							<AreaChart
+								data={formattedChartData.length > 0 ? formattedChartData : chartDataMock.patientsGrowth}
+								margin={{ top: 5, right: 5, left: -20, bottom: 0 }}
+							>
+								<defs>
+									<linearGradient id="patientGrad" x1="0" y1="0" x2="0" y2="1">
+										<stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.15} />
+										<stop offset="95%" stopColor="#0ea5e9" stopOpacity={0} />
+									</linearGradient>
+								</defs>
+								<CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+								<XAxis
+									dataKey="month"
+									tick={{ fontSize: 11, fill: "#9ca3af" }}
+									axisLine={false}
+									tickLine={false}
+								/>
+								<YAxis
+									tick={{ fontSize: 11, fill: "#9ca3af" }}
+									axisLine={false}
+									tickLine={false}
+								/>
+								<Tooltip
+									contentStyle={{
+										borderRadius: "12px",
+										border: "1px solid #f0f0f0",
+										fontSize: 12,
+									}}
+								/>
+								<Area
+									type="monotone"
+									dataKey="patients"
+									stroke="#0ea5e9"
+									strokeWidth={2.5}
+									fill="url(#patientGrad)"
+									dot={{ fill: "#0ea5e9", r: 4 }}
+									activeDot={{ r: 6 }}
+								/>
+							</AreaChart>
+						</ResponsiveContainer>
+					</div>
 				</div>
 
-				{/* Appointment Distribution */}
+				{/* Distribution Overview */}
 				<div className="bg-white rounded-2xl border border-gray-100 shadow-card p-6">
 					<h2 className="text-base font-semibold text-gray-900 mb-1">
-						{t("dashboard.appointments")}
+						{t("dashboard.overview")}
 					</h2>
-					<p className="text-xs text-gray-500 mb-5">{t("dashboard.statusBreakdown")}</p>
+					<p className="text-xs text-gray-500 mb-5">{t("dashboard.distribution")}</p>
 					<ResponsiveContainer width="100%" height={160}>
 						<PieChart>
 							<Pie
-								data={chartData.appointmentsByStatus}
+								data={distributionData}
 								cx="50%"
 								cy="50%"
 								innerRadius={50}
@@ -206,7 +234,7 @@ export default function DashboardPage() {
 								paddingAngle={3}
 								dataKey="value"
 							>
-								{chartData.appointmentsByStatus.map((entry, i) => (
+								{distributionData.map((entry, i) => (
 									<Cell key={i} fill={entry.color} />
 								))}
 							</Pie>
@@ -214,7 +242,7 @@ export default function DashboardPage() {
 						</PieChart>
 					</ResponsiveContainer>
 					<div className="space-y-2 mt-2">
-						{chartData.appointmentsByStatus.map((item) => (
+						{distributionData.map((item) => (
 							<div
 								key={item.name}
 								className="flex items-center justify-between text-xs"
@@ -227,7 +255,7 @@ export default function DashboardPage() {
 									<span className="text-gray-600">{item.name}</span>
 								</div>
 								<span className="font-semibold text-gray-800">
-									{item.value}
+									{loading ? "..." : item.value}
 								</span>
 							</div>
 						))}
@@ -238,7 +266,7 @@ export default function DashboardPage() {
 			{/* Weekly Appointments & Activity */}
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 				{/* Weekly Bar Chart */}
-				<div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-card p-6">
+				{/* <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-card p-6">
 					<h2 className="text-base font-semibold text-gray-900 mb-1">
 						{t("dashboard.weeklyAppointments")}
 					</h2>
@@ -247,7 +275,7 @@ export default function DashboardPage() {
 					</p>
 					<ResponsiveContainer width="100%" height={180}>
 						<BarChart
-							data={chartData.weeklyAppointments}
+							data={chartDataMock.weeklyAppointments}
 							margin={{ top: 5, right: 5, left: -20, bottom: 0 }}
 						>
 							<CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -278,10 +306,10 @@ export default function DashboardPage() {
 							/>
 						</BarChart>
 					</ResponsiveContainer>
-				</div>
+				</div> */}
 
 				{/* Today's Appointments */}
-				<div className="bg-white rounded-2xl border border-gray-100 shadow-card p-6">
+				{/* <div className="bg-white rounded-2xl border border-gray-100 shadow-card p-6">
 					<h2 className="text-base font-semibold text-gray-900 mb-1">
 						{t("dashboard.todaySchedule")}
 					</h2>
@@ -312,11 +340,11 @@ export default function DashboardPage() {
 							</div>
 						))}
 					</div>
-				</div>
+				</div> */}
 			</div>
 
 			{/* Recent Activity */}
-			<div className="bg-white rounded-2xl border border-gray-100 shadow-card p-6">
+			{/* <div className="bg-white rounded-2xl border border-gray-100 shadow-card p-6">
 				<div className="mb-5">
 					<h2 className="text-base font-semibold text-gray-900">
 						{t("dashboard.recentActivity")}
@@ -343,7 +371,7 @@ export default function DashboardPage() {
 						</div>
 					))}
 				</div>
-			</div>
+			</div> */}
 		</div>
 	);
 }
