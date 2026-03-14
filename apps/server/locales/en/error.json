@@ -19,6 +19,9 @@
 	"MEDICINE": {
 		"NOT_FOUND": "Medicine not found"
 	},
+	"CATEGORY": {
+		"NOT_FOUND": "Category not found"
+	},
 	"COMPANY": {
 		"NOT_FOUND": "Company not found"
 	},

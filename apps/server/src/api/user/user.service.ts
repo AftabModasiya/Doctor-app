@@ -16,7 +16,7 @@ export class UserService {
 		@InjectRepository(User)
 		private readonly userRepository: Repository<User>,
 		private readonly i18nService: I18nService<I18nTranslations>,
-	) {}
+	) { }
 
 	async create(dto: CreateUserDto): Promise<User> {
 		if (dto.email) {
@@ -24,7 +24,7 @@ export class UserService {
 				where: { email: dto.email as string },
 			});
 			if (existingUser) {
-				throw new ConflictException("Email already exists.");
+				throw new ConflictException(this.i18nService.t('error.VALIDATION.EMAIL_EXISTS'));
 			}
 		}
 
@@ -58,7 +58,7 @@ export class UserService {
 				where: { email: dto.email as string },
 			});
 			if (existingUser) {
-				throw new ConflictException("Email already exists.");
+				throw new ConflictException(this.i18nService.t('error.VALIDATION.EMAIL_EXISTS'));
 			}
 		}
 

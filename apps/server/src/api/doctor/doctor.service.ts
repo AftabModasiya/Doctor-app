@@ -26,7 +26,7 @@ export class DoctorService {
 		// private readonly degreeService: DegreeService,
 		private readonly dataSource: DataSource,
 		private readonly i18nService: I18nService<I18nTranslations>,
-	) {}
+	) { }
 
 	async create(dto: CreateDoctorDto): Promise<Doctor> {
 		return this.dataSource.transaction(async (manager) => {
@@ -36,7 +36,7 @@ export class DoctorService {
 			});
 
 			if (existingUser) {
-				throw new ConflictException("Email already exists.");
+				throw new ConflictException(this.i18nService.t('error.VALIDATION.EMAIL_EXISTS'));
 			}
 
 			// 1. Create User

@@ -32,6 +32,9 @@ export type I18nTranslations = {
         "COMPANY_SETTING": {
             "NOT_FOUND": string;
         };
+        "CATEGORY": {
+            "NOT_FOUND": string;
+        };
         "DEGREE": {
             "NOT_FOUND": string;
         };

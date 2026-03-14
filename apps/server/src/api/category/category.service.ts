@@ -13,7 +13,7 @@ export class CategoryService {
 		@InjectRepository(Category)
 		private readonly categoryRepository: Repository<Category>,
 		private readonly i18nService: I18nService<I18nTranslations>,
-	) {}
+	) { }
 
 	create(dto: CreateCategoryDto): Promise<Category> {
 		const category = this.categoryRepository.create(dto);
@@ -34,7 +34,7 @@ export class CategoryService {
 
 	async findOne(id: number): Promise<Category> {
 		const category = await this.categoryRepository.findOne({ where: { id } });
-		if (!category) throw new NotFoundException(`Category #${id} not found`);
+		if (!category) throw new NotFoundException(this.i18nService.t('error.CATEGORY.NOT_FOUND'));
 		return category;
 	}
 

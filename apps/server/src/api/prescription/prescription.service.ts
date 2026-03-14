@@ -15,7 +15,7 @@ export class PrescriptionService {
 		private readonly prescriptionRepository: Repository<Prescription>,
 		private readonly i18nService: I18nService<I18nTranslations>,
 		private readonly dataSource: DataSource,
-	) {}
+	) { }
 
 	async create(dto: CreatePrescriptionDto) {
 		return this.dataSource.transaction(async (manager) => {
@@ -49,7 +49,7 @@ export class PrescriptionService {
 			});
 
 			return {
-				message: "Prescription created successfully",
+				message: this.i18nService.t('success.PRESCRIPTION.CREATE'),
 				data: {
 					prescriptionId: newPrescription?.id,
 				},
