@@ -20,6 +20,9 @@ WORKDIR /app
 
 COPY --from=pruner /app/out/json/ .
 
+# ensure lockfile exists
+COPY package-lock.json ./package-lock.json
+
 # install ALL deps (needed for build)
 RUN npm install
 
