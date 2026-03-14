@@ -1,3 +1,5 @@
+import { BaseEntity } from "src/common/entities/base.entity";
+import type { Relation } from "typeorm";
 import {
 	Column,
 	Entity,
@@ -9,34 +11,36 @@ import {
 	OneToMany,
 	OneToOne,
 } from "typeorm";
-import { BaseEntity } from "../../common/entities/base.entity";
-import type { User } from "../../user/entities/user.entity";
 import type { Company } from "../../company/entities/company.entity";
-import type { Specialization } from "../../specialization/entities/specialization.entity";
 import type { Degree } from "../../degree/entities/degree.entity";
 import type { Prescription } from "../../prescription/entities/prescription.entity";
+import type { Specialization } from "../../specialization/entities/specialization.entity";
+import type { User } from "../../user/entities/user.entity";
 
 @Entity("doctors")
 export class Doctor extends BaseEntity {
 	@Index("idx_doctors_user_id")
-	@Column({ name: "user_id" })
+	@Column()
 	userId!: number;
 
 	@Index("idx_doctors_company_id")
-	@Column({ name: "company_id" })
+	@Column()
 	companyId!: number;
 
-	@Column({ name: "graduation_date", type: "date", nullable: true })
+	@Column({ type: "date", nullable: true })
 	graduationDate!: Date | null;
+
+	@Column({ type: "int", nullable: true })
+	experience!: number | null;
 
 	// ---- Relations ----
 	@OneToOne("User", (user: User) => user.doctor)
-	@JoinColumn({ name: "user_id" })
-	user!: User;
+	@JoinColumn()
+	user!: Relation<User>;
 
 	@ManyToOne("Company", (company: Company) => company.doctors)
-	@JoinColumn({ name: "company_id" })
-	company!: Company;
+	@JoinColumn()
+	company!: Relation<Company>;
 
 	@ManyToMany("Specialization", (spec: Specialization) => spec.doctors)
 	@JoinTable({
@@ -47,7 +51,7 @@ export class Doctor extends BaseEntity {
 			referencedColumnName: "id",
 		},
 	})
-	specializations!: Specialization[];
+	specializations!: Relation<Specialization[]>;
 
 	@ManyToMany("Degree", (degree: Degree) => degree.doctors)
 	@JoinTable({
@@ -55,11 +59,11 @@ export class Doctor extends BaseEntity {
 		joinColumn: { name: "doctor_id", referencedColumnName: "id" },
 		inverseJoinColumn: { name: "degree_id", referencedColumnName: "id" },
 	})
-	degrees!: Degree[];
+	degrees!: Relation<Degree[]>;
 
 	@OneToMany(
 		"Prescription",
 		(prescription: Prescription) => prescription.doctor,
 	)
-	prescriptions!: Prescription[];
+	prescriptions!: Relation<Prescription[]>;
 }

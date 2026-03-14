@@ -1,1 +1,102 @@
-{}
+{
+	"DASHBOARD": {
+		"COUNT": "Dashboard counts fetched successfully",
+		"PATIENT_CHART": "Patient growth chart data fetched successfully"
+	},
+	"PATIENT": {
+		"LIST": "Patients retrieved successfully",
+		"CREATE": "Patient created successfully",
+		"VIEW": "Patient retrieved successfully",
+		"UPDATE": "Patient updated successfully",
+		"DELETE": "Patient deleted successfully"
+	},
+	"DOCTOR": {
+		"LIST": "Doctors retrieved successfully",
+		"CREATE": "Doctor created successfully",
+		"VIEW": "Doctor retrieved successfully",
+		"UPDATE": "Doctor updated successfully",
+		"DELETE": "Doctor deleted successfully"
+	},
+	"PRESCRIPTION": {
+		"LIST": "Prescriptions retrieved successfully",
+		"CREATE": "Prescription created successfully",
+		"VIEW": "Prescription retrieved successfully",
+		"UPDATE": "Prescription updated successfully",
+		"DELETE": "Prescription deleted successfully"
+	},
+	"MEDICINE": {
+		"LIST": "Medicines retrieved successfully",
+		"CREATE": "Medicine created successfully",
+		"VIEW": "Medicine retrieved successfully",
+		"UPDATE": "Medicine updated successfully",
+		"DELETE": "Medicine deleted successfully"
+	},
+	"COMPANY": {
+		"LIST": "Companies retrieved successfully",
+		"CREATE": "Company created successfully",
+		"VIEW": "Company retrieved successfully",
+		"UPDATE": "Company updated successfully",
+		"DELETE": "Company deleted successfully"
+	},
+	"COMPANY_SETTING": {
+		"LIST": "Company settings retrieved successfully",
+		"CREATE": "Company setting created successfully",
+		"VIEW": "Company setting retrieved successfully",
+		"UPDATE": "Company setting updated successfully",
+		"DELETE": "Company setting deleted successfully"
+	},
+	"DEGREE": {
+		"LIST": "Degrees retrieved successfully",
+		"CREATE": "Degree created successfully",
+		"VIEW": "Degree retrieved successfully",
+		"UPDATE": "Degree updated successfully",
+		"DELETE": "Degree deleted successfully"
+	},
+	"SPECIALIZATION": {
+		"LIST": "Specializations retrieved successfully",
+		"CREATE": "Specialization created successfully",
+		"VIEW": "Specialization retrieved successfully",
+		"UPDATE": "Specialization updated successfully",
+		"DELETE": "Specialization deleted successfully"
+	},
+	"USER": {
+		"LIST": "Users retrieved successfully",
+		"CREATE": "User created successfully",
+		"VIEW": "User retrieved successfully",
+		"UPDATE": "User updated successfully",
+		"DELETE": "User deleted successfully"
+	},
+	"TOKEN": {
+		"LIST": "Tokens retrieved successfully",
+		"CREATE": "Token created successfully",
+		"VIEW": "Token retrieved successfully",
+		"UPDATE": "Token updated successfully",
+		"DELETE": "Token deleted successfully"
+	},
+	"USER_DEVICE": {
+		"LIST": "User devices retrieved successfully",
+		"CREATE": "User device created successfully",
+		"VIEW": "User device retrieved successfully",
+		"UPDATE": "User device updated successfully",
+		"DELETE": "User device deleted successfully"
+	},
+	"MEDICINE_PRESCRIPTION": {
+		"LIST": "Medicine prescriptions retrieved successfully",
+		"CREATE": "Medicine prescription created successfully",
+		"VIEW": "Medicine prescription retrieved successfully",
+		"UPDATE": "Medicine prescription updated successfully",
+		"DELETE": "Medicine prescription deleted successfully"
+	},
+	"CATEGORY": {
+		"LIST": "Categories retrieved successfully",
+		"CREATE": "Category created successfully",
+		"VIEW": "Category retrieved successfully",
+		"UPDATE": "Category updated successfully",
+		"DELETE": "Category deleted successfully"
+	},
+	"AUTH": {
+		"LOGIN_SUCCESSFUL": "Login successful",
+		"PASSWORD_RESET": "Password has been changes successfully",
+		"LOGGED_OUT": "Logged out successfully"
+	}
+}

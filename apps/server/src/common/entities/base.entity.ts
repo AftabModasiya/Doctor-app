@@ -1,27 +1,27 @@
 import {
+	Column,
 	CreateDateColumn,
 	DeleteDateColumn,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
-	Column,
 } from "typeorm";
 
 export abstract class BaseEntity {
 	@PrimaryGeneratedColumn()
 	id!: number;
 
-	@CreateDateColumn({ name: "created_at" })
+	@CreateDateColumn()
 	createdAt!: Date;
 
-	@UpdateDateColumn({ name: "updated_at" })
+	@UpdateDateColumn({ nullable: true })
 	updatedAt!: Date;
 
-	@DeleteDateColumn({ name: "deleted_at", nullable: true })
+	@DeleteDateColumn({ nullable: true })
 	deletedAt!: Date | null;
 
-	@Column({ name: "created_by", type: "int", nullable: true })
+	@Column({ type: "int", nullable: true })
 	createdBy!: number | null;
 
-	@Column({ name: "updated_by", type: "int", nullable: true })
+	@Column({ type: "int", nullable: true })
 	updatedBy!: number | null;
 }

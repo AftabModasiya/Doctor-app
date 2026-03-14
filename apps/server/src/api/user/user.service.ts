@@ -1,18 +1,33 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+	ConflictException,
+	Injectable,
+	NotFoundException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { User } from "./entities/user.entity";
+import { I18nTranslations } from "generated/i18n.generated";
+import { I18nService } from "nestjs-i18n";
+import { DeepPartial, FindOneOptions, Repository } from "typeorm";
 import type { CreateUserDto } from "./dto/create-user.dto";
-import type { UpdateUserDto } from "./dto/update-user.dto";
+import { User } from "./entities/user.entity";
 
 @Injectable()
 export class UserService {
 	constructor(
 		@InjectRepository(User)
 		private readonly userRepository: Repository<User>,
+		private readonly i18nService: I18nService<I18nTranslations>,
 	) {}
 
-	create(dto: CreateUserDto): Promise<User> {
+	async create(dto: CreateUserDto): Promise<User> {
+		if (dto.email) {
+			const existingUser = await this.userRepository.findOne({
+				where: { email: dto.email as string },
+			});
+			if (existingUser) {
+				throw new ConflictException("Email already exists.");
+			}
+		}
+
 		const user = this.userRepository.create(dto as unknown as Partial<User>);
 		return this.userRepository.save(user);
 	}
@@ -23,12 +38,30 @@ export class UserService {
 
 	async findOne(id: number): Promise<User> {
 		const user = await this.userRepository.findOne({ where: { id } });
-		if (!user) throw new NotFoundException(`User #${id} not found`);
+		if (!user)
+			throw new NotFoundException(this.i18nService.t(`error.USER.NOT_FOUND`));
 		return user;
 	}
 
-	async update(id: number, dto: UpdateUserDto): Promise<User> {
+	async findOneByQuery(query: FindOneOptions<User>): Promise<User> {
+		const user = await this.userRepository.findOne(query);
+		if (!user)
+			throw new NotFoundException(this.i18nService.t(`error.USER.NOT_FOUND`));
+		return user;
+	}
+
+	async update(id: number, dto: DeepPartial<User>): Promise<User> {
 		const user = await this.findOne(id);
+
+		if (dto.email && dto.email !== user.email) {
+			const existingUser = await this.userRepository.findOne({
+				where: { email: dto.email as string },
+			});
+			if (existingUser) {
+				throw new ConflictException("Email already exists.");
+			}
+		}
+
 		Object.assign(user, dto);
 		return this.userRepository.save(user);
 	}

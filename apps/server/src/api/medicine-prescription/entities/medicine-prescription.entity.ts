@@ -1,27 +1,34 @@
+import { BaseEntity } from "src/common/entities/base.entity";
+import type { Relation } from "typeorm";
 import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
-import { BaseEntity } from "../../common/entities/base.entity";
-import type { Medicine } from "../../medicine/entities/medicine.entity";
-import type { Prescription } from "../../prescription/entities/prescription.entity";
+import { Medicine } from "../../medicine/entities/medicine.entity";
+import { Prescription } from "../../prescription/entities/prescription.entity";
 
 @Entity("medicine_prescriptions")
 export class MedicinePrescription extends BaseEntity {
 	@Index("idx_medicine_prescriptions_medicine_id")
-	@Column({ name: "medicine_id" })
+	@Column()
 	medicineId!: number;
 
 	@Index("idx_medicine_prescriptions_prescription_id")
-	@Column({ name: "prescription_id" })
+	@Column()
 	prescriptionId!: number;
 
+	@Column({ type: "int", default: 1 })
+	quantity!: number;
+
 	// ---- Relations ----
-	@ManyToOne("Medicine", (medicine: Medicine) => medicine.medicinePrescriptions)
-	@JoinColumn({ name: "medicine_id" })
-	medicine!: Medicine;
+	@ManyToOne(
+		() => Medicine,
+		(medicine: Medicine) => medicine.medicinePrescriptions,
+	)
+	@JoinColumn()
+	medicine!: Relation<Medicine>;
 
 	@ManyToOne(
-		"Prescription",
+		() => Prescription,
 		(prescription: Prescription) => prescription.medicinePrescriptions,
 	)
-	@JoinColumn({ name: "prescription_id" })
-	prescription!: Prescription;
+	@JoinColumn()
+	prescription!: Relation<Prescription>;
 }

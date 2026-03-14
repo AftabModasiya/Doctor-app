@@ -1,34 +1,39 @@
+import { BaseEntity } from "src/common/entities/base.entity";
+import type { Relation } from "typeorm";
 import {
 	Column,
 	Entity,
 	Index,
 	JoinColumn,
 	ManyToOne,
-	OneToOne,
+	OneToMany,
 } from "typeorm";
-import { BaseEntity } from "../../common/entities/base.entity";
-import type { User } from "../../user/entities/user.entity";
-import type { Token } from "../../token/entities/token.entity";
+import { Token } from "../../token/entities/token.entity";
+import { User } from "../../user/entities/user.entity";
 
 @Entity("user_devices")
 export class UserDevice extends BaseEntity {
-	@Column({ name: "device_token", type: "text" })
-	deviceToken!: string;
+	@Column({ type: "text", nullable: true })
+	deviceToken!: string | null;
 
-	@Column({ name: "device_ip", type: "varchar", nullable: true })
+	@Column({ type: "varchar", nullable: true })
 	deviceIp!: string | null;
 
 	@Index("idx_user_devices_user_id")
-	@Column({ name: "user_id" })
+	@Column()
 	userId!: number;
 
 	// ---- Relations ----
-	@ManyToOne("User", (user: User) => user.devices)
-	@JoinColumn({ name: "user_id" })
-	user!: User;
+	@ManyToOne(
+		() => User,
+		(user: User) => user.devices,
+	)
+	@JoinColumn()
+	user!: Relation<User>;
 
-	@OneToOne("Token", (token: Token) => token.userDevice, {
-		cascade: ["insert", "soft-remove"],
-	})
-	token!: Token;
+	@OneToMany(
+		() => Token,
+		(tokens: Token) => tokens.userDevice,
+	)
+	token!: Relation<Token[]>;
 }

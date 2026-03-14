@@ -16,7 +16,7 @@ export class ZodValidationExceptionFilter implements ExceptionFilter {
 
 		response.status(HttpStatus.BAD_REQUEST).json({
 			statusCode: HttpStatus.BAD_REQUEST,
-			message: "Validation failed",
+			message: zodError?.issues[0]?.message,
 			errors: zodError.issues.map((issue) => ({
 				path: issue.path.join("."),
 				message: issue.message,

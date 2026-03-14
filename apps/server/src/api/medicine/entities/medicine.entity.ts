@@ -1,3 +1,5 @@
+import { BaseEntity } from "src/common/entities/base.entity";
+import type { Relation } from "typeorm";
 import {
 	Column,
 	Entity,
@@ -6,9 +8,9 @@ import {
 	ManyToOne,
 	OneToMany,
 } from "typeorm";
-import { BaseEntity } from "../../common/entities/base.entity";
-import type { Company } from "../../company/entities/company.entity";
-import type { MedicinePrescription } from "../../medicine-prescription/entities/medicine-prescription.entity";
+import { Category } from "../../category/entities/category.entity";
+import { Company } from "../../company/entities/company.entity";
+import { MedicinePrescription } from "../../medicine-prescription/entities/medicine-prescription.entity";
 
 @Entity("medicines")
 export class Medicine extends BaseEntity {
@@ -16,14 +18,31 @@ export class Medicine extends BaseEntity {
 	name!: string;
 
 	@Index("idx_medicines_company_id")
-	@Column({ name: "company_id" })
+	@Column()
 	companyId!: number;
 
-	// ---- Relations ----
-	@ManyToOne("Company", (company: Company) => company.patients)
-	@JoinColumn({ name: "company_id" })
-	company!: Company;
+	@Index("idx_medicines_category_id")
+	@Column()
+	categoryId!: number;
 
-	@OneToMany("MedicinePrescription", (mp: MedicinePrescription) => mp.medicine)
-	medicinePrescriptions!: MedicinePrescription[];
+	// ---- Relations ----
+	@ManyToOne(
+		() => Company,
+		(company: Company) => company.patients,
+	)
+	@JoinColumn()
+	company!: Relation<Company>;
+
+	@ManyToOne(
+		() => Category,
+		(category: Category) => category.medicines,
+	)
+	@JoinColumn()
+	category!: Relation<Category>;
+
+	@OneToMany(
+		() => MedicinePrescription,
+		(mp: MedicinePrescription) => mp.medicine,
+	)
+	medicinePrescriptions!: Relation<MedicinePrescription[]>;
 }
