@@ -174,7 +174,7 @@ export default function DoctorsPage() {
             const initials =
               doc?.user?.name
                 ?.split(" ")
-                ?.map((n) => n[0])
+                ?.map((n: string) => n[0])
                 ?.slice(0, 2)
                 ?.join("")
                 ?.toUpperCase() ?? "DR";
@@ -224,7 +224,7 @@ export default function DoctorsPage() {
                       {doc?.user?.age ?? "—"}y ·{" "}
                       {doc?.user?.gender
                         ? doc.user.gender.charAt(0).toUpperCase() +
-                          doc.user.gender.slice(1)
+                        doc.user.gender.slice(1)
                         : "—"}
                     </p>
                   </div>

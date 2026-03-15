@@ -3,12 +3,10 @@ import type {
   TAuthGenerateTokenResponse,
   TChangePasswordPayload,
   TLoginApiPayload,
-  TSendOtpViaEmailApiPayload,
-  TSendOtpViaEmailApiResponse,
   TSsoExchangePayload,
 } from "@models/auth";
 import type { TApiResponse } from "@models/axios";
-import { GET, PATCH, POST } from "@shared/services/api-service";
+import { DELETE, GET, PATCH, POST } from "@shared/services/api-service";
 
 const authRefreshTokenApi = (): TApiResponse<TAuthGenerateTokenResponse> => {
   return GET({
@@ -16,16 +14,6 @@ const authRefreshTokenApi = (): TApiResponse<TAuthGenerateTokenResponse> => {
   });
 };
 
-const authSignInApi = (
-  payload: TLoginApiPayload,
-): TApiResponse<TAuthGenerateTokenResponse> => {
-  return PATCH({
-    URL: AuthEndpoints.signIn,
-    body: {
-      ...payload,
-    },
-  });
-};
 
 const forgotPasswordApi = (payload: { email: string }) => {
   return PATCH({
@@ -160,7 +148,7 @@ const verifySubAdminEmailApi = ({
 };
 
 const logOutApi = () => {
-  return GET({
+  return DELETE({
     URL: AuthEndpoints.logout,
   });
 };
@@ -174,11 +162,11 @@ const changePasswordApi = (payload: TChangePasswordPayload) => {
   });
 };
 
-const sendOtpViaEmailApi = (
-  payload: TSendOtpViaEmailApiPayload,
-): TApiResponse<TSendOtpViaEmailApiResponse> => {
+const adminLoginApi = (
+  payload: TLoginApiPayload,
+): TApiResponse<TAuthGenerateTokenResponse> => {
   return PATCH({
-    URL: AuthEndpoints.sendOtpViaEamil,
+    URL: AuthEndpoints.adminLogin,
     body: {
       ...payload,
     },
@@ -197,9 +185,8 @@ const ssoExchangeApi = (
 };
 
 export {
-  sendOtpViaEmailApi,
+  adminLoginApi,
   authRefreshTokenApi,
-  authSignInApi,
   forgotPasswordApi,
   verifyTokenApi,
   resetPasswordApi,

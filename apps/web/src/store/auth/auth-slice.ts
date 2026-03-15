@@ -1,5 +1,9 @@
 import { SliceNames } from "@constants/redux-constant";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import {
+  logOutAsyncThunk,
+  signInAsyncThunk,
+} from "./auth-async-thunk";
 
 interface AuthState {
   user: any | null;
@@ -7,7 +11,7 @@ interface AuthState {
   refreshToken: string | null;
   companyId: string | number | null;
   isAuthenticated: boolean;
-  isLoading: boolean;
+  loading: boolean;
 }
 
 const initialState: AuthState = {
@@ -16,7 +20,7 @@ const initialState: AuthState = {
   refreshToken: null,
   companyId: null,
   isAuthenticated: false,
-  isLoading: false,
+  loading: false,
 };
 
 const authSlice = createSlice({
@@ -46,8 +50,44 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload;
+      state.loading = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(signInAsyncThunk.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(signInAsyncThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        const authData = action.payload?.data;
+        if (authData) {
+          state.isAuthenticated = true;
+          state.user = authData.user;
+          state.accessToken = authData.accessToken;
+          state.refreshToken = authData.refreshToken;
+        } else {
+          state.isAuthenticated = false;
+        }
+      })
+      .addCase(signInAsyncThunk.rejected, (state) => {
+        state.loading = false;
+        state.isAuthenticated = false;
+      })
+      .addCase(logOutAsyncThunk.fulfilled, (state) => {
+        state.user = null;
+        state.accessToken = null;
+        state.refreshToken = null;
+        state.companyId = null;
+        state.isAuthenticated = false;
+      })
+      .addCase(logOutAsyncThunk.rejected, (state) => {
+        state.user = null;
+        state.accessToken = null;
+        state.refreshToken = null;
+        state.companyId = null;
+        state.isAuthenticated = false;
+      });
   },
 });
 

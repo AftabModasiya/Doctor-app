@@ -1,8 +1,10 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useAppSelector } from "../store/store";
 
 export default function ProtectedRoute() {
-	const { isAuthenticated, isLoading } = useAuth();
+	const { isAuthenticated } = useAuth();
+	const { isLoading } = useAppSelector((state) => state.auth);
 
 	if (isLoading) {
 		return (

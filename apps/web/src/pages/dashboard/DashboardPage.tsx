@@ -1,8 +1,5 @@
-// import type React from "react";
 import {
 	FaArrowUp,
-	// FaCalendarAlt,
-	// FaExclamationTriangle,
 	FaNotesMedical,
 	FaUserInjured,
 	FaUserMd,
@@ -11,8 +8,6 @@ import { useTranslation } from "react-i18next";
 import {
 	Area,
 	AreaChart,
-	// Bar,
-	// BarChart,
 	CartesianGrid,
 	Cell,
 	Pie,
@@ -22,18 +17,15 @@ import {
 	XAxis,
 	YAxis,
 } from "recharts";
-// import Badge from "../../components/ui/Badge";
 import {
 	chartData as chartDataMock,
-	// mockActivity,
-	// mockAppointments,
 } from "../../utils/mockData";
 
 import { useEffect, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "@store/store";
-import { 
-    getDashboardCountsAsyncThunk, 
-    getPatientChartAsyncThunk 
+import {
+	getDashboardCountsAsyncThunk,
+	getPatientChartAsyncThunk
 } from "@store/dashboard/dashboard-async-thunk";
 
 // const activityIcons: Record<string, React.ReactNode> = {
@@ -66,10 +58,10 @@ export default function DashboardPage() {
 	const { t } = useTranslation();
 	const dispatch = useAppDispatch();
 	const { counts, chartData, loading, chartLoading } = useAppSelector((state) => state.dashboard);
-	
+
 	useEffect(() => {
 		dispatch(getDashboardCountsAsyncThunk());
-		
+
 		const currentYear = new Date().getFullYear();
 		dispatch(getPatientChartAsyncThunk({
 			startDate: `${currentYear}-01-01`,
@@ -79,13 +71,12 @@ export default function DashboardPage() {
 
 	const formattedChartData = useMemo(() => {
 		if (!chartData) return [];
-		return chartData.labels.map((label, index) => ({
+		return chartData.labels.map((label: string, index: number) => ({
 			month: label,
 			patients: chartData.data[index],
 		}));
 	}, [chartData]);
 
-	// const todayAppts = mockAppointments.filter((a) => a.date === "2025-03-05");
 
 	const distributionData = useMemo(() => {
 		return [
@@ -165,7 +156,7 @@ export default function DashboardPage() {
 							</h2>
 							<p className="text-xs text-gray-500 mt-0.5">{t("dashboard.last7Months")}</p>
 						</div>
-						
+
 					</div>
 					<div className="relative">
 						{chartLoading && (

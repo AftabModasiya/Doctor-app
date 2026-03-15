@@ -7,7 +7,9 @@ import doctorReducer from "./doctor/doctor-slice";
 import medicineReducer from "./medicine/medicine-slice";
 import metadataReducer from "./metadata/metadata-slice";
 import patientReducer from "./patient/patient-slice";
+import prescriptionReducer from "./prescription/prescription-slice";
 import specializationReducer from "./specialization/specialization-slice";
+import passkeyReducer from "./passkey/passkey-slice";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -19,6 +21,8 @@ const rootReducer = combineReducers({
   category: categoryReducer,
   medicine: medicineReducer,
   metadata: metadataReducer,
+  prescription: prescriptionReducer,
+  passkey: passkeyReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -1,4 +1,4 @@
-export interface IMetadataItem {
+type IMetadataItem = {
     id: number;
     user: {
         id: number;
@@ -6,7 +6,12 @@ export interface IMetadataItem {
     };
 }
 
-export interface IMetadataResponse {
+type IMEtadataMedicine = {
+    id: number;
+    name: string
+}
+
+type IMetadataResponse = {
     success: boolean;
     data: {
         list: IMetadataItem[];
@@ -15,3 +20,14 @@ export interface IMetadataResponse {
     statusCode: number;
     message: string;
 }
+
+type IMetadtaMedicineResponse = {
+    success: boolean;
+    data: {
+        list: IMEtadataMedicine[];
+        count: number;
+    };
+    statusCode: number;
+    message: string;
+}
+export type { IMetadataItem, IMetadataResponse, IMEtadataMedicine, IMetadtaMedicineResponse }

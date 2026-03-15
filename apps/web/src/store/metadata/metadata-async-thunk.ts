@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
     getPatientMetadataApi,
     getDoctorMetadataApi,
+    getMedicineMetadataApi,
 } from "@services/metadata-service";
 import { enqueueErrorToast } from "@shared/services/toast-service";
 import type { AxiosError } from "axios";
@@ -33,6 +34,20 @@ export const getDoctorMetadataAsyncThunk = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             const response = await getDoctorMetadataApi();
+            return response.data;
+        } catch (error: unknown) {
+            const message = getErrorMessage(error);
+            enqueueErrorToast(message);
+            return rejectWithValue(message);
+        }
+    },
+);
+
+export const getMedicineMetadataAsyncThunk = createAsyncThunk(
+    "metadata/getMedicines",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await getMedicineMetadataApi();
             return response.data;
         } catch (error: unknown) {
             const message = getErrorMessage(error);
