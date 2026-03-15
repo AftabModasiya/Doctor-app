@@ -128,7 +128,7 @@ export default function SpecializationTab() {
                 </td>
               </tr>
             ) : (
-              specializations.map((s) => (
+              specializations.map((s: ISpecialization) => (
                 <tr
                   key={s.id}
                   className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors"
@@ -193,11 +193,10 @@ export default function SpecializationTab() {
           <input
             {...register("name")}
             placeholder={t("appSettings.specialization.namePlaceholder")}
-            className={`w-full px-4 py-2.5 text-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-              errors.name
+            className={`w-full px-4 py-2.5 text-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 ${errors.name
                 ? "border-rose-400 focus:ring-rose-400"
                 : "border-gray-200"
-            }`}
+              }`}
           />
           {errors.name && (
             <p className="mt-1 text-xs text-rose-500">{errors.name.message}</p>

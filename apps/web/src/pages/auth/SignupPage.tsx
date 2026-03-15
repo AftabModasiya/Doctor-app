@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FaEnvelope, FaHospital, FaLock, FaUser } from "react-icons/fa";
@@ -22,6 +22,21 @@ export default function SignupPage() {
 	const { login } = useAuth();
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
+	const [deviceIp, setDeviceIp] = useState<string>("0.0.0.0");
+
+	useEffect(() => {
+		const fetchIp = async () => {
+			try {
+				const response = await fetch("https://api.ipify.org?format=json");
+				const data = await response.json();
+				setDeviceIp(data.ip);
+			} catch (error) {
+				console.error("Failed to fetch IP", error);
+			}
+		};
+		fetchIp();
+	}, []);
+
 	const dispatch = useAppDispatch();
 	const passkeyState = useAppSelector((state) => state.passkey);
 
@@ -48,7 +63,7 @@ export default function SignupPage() {
 		setLoading(true);
 		try {
 			await new Promise((r) => setTimeout(r, 800));
-			await login(data.email, data.password);
+			await login(data.email, data.password, deviceIp);
 			toast.success(t("auth.toast.accountCreated"));
 			navigate("/dashboard");
 		} catch {

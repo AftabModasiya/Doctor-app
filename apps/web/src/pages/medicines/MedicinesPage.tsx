@@ -50,7 +50,7 @@ export default function MedicinesPage() {
   const filtered = useMemo(
     () =>
       medicines.filter(
-        (m) =>
+        (m: IMedicine) =>
           m.name.toLowerCase().includes(search.toLowerCase()) ||
           m.category?.name.toLowerCase().includes(search.toLowerCase()),
       ),
@@ -187,12 +187,12 @@ export default function MedicinesPage() {
           },
           {
             label: "Total Categories",
-            count: new Set(medicines.map((m) => m.categoryId)).size,
+            count: new Set(medicines.map((m: IMedicine) => m.categoryId)).size,
             color: "bg-emerald-50 text-emerald-700",
           },
           {
             label: "Active Inventory",
-            count: medicines.filter((m) => !m.deletedAt).length,
+            count: medicines.filter((m: IMedicine) => !m.deletedAt).length,
             color: "bg-violet-50 text-violet-700",
           },
         ].map((c) => (

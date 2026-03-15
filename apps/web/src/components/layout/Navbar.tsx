@@ -91,7 +91,7 @@ export default function Navbar({
 							<span className="text-white text-xs font-bold">
 								{user?.name
 									?.split(" ")
-									.map((n) => n[0])
+									.map((n: string) => n[0])
 									.join("")
 									.slice(0, 2)}
 							</span>

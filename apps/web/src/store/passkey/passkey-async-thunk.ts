@@ -142,15 +142,12 @@ const registerPasskeyThunk = createAsyncThunk(
       const userFallback = state.auth?.user?.email || state.auth?.user?.name;
       const creationOptions = normalizeCreationOptions(rawOptions, userFallback);
 
-      const attResp = await startRegistration(creationOptions);
+      const attResp = await startRegistration({ optionsJSON: creationOptions as any });
 
       const verifyPayload: TPasskeyRegisterVerifyPayload = { attResp };
       const verifyResponse = await passkeyRegisterVerifyApi(verifyPayload);
 
-      const responseData =
-        verifyResponse.data as
-          | { success?: boolean; data?: TPasskeyRegisterVerifyResponse }
-          | TPasskeyRegisterVerifyResponse;
+      const responseData = verifyResponse.data as { success?: boolean; data?: TPasskeyRegisterVerifyResponse } & TPasskeyRegisterVerifyResponse;
 
       const passkeyData = responseData.data || responseData;
       const verified = passkeyData.verified ?? false;

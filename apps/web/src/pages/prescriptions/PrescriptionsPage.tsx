@@ -20,6 +20,9 @@ import {
 } from "../../store/prescription/prescription-async-thunk";
 import type { IPrescription } from "../../models/prescription";
 import Breadcrumb from "@components/ui/Breadcrumb";
+import type { IPatient } from "@models/patient";
+import type { IDoctor } from "@models/doctor";
+import type { IMedicine } from "@models/medicine";
 
 const statusVariant: Record<string, "success" | "info" | "danger"> = {
 	Active: "success",
@@ -214,7 +217,7 @@ export default function PrescriptionsPage() {
 	];
 
 	const filtered = prescriptions.filter(
-		(p) =>
+		(p: IPrescription) =>
 			(p.patient?.user?.name || "").toLowerCase().includes(search.toLowerCase()) ||
 			p.id.toString().includes(search.toLowerCase()) ||
 			p.diagnosis.toLowerCase().includes(search.toLowerCase()),
@@ -366,7 +369,7 @@ export default function PrescriptionsPage() {
 								className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-sm"
 							>
 								<option value="">{t("prescriptions.modal.selectPatient")}</option>
-								{patientMetadata.map((p) => (
+								{patientMetadata.map((p: IPatient) => (
 									<option key={p.id} value={p.id}>
 										{p.user.name}
 									</option>
@@ -383,7 +386,7 @@ export default function PrescriptionsPage() {
 								className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-sm"
 							>
 								<option value="">{t("prescriptions.modal.selectDoctor")}</option>
-								{doctorMetadata.map((d) => (
+								{doctorMetadata.map((d: IDoctor) => (
 									<option key={d.id} value={d.id}>
 										{d.user.name}
 									</option>
@@ -436,7 +439,7 @@ export default function PrescriptionsPage() {
 										className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
 									>
 										<option value="">{t("prescriptions.modal.selectMed")}</option>
-										{medicineMetadata.map((med) => (
+										{medicineMetadata.map((med: IMedicine) => (
 											<option key={med.id} value={med.id}>
 												{med.name}
 											</option>
