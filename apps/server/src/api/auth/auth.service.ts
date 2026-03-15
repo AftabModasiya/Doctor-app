@@ -4,16 +4,14 @@ import {
 	NotFoundException,
 	UnauthorizedException,
 } from "@nestjs/common";
+import { compare, hash } from "bcrypt";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
 import { TokenType } from "src/shared/constants/enums.constants";
+import { SALT_ROUNDS } from "src/shared/constants/variable.constants";
 import { ICurrentUser } from "src/shared/interfaces/current-user.interface";
 import { ITokenPayload } from "src/shared/interfaces/token.interface";
 import { JWTService } from "src/shared/services/jwt.service";
-import {
-	comparePassword,
-	hashPassword,
-} from "src/shared/utils/helperMethods.utils";
 import { DeepPartial, FindOptionsWhere } from "typeorm";
 import { Token } from "../token/entities/token.entity";
 import { TokenService } from "../token/token.service";
@@ -76,7 +74,7 @@ export class AuthService {
 				this.i18nService.t("error.AUTH.PASSWORD_NOT_CONFIGURED"),
 			);
 
-		const isAuthentic = await comparePassword(password, existingUser.password);
+		const isAuthentic = await compare(password, existingUser.password);
 
 		if (!isAuthentic)
 			throw new BadRequestException(
@@ -178,10 +176,7 @@ export class AuthService {
 		if (!existingUser)
 			throw new NotFoundException(this.i18nService.t("error.USER.NOT_FOUND"));
 
-		const passwordMatch = await comparePassword(
-			old_password,
-			existingUser.password,
-		);
+		const passwordMatch = await compare(old_password, existingUser.password);
 
 		if (!passwordMatch)
 			throw new BadRequestException(
@@ -194,7 +189,7 @@ export class AuthService {
 				this.i18nService.t("error.USER.SAME_PASSWORD"),
 			);
 
-		const hashedPassword = await hashPassword(new_password);
+		const hashedPassword = await hash(new_password, SALT_ROUNDS);
 
 		return this.userService.update(userId, {
 			password: hashedPassword,

@@ -26,13 +26,13 @@ export type I18nTranslations = {
         "MEDICINE": {
             "NOT_FOUND": string;
         };
+        "CATEGORY": {
+            "NOT_FOUND": string;
+        };
         "COMPANY": {
             "NOT_FOUND": string;
         };
         "COMPANY_SETTING": {
-            "NOT_FOUND": string;
-        };
-        "CATEGORY": {
             "NOT_FOUND": string;
         };
         "DEGREE": {

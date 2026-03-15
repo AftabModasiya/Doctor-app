@@ -7,7 +7,9 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
-import { DataSource, Repository } from "typeorm";
+import { CommonListFiltersDto } from "src/common/dto/query.dto";
+import { getQueryAlias } from "src/shared/constants/app.constants";
+import { Brackets, DataSource, Repository } from "typeorm";
 import { User } from "../user/entities/user.entity";
 import { UserService } from "../user/user.service";
 import type { CreateDoctorDto } from "./dto/create-doctor.dto";
@@ -26,7 +28,7 @@ export class DoctorService {
 		// private readonly degreeService: DegreeService,
 		private readonly dataSource: DataSource,
 		private readonly i18nService: I18nService<I18nTranslations>,
-	) { }
+	) {}
 
 	async create(dto: CreateDoctorDto): Promise<Doctor> {
 		return this.dataSource.transaction(async (manager) => {
@@ -36,7 +38,9 @@ export class DoctorService {
 			});
 
 			if (existingUser) {
-				throw new ConflictException(this.i18nService.t('error.VALIDATION.EMAIL_EXISTS'));
+				throw new ConflictException(
+					this.i18nService.t("error.VALIDATION.EMAIL_EXISTS"),
+				);
 			}
 
 			// 1. Create User
@@ -65,19 +69,48 @@ export class DoctorService {
 		});
 	}
 
-	async findAll() {
-		const doctors = await this.doctorRepository.find({
-			relations: {
-				user: true,
-				company: true,
-				specializations: true,
-				degrees: true,
-			},
-		});
-		return {
-			list: doctors,
-			count: doctors.length,
-		};
+	async findAll(query: CommonListFiltersDto) {
+		const { page, perPage, sort, sortBy, startAt, search, endAt } = query;
+
+		const listQuery = this.doctorRepository
+			.createQueryBuilder(getQueryAlias().DOCTOR)
+			.leftJoinAndSelect(
+				`${getQueryAlias().DOCTOR}.user`,
+				getQueryAlias().USER,
+			);
+
+		if (search) {
+			const searchText = `%${search}%`;
+			listQuery.andWhere(
+				new Brackets((qb) => {
+					qb.where(`${getQueryAlias().USER}.name ILIKE :searchText`, {
+						searchText,
+					}).orWhere(`${getQueryAlias().USER}.email ILIKE :searchText`, {
+						searchText,
+					});
+				}),
+			);
+		}
+
+		if (startAt)
+			listQuery.andWhere(`${getQueryAlias().DOCTOR}.createdAt >= :startAt`, {
+				startAt,
+			});
+
+		if (endAt)
+			listQuery.andWhere(`${getQueryAlias().DOCTOR}.createdAt <= :endAt`, {
+				endAt,
+			});
+
+		if (page && perPage) listQuery.skip((page - 1) * perPage).take(perPage);
+
+		if (sort && sortBy)
+			listQuery.orderBy(
+				`${getQueryAlias().DOCTOR}.${sortBy}`,
+				sort.toUpperCase() as "ASC" | "DESC",
+			);
+
+		return listQuery.getManyAndCount();
 	}
 
 	async findAllDoctorMetadata() {

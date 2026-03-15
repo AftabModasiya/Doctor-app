@@ -40,3 +40,10 @@ export const getQuerySortOrder = () => {
 		DESC: "DESC",
 	} as const;
 };
+
+export const getQueryAlias = () => {
+	return {
+		DOCTOR: "doctor",
+		USER: "user",
+	};
+};

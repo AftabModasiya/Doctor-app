@@ -6,11 +6,13 @@ import {
 	Param,
 	Patch,
 	Post,
+	Query,
 	UseGuards,
 } from "@nestjs/common";
 import { ApiBearerAuth } from "@nestjs/swagger";
 import { I18nTranslations } from "generated/i18n.generated";
 import { I18nService } from "nestjs-i18n";
+import { CommonListFiltersDto } from "src/common/dto/query.dto";
 import { JWTAuthGuard } from "src/shared/guards/jwt-auth.guard";
 import { DoctorService } from "./doctor.service";
 import { CreateDoctorDto } from "./dto/create-doctor.dto";
@@ -35,8 +37,8 @@ export class DoctorController {
 	}
 
 	@Get()
-	async findAll() {
-		const { list, count } = await this.doctorService.findAll();
+	async findAll(@Query() query: CommonListFiltersDto) {
+		const [list, count] = await this.doctorService.findAll(query);
 		return {
 			list,
 			count,

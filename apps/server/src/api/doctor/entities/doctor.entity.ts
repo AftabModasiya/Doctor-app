@@ -11,11 +11,11 @@ import {
 	OneToMany,
 	OneToOne,
 } from "typeorm";
-import type { Company } from "../../company/entities/company.entity";
-import type { Degree } from "../../degree/entities/degree.entity";
-import type { Prescription } from "../../prescription/entities/prescription.entity";
-import type { Specialization } from "../../specialization/entities/specialization.entity";
-import type { User } from "../../user/entities/user.entity";
+import { Company } from "../../company/entities/company.entity";
+import { Degree } from "../../degree/entities/degree.entity";
+import { Prescription } from "../../prescription/entities/prescription.entity";
+import { Specialization } from "../../specialization/entities/specialization.entity";
+import { User } from "../../user/entities/user.entity";
 
 @Entity("doctors")
 export class Doctor extends BaseEntity {
@@ -34,15 +34,24 @@ export class Doctor extends BaseEntity {
 	experience!: number | null;
 
 	// ---- Relations ----
-	@OneToOne("User", (user: User) => user.doctor)
+	@OneToOne(
+		() => User,
+		(user: User) => user.doctor,
+	)
 	@JoinColumn()
 	user!: Relation<User>;
 
-	@ManyToOne("Company", (company: Company) => company.doctors)
+	@ManyToOne(
+		() => Company,
+		(company: Company) => company.doctors,
+	)
 	@JoinColumn()
 	company!: Relation<Company>;
 
-	@ManyToMany("Specialization", (spec: Specialization) => spec.doctors)
+	@ManyToMany(
+		() => Specialization,
+		(spec: Specialization) => spec.doctors,
+	)
 	@JoinTable({
 		name: "doctor_specialization",
 		joinColumn: { name: "doctor_id", referencedColumnName: "id" },
@@ -53,7 +62,10 @@ export class Doctor extends BaseEntity {
 	})
 	specializations!: Relation<Specialization[]>;
 
-	@ManyToMany("Degree", (degree: Degree) => degree.doctors)
+	@ManyToMany(
+		() => Degree,
+		(degree: Degree) => degree.doctors,
+	)
 	@JoinTable({
 		name: "doctor_degree",
 		joinColumn: { name: "doctor_id", referencedColumnName: "id" },
@@ -62,7 +74,7 @@ export class Doctor extends BaseEntity {
 	degrees!: Relation<Degree[]>;
 
 	@OneToMany(
-		"Prescription",
+		() => Prescription,
 		(prescription: Prescription) => prescription.doctor,
 	)
 	prescriptions!: Relation<Prescription[]>;
