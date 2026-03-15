@@ -1,18 +1,26 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import clsx from "clsx";
 import type React from "react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import {
 	FaBell,
 	FaCamera,
 	FaCog,
+	FaEye,
+	FaEyeSlash,
 	FaLock,
 	FaSave,
 	FaUser,
 } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import * as yup from "yup";
 import Button from "../../components/ui/Button";
 import { useAuth } from "../../context/AuthContext";
+import { useDispatch } from "react-redux";
+import { changePasswordAsyncThunk } from "../../store/auth/auth-async-thunk";
+import type { AppDispatch } from "../../store/store";
 
 type Tab = "profile" | "password" | "notifications" | "system";
 
@@ -36,6 +44,7 @@ function ToggleSwitch({
 }
 
 export default function SettingsPage() {
+	const dispatch = useDispatch<AppDispatch>();
 	const { t } = useTranslation();
 	const { user, updateUser } = useAuth();
 	const [activeTab, setActiveTab] = useState<Tab>("profile");
@@ -46,11 +55,8 @@ export default function SettingsPage() {
 		phone: "+1 555-0001",
 		department: "Administration",
 	});
-	const [passwords, setPasswords] = useState({
-		current: "",
-		newPass: "",
-		confirm: "",
-	});
+
+	const [isSubmittingPassword, setIsSubmittingPassword] = useState(false);
 	const [notifications, setNotifications] = useState({
 		appointments: true,
 		prescriptions: true,
@@ -75,6 +81,29 @@ export default function SettingsPage() {
 		{ id: "system", label: t("settings.tabs.system"), icon: FaCog },
 	];
 
+	const passwordSchema = yup.object({
+		currentPassword: yup.string().required(t("validation.passwordRequired")),
+		newPassword: yup
+			.string()
+			.min(6, t("validation.passwordMin"))
+			.required(t("validation.passwordRequired")),
+		confirmPassword: yup
+			.string()
+			.oneOf([yup.ref("newPassword")], t("settings.password.toast.noMatch"))
+			.required(t("validation.passwordRequired")),
+	});
+
+	type PasswordFormData = yup.InferType<typeof passwordSchema>;
+
+	const {
+		register: registerPassword,
+		handleSubmit: handlePasswordSubmit,
+		reset: resetPasswordForm,
+		formState: { errors: passwordErrors },
+	} = useForm<PasswordFormData>({
+		resolver: yupResolver(passwordSchema),
+	});
+
 	const saveProfile = async () => {
 		setProfileLoading(true);
 		await new Promise((r) => setTimeout(r, 800));
@@ -83,22 +112,21 @@ export default function SettingsPage() {
 		setProfileLoading(false);
 	};
 
-	const changePassword = async () => {
-		if (!passwords.current) {
-			toast.error(t("settings.password.toast.enterCurrent"));
-			return;
+	const changePassword = async (data: PasswordFormData) => {
+		setIsSubmittingPassword(true);
+		try {
+			await dispatch(
+				changePasswordAsyncThunk({
+					oldPassword: data.currentPassword,
+					newPassword: data.newPassword,
+				})
+			).unwrap();
+			resetPasswordForm();
+		} catch (error: any) {
+			toast.error(error.message || t("settings.password.toast.error"));
+		} finally {
+			setIsSubmittingPassword(false);
 		}
-		if (passwords.newPass.length < 6) {
-			toast.error(t("settings.password.toast.minLength"));
-			return;
-		}
-		if (passwords.newPass !== passwords.confirm) {
-			toast.error(t("settings.password.toast.noMatch"));
-			return;
-		}
-		await new Promise((r) => setTimeout(r, 600));
-		toast.success(t("settings.password.toast.changed"));
-		setPasswords({ current: "", newPass: "", confirm: "" });
 	};
 
 	const Field = ({
@@ -132,6 +160,50 @@ export default function SettingsPage() {
 			/>
 		</div>
 	);
+
+	const PasswordField = ({
+		label,
+		registration,
+		error,
+	}: {
+		label: string;
+		registration: any;
+		error?: string;
+	}) => {
+		const [showPassword, setShowPassword] = useState(false);
+		return (
+			<div>
+				<label className="block text-sm font-medium text-gray-700 mb-1.5">
+					{label}
+				</label>
+				<div className="relative">
+					<input
+						{...registration}
+						type={showPassword ? "text" : "password"}
+						placeholder="••••••••"
+						className={clsx(
+							"w-full pl-4 pr-10 py-2.5 text-sm border rounded-xl focus:outline-none transition-all",
+							error
+								? "border-rose-300 focus:ring-rose-500"
+								: "border-gray-200 focus:ring-2 focus:ring-primary-500 hover:border-gray-300"
+						)}
+					/>
+					<button
+						type="button"
+						onClick={() => setShowPassword(!showPassword)}
+						className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 focus:outline-none"
+					>
+						{showPassword ? (
+							<FaEyeSlash className="h-4 w-4" />
+						) : (
+							<FaEye className="h-4 w-4" />
+						)}
+					</button>
+				</div>
+				{error && <p className="mt-1 text-xs text-rose-600">{error}</p>}
+			</div>
+		);
+	};
 
 	const NotificationRow = ({
 		label,
@@ -202,7 +274,7 @@ export default function SettingsPage() {
 									<div className="h-16 w-16 bg-gradient-to-br from-primary-400 to-primary-600 rounded-2xl flex items-center justify-center text-white text-xl font-bold">
 										{profile.name
 											.split(" ")
-											.map((n) => n[0])
+											.map((n: string) => n[0])
 											.join("")
 											.slice(0, 2)}
 									</div>
@@ -267,37 +339,36 @@ export default function SettingsPage() {
 									{t("settings.password.subtitle")}
 								</p>
 							</div>
-							<div className="max-w-md space-y-4">
-								<Field
+							<form
+								onSubmit={handlePasswordSubmit(changePassword)}
+								className="max-w-md space-y-4"
+							>
+								<PasswordField
 									label={t("settings.password.current")}
-									value={passwords.current}
-									type="password"
-									onChange={(v) => setPasswords((p) => ({ ...p, current: v }))}
+									registration={registerPassword("currentPassword")}
+									error={passwordErrors.currentPassword?.message}
 								/>
-								<Field
+								<PasswordField
 									label={t("settings.password.new")}
-									value={passwords.newPass}
-									type="password"
-									onChange={(v) => setPasswords((p) => ({ ...p, newPass: v }))}
+									registration={registerPassword("newPassword")}
+									error={passwordErrors.newPassword?.message}
 								/>
-								<Field
+								<PasswordField
 									label={t("settings.password.confirm")}
-									value={passwords.confirm}
-									type="password"
-									onChange={(v) => setPasswords((p) => ({ ...p, confirm: v }))}
+									registration={registerPassword("confirmPassword")}
+									error={passwordErrors.confirmPassword?.message}
 								/>
 								<div className="p-3 bg-sky-50 border border-sky-200 rounded-xl">
-									<p className="text-xs text-sky-700">
-										{t("settings.password.hint")}
-									</p>
+									<p className="text-xs text-sky-700">{t("settings.password.hint")}</p>
 								</div>
 								<Button
-									onClick={changePassword}
+									type="submit"
+									loading={isSubmittingPassword}
 									leftIcon={<FaLock className="h-3.5 w-3.5" />}
 								>
 									{t("settings.password.updateBtn")}
 								</Button>
-							</div>
+							</form>
 						</div>
 					)}
 

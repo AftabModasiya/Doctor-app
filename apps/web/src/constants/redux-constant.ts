@@ -8,6 +8,8 @@ const SliceNames = {
   CATEGORY: "category",
   MEDICINE: "medicine",
   METADATA: "metadata",
+  PRESCRIPTION: "prescription",
+  PASSKEY: "passkey",
 };
 
 const REDUX_PERSISTENT_STORE_ENCRYPT_KEY = "redux$persistentStore$key";

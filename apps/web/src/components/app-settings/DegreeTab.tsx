@@ -119,7 +119,7 @@ export default function DegreeTab() {
                 </td>
               </tr>
             ) : (
-              degrees.map((d) => (
+              degrees.map((d: IDegree) => (
                 <tr
                   key={d.id}
                   className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors"
@@ -184,11 +184,10 @@ export default function DegreeTab() {
           <input
             {...register("name")}
             placeholder={t("appSettings.degree.namePlaceholder")}
-            className={`w-full px-4 py-2.5 text-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-              errors.name
+            className={`w-full px-4 py-2.5 text-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 ${errors.name
                 ? "border-rose-400 focus:ring-rose-400"
                 : "border-gray-200"
-            }`}
+              }`}
           />
           {errors.name && (
             <p className="mt-1 text-xs text-rose-500">{errors.name.message}</p>
