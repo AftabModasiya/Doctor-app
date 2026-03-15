@@ -2,6 +2,7 @@
 	"private": true,
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.7",
+		"husky": "^9.1.7",
 		"turbo": "^2.8.17"
 	},
 	"scripts": {
@@ -9,7 +10,8 @@
 		"build": "npx turbo run build",
 		"test": "npx turbo run test",
 		"check": "biome check . --write",
-		"start": "node apps/server/dist/api/main"
+		"start": "node apps/server/dist/api/main",
+		"prepare": "husky"
 	},
 	"workspaces": [
 		"apps/*"

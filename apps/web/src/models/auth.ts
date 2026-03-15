@@ -71,12 +71,9 @@ type TAuthRoutesGuardProps = {
 //INFO : Api payloads
 
 type TLoginApiPayload = {
-  userId?: number;
   email: string;
-  companyId?: number;
-  deviceType: number;
-  otp: number;
-  deviceToken?: string;
+  password: string;
+  deviceIp: string;
 };
 
 type TChangePasswordPayload = {

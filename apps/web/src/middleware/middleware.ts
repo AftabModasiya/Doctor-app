@@ -13,7 +13,7 @@ interface ErrorResponse {
   [key: string]: unknown;
 }
 
-const backendBaseUrl = `http://192.168.1.194:3000/api`;
+const backendBaseUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5173/api";
 
 const axiosInstance = axios.create({
   baseURL: backendBaseUrl,
@@ -80,7 +80,7 @@ const setupInterceptors = (storeApi: MiddlewareAPI<Dispatch, TRootState>) => {
       if (
         error.response &&
         error.response.status === BackendResponse.UNAUTHORIZED &&
-        !requestUrl.includes(AuthEndpoints.sendOtpViaEamil) &&
+        !requestUrl.includes(AuthEndpoints.adminLogin) &&
         !requestUrl.includes(AuthEndpoints.signIn) &&
         !requestUrl.includes(AuthEndpoints.refreshToken) &&
         !requestUrl.includes(AuthEndpoints.forgotPassword) &&
@@ -144,6 +144,8 @@ const setupInterceptors = (storeApi: MiddlewareAPI<Dispatch, TRootState>) => {
         }
       }
 
+      // For all other errors (e.g., 400/404/500), propagate so thunks reject.
+      return Promise.reject(error);
     },
   );
 };

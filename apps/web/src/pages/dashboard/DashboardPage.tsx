@@ -1,8 +1,5 @@
-import type React from "react";
 import {
 	FaArrowUp,
-	FaCalendarAlt,
-	FaExclamationTriangle,
 	FaNotesMedical,
 	FaUserInjured,
 	FaUserMd,
@@ -11,8 +8,6 @@ import { useTranslation } from "react-i18next";
 import {
 	Area,
 	AreaChart,
-	Bar,
-	BarChart,
 	CartesianGrid,
 	Cell,
 	Pie,
@@ -22,54 +17,50 @@ import {
 	XAxis,
 	YAxis,
 } from "recharts";
-import Badge from "../../components/ui/Badge";
 import {
 	chartData as chartDataMock,
-	mockActivity,
-	mockAppointments,
 } from "../../utils/mockData";
-
 import { useEffect, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "@store/store";
-import { 
-    getDashboardCountsAsyncThunk, 
-    getPatientChartAsyncThunk 
+import {
+	getDashboardCountsAsyncThunk,
+	getPatientChartAsyncThunk
 } from "@store/dashboard/dashboard-async-thunk";
 
-const activityIcons: Record<string, React.ReactNode> = {
-	calendar: <FaCalendarAlt className="h-3.5 w-3.5" />,
-	patient: <FaUserInjured className="h-3.5 w-3.5" />,
-	prescription: <FaNotesMedical className="h-3.5 w-3.5" />,
-	medicine: <FaExclamationTriangle className="h-3.5 w-3.5" />,
-	doctor: <FaUserMd className="h-3.5 w-3.5" />,
-};
+// const activityIcons: Record<string, React.ReactNode> = {
+// 	calendar: <FaCalendarAlt className="h-3.5 w-3.5" />,
+// 	patient: <FaUserInjured className="h-3.5 w-3.5" />,
+// 	prescription: <FaNotesMedical className="h-3.5 w-3.5" />,
+// 	medicine: <FaExclamationTriangle className="h-3.5 w-3.5" />,
+// 	doctor: <FaUserMd className="h-3.5 w-3.5" />,
+// };
 
-const activityColors: Record<string, string> = {
-	calendar: "bg-sky-100 text-sky-600",
-	patient: "bg-emerald-100 text-emerald-600",
-	prescription: "bg-violet-100 text-violet-600",
-	medicine: "bg-amber-100 text-amber-600",
-	doctor: "bg-rose-100 text-rose-600",
-};
+// const activityColors: Record<string, string> = {
+// 	calendar: "bg-sky-100 text-sky-600",
+// 	patient: "bg-emerald-100 text-emerald-600",
+// 	prescription: "bg-violet-100 text-violet-600",
+// 	medicine: "bg-amber-100 text-amber-600",
+// 	doctor: "bg-rose-100 text-rose-600",
+// };
 
-const appointmentStatusVariant: Record<
-	string,
-	"success" | "warning" | "info" | "danger" | "neutral"
-> = {
-	Confirmed: "success",
-	Pending: "warning",
-	Completed: "info",
-	Cancelled: "danger",
-};
+// const appointmentStatusVariant: Record<
+// 	string,
+// 	"success" | "warning" | "info" | "danger" | "neutral"
+// > = {
+// 	Confirmed: "success",
+// 	Pending: "warning",
+// 	Completed: "info",
+// 	Cancelled: "danger",
+// };
 
 export default function DashboardPage() {
 	const { t } = useTranslation();
 	const dispatch = useAppDispatch();
 	const { counts, chartData, loading, chartLoading } = useAppSelector((state) => state.dashboard);
-	
+
 	useEffect(() => {
 		dispatch(getDashboardCountsAsyncThunk());
-		
+
 		const currentYear = new Date().getFullYear();
 		dispatch(getPatientChartAsyncThunk({
 			startDate: `${currentYear}-01-01`,
@@ -79,13 +70,12 @@ export default function DashboardPage() {
 
 	const formattedChartData = useMemo(() => {
 		if (!chartData) return [];
-		return chartData.labels.map((label, index) => ({
+		return chartData.labels.map((label: string, index: number) => ({
 			month: label,
 			patients: chartData.data[index],
 		}));
 	}, [chartData]);
 
-	const todayAppts = mockAppointments.filter((a) => a.date === "2025-03-05");
 
 	const distributionData = useMemo(() => {
 		return [
@@ -165,7 +155,7 @@ export default function DashboardPage() {
 							</h2>
 							<p className="text-xs text-gray-500 mt-0.5">{t("dashboard.last7Months")}</p>
 						</div>
-						
+
 					</div>
 					<div className="relative">
 						{chartLoading && (

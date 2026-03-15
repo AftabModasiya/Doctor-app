@@ -10,7 +10,7 @@ const AuthEndpoints = {
 	resetPassword: `${BASE_AUTH_ENDPOINT}/reset-password`,
 	logout: `${BASE_AUTH_ENDPOINT}/logout`,
 	changePassword: `${BASE_AUTH_ENDPOINT}/change-password`,
-	sendOtpViaEamil: `${BASE_AUTH_ENDPOINT}/admin-login`,
+	adminLogin: `${BASE_AUTH_ENDPOINT}/admin-login`,
 	ssoExchange: `${BASE_AUTH_ENDPOINT}/sso/admin/exchange`
 };
 

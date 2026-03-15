@@ -17,7 +17,10 @@
         "saveChanges": "Save Changes",
         "loading": "Loading...",
         "dashboard": "Dashboard",
-        "login": "Login"
+        "login": "Login",
+        "confirmDelete": "Are you sure you want to delete this record?",
+        "na": "N/A",
+        "optional": "(Optional)"
     },
     "validation": {
         "nameMin": "Min 2 characters",
@@ -49,6 +52,7 @@
         "passwordPlaceholder": "Min 6 characters",
         "confirmPassword": "Confirm Password",
         "confirmPasswordPlaceholder": "Repeat your password",
+        "registerWithPasskey": "Register with Passkey",
         "alreadyHaveAccount": "Already have an account?",
         "resetPassword": {
             "title": "Reset Password",
@@ -363,6 +367,7 @@
             "diagnosisPlaceholder": "e.g. Seasonal Allergy",
             "prescribedMedicines": "Prescribed Medicines",
             "medicines": "Medicines",
+            "medicine": "Medicine",
             "addMed": "Add Medicine",
             "selectPatient": "Select patient...",
             "selectDoctor": "Select doctor...",
@@ -370,9 +375,12 @@
             "dosagePlaceholder": "Dosage (e.g. 500mg)",
             "frequencyPlaceholder": "Frequency (e.g. 2x Daily)",
             "durationPlaceholder": "Duration (e.g. 5 Days)",
+            "quantity": "Quantity",
+            "quantityPlaceholder": "e.g. 1",
             "notes": "Notes",
             "notesPlaceholder": "Additional instructions...",
-            "doctorNotes": "Doctor's Notes"
+            "doctorNotes": "Doctor's Notes",
+            "unknownMedicine": "Unknown Medicine"
         },
         "status": {
             "active": "Active",
@@ -381,6 +389,7 @@
         },
         "toast": {
             "fillRequired": "Please fill all required fields",
+            "selectMedicine": "Please select at least one medicine",
             "created": "Prescription created successfully"
         }
     },
