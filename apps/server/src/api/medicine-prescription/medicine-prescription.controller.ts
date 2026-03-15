@@ -6,47 +6,76 @@ import {
 	Param,
 	Patch,
 	Post,
+	UseGuards,
 } from "@nestjs/common";
-import type { CreateMedicinePrescriptionDto } from "./dto/create-medicine-prescription.dto";
-import type { UpdateMedicinePrescriptionDto } from "./dto/update-medicine-prescription.dto";
+import { ApiBearerAuth } from "@nestjs/swagger";
+import { I18nTranslations } from "generated/i18n.generated";
+import { I18nService } from "nestjs-i18n";
+import { JWTAuthGuard } from "src/shared/guards/jwt-auth.guard";
+import { CreateMedicinePrescriptionDto } from "./dto/create-medicine-prescription.dto";
+import { UpdateMedicinePrescriptionDto } from "./dto/update-medicine-prescription.dto";
 import { MedicinePrescriptionService } from "./medicine-prescription.service";
 
+@UseGuards(JWTAuthGuard)
+@ApiBearerAuth()
 @Controller("medicine-prescription")
 export class MedicinePrescriptionController {
 	constructor(
 		private readonly medicinePrescriptionService: MedicinePrescriptionService,
+		private readonly i18nService: I18nService<I18nTranslations>,
 	) {}
 
 	@Post()
-	create(@Body() createMedicinePrescriptionDto: CreateMedicinePrescriptionDto) {
-		return this.medicinePrescriptionService.create(
+	async create(
+		@Body() createMedicinePrescriptionDto: CreateMedicinePrescriptionDto,
+	) {
+		const data = await this.medicinePrescriptionService.create(
 			createMedicinePrescriptionDto,
 		);
+		return {
+			...data,
+			message: this.i18nService.t("success.MEDICINE_PRESCRIPTION.CREATE"),
+		};
 	}
 
 	@Get()
-	findAll() {
-		return this.medicinePrescriptionService.findAll();
+	async findAll() {
+		const result = await this.medicinePrescriptionService.findAll();
+		return {
+			list: result,
+			message: this.i18nService.t("success.MEDICINE_PRESCRIPTION.LIST"),
+		};
 	}
 
 	@Get(":id")
-	findOne(@Param("id") id: string) {
-		return this.medicinePrescriptionService.findOne(+id);
+	async findOne(@Param("id") id: string) {
+		const mp = await this.medicinePrescriptionService.findOne(+id);
+		return {
+			...mp,
+			message: this.i18nService.t("success.MEDICINE_PRESCRIPTION.VIEW"),
+		};
 	}
 
 	@Patch(":id")
-	update(
+	async update(
 		@Param("id") id: string,
 		@Body() updateMedicinePrescriptionDto: UpdateMedicinePrescriptionDto,
 	) {
-		return this.medicinePrescriptionService.update(
+		const data = await this.medicinePrescriptionService.update(
 			+id,
 			updateMedicinePrescriptionDto,
 		);
+		return {
+			...data,
+			message: this.i18nService.t("success.MEDICINE_PRESCRIPTION.UPDATE"),
+		};
 	}
 
 	@Delete(":id")
-	remove(@Param("id") id: string) {
-		return this.medicinePrescriptionService.remove(+id);
+	async remove(@Param("id") id: string) {
+		await this.medicinePrescriptionService.remove(+id);
+		return {
+			message: this.i18nService.t("success.MEDICINE_PRESCRIPTION.DELETE"),
+		};
 	}
 }

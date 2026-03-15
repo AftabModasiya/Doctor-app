@@ -1,7 +1,7 @@
-import { DataSource } from "typeorm";
+import { join } from "node:path";
 import { config } from "dotenv";
+import { DataSource } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
-import { join } from "path";
 
 config();
 

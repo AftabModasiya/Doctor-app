@@ -1,21 +1,9 @@
-import {
-	Column,
-	Entity,
-	Index,
-	JoinColumn,
-	ManyToOne,
-	OneToOne,
-} from "typeorm";
-import { BaseEntity } from "../../common/entities/base.entity";
-import type { UserDevice } from "../../user-device/entities/user-device.entity";
-import type { User } from "../../user/entities/user.entity";
-
-export enum TokenType {
-	ACCESS = "access",
-	REFRESH = "refresh",
-	RESET_PASSWORD = "reset_password",
-	VERIFY_EMAIL = "verify_email",
-}
+import { BaseEntity } from "src/common/entities/base.entity";
+import { TokenType } from "src/shared/constants/enums.constants";
+import type { Relation } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
+import { User } from "../../user/entities/user.entity";
+import { UserDevice } from "../../user-device/entities/user-device.entity";
 
 @Entity("tokens")
 export class Token extends BaseEntity {
@@ -31,23 +19,29 @@ export class Token extends BaseEntity {
 	})
 	tokenType!: TokenType;
 
-	@Column({ name: "expires_at", type: "timestamptz" })
-	expiresAt!: Date;
+	@Column({ type: "timestamptz", nullable: true })
+	expiresAt!: Date | null;
 
 	@Index("idx_tokens_user_device_id")
-	@Column({ name: "user_device_id" })
+	@Column()
 	userDeviceId!: number;
 
 	@Index("idx_tokens_user_id")
-	@Column({ name: "user_id" })
+	@Column()
 	userId!: number;
 
 	// ---- Relations ----
-	@OneToOne("UserDevice", (device: UserDevice) => device.token)
-	@JoinColumn({ name: "user_device_id" })
-	userDevice!: UserDevice;
+	@ManyToOne(
+		() => UserDevice,
+		(device: UserDevice) => device.token,
+	)
+	@JoinColumn()
+	userDevice!: Relation<UserDevice>;
 
-	@ManyToOne("User", (user: User) => user.devices)
-	@JoinColumn({ name: "user_id" })
-	user!: User;
+	@ManyToOne(
+		() => User,
+		(user: User) => user.devices,
+	)
+	@JoinColumn()
+	user!: Relation<User>;
 }

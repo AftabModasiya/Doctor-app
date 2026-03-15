@@ -15,6 +15,12 @@ import { Link } from "react-router-dom";
 export default function HeroSection() {
 	const { t } = useTranslation();
 
+	// const stats = [
+	// 	{ value: "500+", label: t("landing.hero.stats.hospitals") },
+	// 	{ value: "50K+", label: t("landing.hero.stats.patients") },
+	// 	{ value: "99.9%", label: t("landing.hero.stats.uptime") },
+	// 	{ value: "24/7", label: t("landing.hero.stats.support") },
+	// ];
 
 	const trustIndicators = [
 		{ icon: FaCheckCircle, text: t("landing.hero.trust.hipaa") },

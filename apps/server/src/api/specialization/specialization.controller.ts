@@ -6,40 +6,75 @@ import {
 	Param,
 	Patch,
 	Post,
+	UseGuards,
 } from "@nestjs/common";
-import type { CreateSpecializationDto } from "./dto/create-specialization.dto";
-import type { UpdateSpecializationDto } from "./dto/update-specialization.dto";
+import { ApiBearerAuth } from "@nestjs/swagger";
+import { I18nTranslations } from "generated/i18n.generated";
+import { I18nService } from "nestjs-i18n";
+import { JWTAuthGuard } from "src/shared/guards/jwt-auth.guard";
+import { CreateSpecializationDto } from "./dto/create-specialization.dto";
+import { UpdateSpecializationDto } from "./dto/update-specialization.dto";
 import { SpecializationService } from "./specialization.service";
 
+@UseGuards(JWTAuthGuard)
+@ApiBearerAuth()
 @Controller("specialization")
 export class SpecializationController {
-	constructor(private readonly specializationService: SpecializationService) {}
+	constructor(
+		private readonly specializationService: SpecializationService,
+		private readonly i18nService: I18nService<I18nTranslations>,
+	) {}
 
 	@Post()
-	create(@Body() createSpecializationDto: CreateSpecializationDto) {
-		return this.specializationService.create(createSpecializationDto);
+	async create(@Body() createSpecializationDto: CreateSpecializationDto) {
+		const data = await this.specializationService.create(
+			createSpecializationDto,
+		);
+		return {
+			...data,
+			message: this.i18nService.t("success.SPECIALIZATION.CREATE"),
+		};
 	}
 
 	@Get()
-	findAll() {
-		return this.specializationService.findAll();
+	async findAll() {
+		const [list, count] = await this.specializationService.findAll();
+		return {
+			list,
+			count,
+			message: this.i18nService.t("success.SPECIALIZATION.LIST"),
+		};
 	}
 
 	@Get(":id")
-	findOne(@Param("id") id: string) {
-		return this.specializationService.findOne(+id);
+	async findOne(@Param("id") id: string) {
+		const specialization = await this.specializationService.findOne(+id);
+		return {
+			...specialization,
+			message: this.i18nService.t("success.SPECIALIZATION.VIEW"),
+		};
 	}
 
 	@Patch(":id")
-	update(
+	async update(
 		@Param("id") id: string,
 		@Body() updateSpecializationDto: UpdateSpecializationDto,
 	) {
-		return this.specializationService.update(+id, updateSpecializationDto);
+		const data = await this.specializationService.update(
+			+id,
+			updateSpecializationDto,
+		);
+		return {
+			...data,
+			message: this.i18nService.t("success.SPECIALIZATION.UPDATE"),
+		};
 	}
 
 	@Delete(":id")
-	remove(@Param("id") id: string) {
-		return this.specializationService.remove(+id);
+	async remove(@Param("id") id: string) {
+		await this.specializationService.remove(+id);
+		return {
+			message: this.i18nService.t("success.SPECIALIZATION.DELETE"),
+		};
 	}
 }

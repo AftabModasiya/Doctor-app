@@ -28,6 +28,31 @@ import {
 	getPatientChartAsyncThunk
 } from "@store/dashboard/dashboard-async-thunk";
 
+// const activityIcons: Record<string, React.ReactNode> = {
+// 	calendar: <FaCalendarAlt className="h-3.5 w-3.5" />,
+// 	patient: <FaUserInjured className="h-3.5 w-3.5" />,
+// 	prescription: <FaNotesMedical className="h-3.5 w-3.5" />,
+// 	medicine: <FaExclamationTriangle className="h-3.5 w-3.5" />,
+// 	doctor: <FaUserMd className="h-3.5 w-3.5" />,
+// };
+
+// const activityColors: Record<string, string> = {
+// 	calendar: "bg-sky-100 text-sky-600",
+// 	patient: "bg-emerald-100 text-emerald-600",
+// 	prescription: "bg-violet-100 text-violet-600",
+// 	medicine: "bg-amber-100 text-amber-600",
+// 	doctor: "bg-rose-100 text-rose-600",
+// };
+
+// const appointmentStatusVariant: Record<
+// 	string,
+// 	"success" | "warning" | "info" | "danger" | "neutral"
+// > = {
+// 	Confirmed: "success",
+// 	Pending: "warning",
+// 	Completed: "info",
+// 	Cancelled: "danger",
+// };
 
 export default function DashboardPage() {
 	const { t } = useTranslation();

@@ -1,3 +1,5 @@
+import { BaseEntity } from "src/common/entities/base.entity";
+import type { Relation } from "typeorm";
 import {
 	Column,
 	Entity,
@@ -6,9 +8,8 @@ import {
 	ManyToMany,
 	ManyToOne,
 } from "typeorm";
-import { BaseEntity } from "../../common/entities/base.entity";
-import type { Company } from "../../company/entities/company.entity";
-import type { Doctor } from "../../doctor/entities/doctor.entity";
+import { Company } from "../../company/entities/company.entity";
+import { Doctor } from "../../doctor/entities/doctor.entity";
 
 @Entity("degrees")
 export class Degree extends BaseEntity {
@@ -16,14 +17,20 @@ export class Degree extends BaseEntity {
 	name!: string;
 
 	@Index("idx_degrees_company_id")
-	@Column({ name: "company_id" })
+	@Column()
 	companyId!: number;
 
 	// ---- Relations ----
-	@ManyToOne("Company", (company: Company) => company.doctors)
-	@JoinColumn({ name: "company_id" })
-	company!: Company;
+	@ManyToOne(
+		() => Company,
+		(company: Company) => company.doctors,
+	)
+	@JoinColumn()
+	company!: Relation<Company>;
 
-	@ManyToMany("Doctor", (doctor: Doctor) => doctor.degrees)
-	doctors!: Doctor[];
+	@ManyToMany(
+		() => Doctor,
+		(doctor: Doctor) => doctor.degrees,
+	)
+	doctors!: Relation<Doctor[]>;
 }
